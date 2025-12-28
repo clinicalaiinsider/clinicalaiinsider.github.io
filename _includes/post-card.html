@@ -1,0 +1,28 @@
+<article class="post-card">
+    <div class="post-card-header">
+        <h3 class="post-card-title">
+            <a href="{{ include.post.url | relative_url }}">{{ include.post.title }}</a>
+        </h3>
+        <p class="post-card-excerpt">{{ include.post.description | default: include.post.excerpt | strip_html | truncate: 160 }}</p>
+        <div class="post-card-meta">
+            <span class="post-card-author">{{ include.post.author | default: site.author }}</span>
+            <div class="post-card-stats">
+                <span class="post-card-stat">📅 {{ include.post.date | date: "%b %d" }}</span>
+                <span class="post-card-stat">⏱️ {% if include.post.reading_time %}{{ include.post.reading_time }}{% else %}{{ include.post.content | number_of_words | divided_by: 200 | plus: 1 }}{% endif %} min</span>
+            </div>
+        </div>
+    </div>
+    <div class="post-card-footer">
+        <div class="post-card-tags">
+            {% for tag in include.post.tags limit:3 %}
+            <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
+            {% endfor %}
+            {% if include.post.tags.size > 3 %}
+            <span class="tag tag-more">+{{ include.post.tags.size | minus: 3 }}</span>
+            {% endif %}
+        </div>
+        <div class="post-card-actions">
+            <a href="{{ include.post.url | relative_url }}" class="action-btn">Read →</a>
+        </div>
+    </div>
+</article>

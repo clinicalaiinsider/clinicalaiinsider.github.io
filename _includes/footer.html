@@ -1,0 +1,43 @@
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="{{ '/blog/' | relative_url }}">All Posts</a></li>
+                    <li><a href="{{ '/tags/' | relative_url }}">Tags</a></li>
+                    <li><a href="{{ '/projects/' | relative_url }}">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Topics</h4>
+                <ul>
+                    {% for tag in site.footer_tags limit:4 %}
+                    <li><a href="{{ '/tags/' | append: tag | downcase | relative_url }}">{{ tag }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    {% for link in site.footer_resources %}
+                    <li><a href="{{ link.url }}">{{ link.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    {% if site.github_username %}<li><a href="https://github.com/{{ site.github_username }}">GitHub</a></li>{% endif %}
+                    {% if site.linkedin_username %}<li><a href="https://linkedin.com/in/{{ site.linkedin_username }}">LinkedIn</a></li>{% endif %}
+                    {% if site.twitter_username %}<li><a href="https://twitter.com/{{ site.twitter_username }}">Twitter</a></li>{% endif %}
+                    <li><a href="{{ '/about/' | relative_url }}">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© {{ 'now' | date: "%Y" }} {{ site.title }}</span>
+            <span>Built with Jekyll • Hosted on GitHub Pages</span>
+        </div>
+    </div>
+</footer>

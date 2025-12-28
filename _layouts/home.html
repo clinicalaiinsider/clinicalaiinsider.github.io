@@ -1,0 +1,60 @@
+---
+layout: default
+---
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1>{{ site.title }}</h1>
+    <p>{{ site.description }}</p>
+    <div class="hero-buttons">
+        <a href="{{ '/blog/' | relative_url }}" class="btn btn-primary">
+            Browse Posts →
+        </a>
+        <a href="{{ '/about/' | relative_url }}" class="btn btn-secondary">
+            About Me
+        </a>
+    </div>
+</section>
+
+<!-- Recent Posts Section -->
+<section class="section">
+    <div class="section-header">
+        <h2 class="section-title">📝 Recent Posts</h2>
+        <a href="{{ '/blog/' | relative_url }}" class="view-all">View All</a>
+    </div>
+    
+    <div class="posts-grid">
+        {% assign posts = site.posts | slice: 0, 6 %}
+        {% for post in posts %}
+        {% include post-card.html post=post %}
+        {% endfor %}
+    </div>
+    
+    <!-- Features -->
+    {% if site.features %}
+    <div class="features-grid">
+        {% for feature in site.features %}
+        <div class="feature-card">
+            <div class="feature-icon">{{ feature.icon }}</div>
+            <div class="feature-title">{{ feature.title }}</div>
+            <div class="feature-desc">{{ feature.description }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<!-- Learn More Section -->
+{% if site.learn_more %}
+<section class="learn-more">
+    <h2>{{ site.learn_more.title | default: "Learn More" }}</h2>
+    <div class="learn-grid">
+        {% for item in site.learn_more.items %}
+        <div class="learn-card">
+            <div class="learn-card-title">{{ item.title }}</div>
+            <p>{{ item.description }} <a href="{{ item.url }}">{{ item.link_text | default: "Learn more" }}</a>.</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

@@ -1,0 +1,142 @@
+# ==============================================================================
+# Site Settings
+# ==============================================================================
+title: DataGodzilla
+description: >-
+  Exploring clinical informatics, healthcare AI, and the OHDSI ecosystem. 
+  Deep dives into OMOP CDM, NLP pipelines, and real-world evidence generation.
+author: DataGodzilla
+email: your-email@example.com
+url: "https://datagodzilla.github.io"
+baseurl: "" # Leave empty for user/org pages, or "/repo-name" for project pages
+
+# ==============================================================================
+# Social / Connect
+# ==============================================================================
+github_username: datagodzilla
+linkedin_username: datagodzilla
+twitter_username: datagodzilla
+
+# ==============================================================================
+# Navigation
+# ==============================================================================
+navigation:
+  - title: Blog
+    url: /blog/
+  - title: Projects
+    url: /projects/
+  - title: About
+    url: /about/
+
+# ==============================================================================
+# Footer Configuration
+# ==============================================================================
+footer_tags:
+  - OHDSI
+  - OMOP
+  - Clinical NLP
+  - Healthcare AI
+
+footer_resources:
+  - name: OHDSI.org
+    url: https://ohdsi.org
+  - name: OHDSI Forums
+    url: https://forums.ohdsi.org
+  - name: OHDSI GitHub
+    url: https://github.com/OHDSI
+
+# ==============================================================================
+# Home Page Features
+# ==============================================================================
+features:
+  - icon: "🏥"
+    title: Clinical Informatics
+    description: Deep dives into OHDSI tools, OMOP CDM, and standardized healthcare data.
+  - icon: "🤖"
+    title: Healthcare AI
+    description: NLP pipelines, BioBERT, and machine learning for clinical applications.
+  - icon: "📊"
+    title: Real-World Evidence
+    description: Cohort studies, comparative effectiveness, and observational research.
+
+# ==============================================================================
+# Learn More Section
+# ==============================================================================
+learn_more:
+  title: Learn More About OHDSI
+  items:
+    - title: The Book of OHDSI
+      description: The definitive guide to observational health data science. Free online at
+      url: https://ohdsi.github.io/TheBookOfOhdsi/
+      link_text: ohdsi.github.io/TheBookOfOhdsi
+    - title: EHDEN Academy
+      description: Free online courses for OHDSI tools and OMOP CDM. Start learning at
+      url: https://academy.ehden.eu/
+      link_text: academy.ehden.eu
+
+# ==============================================================================
+# Build Settings
+# ==============================================================================
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ==============================================================================
+# Collections & Permalinks
+# ==============================================================================
+permalink: /blog/:title/
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+# ==============================================================================
+# Defaults
+# ==============================================================================
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "DataGodzilla"
+      mermaid: true
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "page"
+
+# ==============================================================================
+# Exclude from processing
+# ==============================================================================
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .bundle
+  - .sass-cache
+  - .jekyll-cache
+  - README.md
+  - CLAUDE.md
+  - LICENSE

@@ -1,0 +1,18 @@
+---
+layout: default
+---
+
+<header class="page-header">
+    <h1 class="page-title">{{ page.title | default: "Blog" }}</h1>
+    {% if page.description %}
+    <p class="page-description">{{ page.description }}</p>
+    {% endif %}
+</header>
+
+<section class="section">
+    <div class="posts-grid">
+        {% for post in site.posts %}
+        {% include post-card.html post=post %}
+        {% endfor %}
+    </div>
+</section>

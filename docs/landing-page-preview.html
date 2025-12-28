@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGodzilla | Clinical Informatics & Healthcare AI</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-text: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-text-muted: #9ca3af;
+            --color-bg: #ffffff;
+            --color-bg-secondary: #f9fafb;
+            --color-border: #e5e7eb;
+            --color-accent: #2563eb;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius: 12px;
+        }
+        
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.6;
+        }
+        
+        /* ========== HEADER ========== */
+        .site-header {
+            border-bottom: 1px solid var(--color-border);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            background: var(--color-bg);
+            z-index: 100;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-text);
+            text-decoration: none;
+        }
+        
+        .site-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .site-nav a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .site-nav a:hover {
+            color: var(--color-text);
+        }
+        
+        /* ========== HERO ========== */
+        .hero {
+            text-align: center;
+            padding: 64px 24px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+        
+        .btn-primary {
+            background: var(--color-text);
+            color: white;
+            border: 1px solid var(--color-text);
+        }
+        
+        .btn-primary:hover {
+            background: #374151;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--color-bg-secondary);
+        }
+        
+        /* ========== SECTION ========== */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 64px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .view-all {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+        }
+        
+        .view-all:hover {
+            color: var(--color-accent);
+        }
+        
+        /* ========== POST CARDS GRID ========== */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+        
+        .post-card {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        
+        .post-card:hover {
+            border-color: var(--color-text-muted);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .post-card-header {
+            flex: 1;
+        }
+        
+        .post-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .post-card-title a {
+            color: var(--color-text);
+            text-decoration: none;
+        }
+        
+        .post-card-title a:hover {
+            color: var(--color-accent);
+        }
+        
+        .post-card-excerpt {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .post-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin-bottom: 16px;
+        }
+        
+        .post-card-author {
+            color: var(--color-text-secondary);
+        }
+        
+        .post-card-stats {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .post-card-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .post-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .post-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--color-bg-secondary);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border: 1px solid var(--color-border);
+        }
+        
+        .tag:hover {
+            background: var(--color-border);
+        }
+        
+        .post-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            background: white;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            background: var(--color-bg-secondary);
+            color: var(--color-text);
+        }
+        
+        /* ========== FEATURES ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 48px;
+        }
+        
+        .feature-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .feature-desc {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+        
+        /* ========== LEARN MORE ========== */
+        .learn-more {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 64px;
+        }
+        
+        .learn-more h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .learn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .learn-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+        
+        .learn-card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .learn-card p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .learn-card a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+        
+        .learn-card a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ========== FOOTER ========== */
+        .site-footer {
+            border-top: 1px solid var(--color-border);
+            padding: 48px 24px;
+            background: var(--color-bg);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .footer-section h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text);
+            margin-bottom: 16px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section a {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--color-accent);
+        }
+        
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+        
+        .footer-bottom a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+        
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="site-title">DataGodzilla</a>
+            <nav class="site-nav">
+                <a href="/blog">Blog</a>
+                <a href="/projects">Projects</a>
+                <a href="/about">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>DataGodzilla</h1>
+        <p>Exploring clinical informatics, healthcare AI, and the OHDSI ecosystem. Deep dives into OMOP CDM, NLP pipelines, and real-world evidence generation.</p>
+        <div class="hero-buttons">
+            <a href="/blog" class="btn btn-primary">
+                Browse Posts →
+            </a>
+            <a href="/about" class="btn btn-secondary">
+                About Me
+            </a>
+        </div>
+    </section>
+
+    <!-- Recent Posts -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">📝 Recent Posts</h2>
+            <a href="/blog" class="view-all">View All</a>
+        </div>
+        
+        <div class="posts-grid">
+            
+            <!-- Post Card 1 -->
+            <article class="post-card">
+                <div class="post-card-header">
+                    <h3 class="post-card-title">
+                        <a href="/blog/mastering-atlas-cohort-definitions">Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide</a>
+                    </h3>
+                    <p class="post-card-excerpt">Learn how to build reproducible patient cohorts in OHDSI ATLAS with a hands-on Type 2 Diabetes use case, backend table explanations, and lessons learned.</p>
+                    <div class="post-card-meta">
+                        <span class="post-card-author">DataGodzilla</span>
+                        <div class="post-card-stats">
+                            <span class="post-card-stat">📅 Dec 28</span>
+                            <span class="post-card-stat">⏱️ 18 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-card-tags">
+                        <a href="/tags/ohdsi" class="tag">OHDSI</a>
+                        <a href="/tags/atlas" class="tag">ATLAS</a>
+                        <a href="/tags/omop" class="tag">OMOP</a>
+                    </div>
+                    <div class="post-card-actions">
+                        <a href="/blog/mastering-atlas-cohort-definitions" class="action-btn">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Post Card 2 -->
+            <article class="post-card">
+                <div class="post-card-header">
+                    <h3 class="post-card-title">
+                        <a href="/blog/omop-vocabulary-deep-dive">OMOP Vocabulary Deep Dive: SNOMED, RxNorm, and LOINC</a>
+                    </h3>
+                    <p class="post-card-excerpt">Understanding the standardized vocabularies that power the OMOP Common Data Model. How to navigate concept hierarchies and build effective concept sets.</p>
+                    <div class="post-card-meta">
+                        <span class="post-card-author">DataGodzilla</span>
+                        <div class="post-card-stats">
+                            <span class="post-card-stat">📅 Dec 21</span>
+                            <span class="post-card-stat">⏱️ 15 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-card-tags">
+                        <a href="/tags/vocabulary" class="tag">Vocabulary</a>
+                        <a href="/tags/snomed" class="tag">SNOMED</a>
+                        <a href="/tags/omop" class="tag">OMOP</a>
+                    </div>
+                    <div class="post-card-actions">
+                        <a href="/blog/omop-vocabulary-deep-dive" class="action-btn">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Post Card 3 -->
+            <article class="post-card">
+                <div class="post-card-header">
+                    <h3 class="post-card-title">
+                        <a href="/blog/synthea-to-omop-etl">ETL Pipeline: Synthea to OMOP CDM with Python</a>
+                    </h3>
+                    <p class="post-card-excerpt">Building a complete ETL pipeline to transform Synthea synthetic patient data into OMOP CDM format using Python and PostgreSQL.</p>
+                    <div class="post-card-meta">
+                        <span class="post-card-author">DataGodzilla</span>
+                        <div class="post-card-stats">
+                            <span class="post-card-stat">📅 Dec 14</span>
+                            <span class="post-card-stat">⏱️ 22 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-card-tags">
+                        <a href="/tags/etl" class="tag">ETL</a>
+                        <a href="/tags/python" class="tag">Python</a>
+                        <a href="/tags/synthea" class="tag">Synthea</a>
+                    </div>
+                    <div class="post-card-actions">
+                        <a href="/blog/synthea-to-omop-etl" class="action-btn">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Post Card 4 -->
+            <article class="post-card">
+                <div class="post-card-header">
+                    <h3 class="post-card-title">
+                        <a href="/blog/achilles-data-quality">Data Quality Assessment with OHDSI Achilles</a>
+                    </h3>
+                    <p class="post-card-excerpt">Running Achilles to characterize your OMOP database, understanding the results tables, and identifying data quality issues before analysis.</p>
+                    <div class="post-card-meta">
+                        <span class="post-card-author">DataGodzilla</span>
+                        <div class="post-card-stats">
+                            <span class="post-card-stat">📅 Dec 7</span>
+                            <span class="post-card-stat">⏱️ 12 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-card-tags">
+                        <a href="/tags/achilles" class="tag">Achilles</a>
+                        <a href="/tags/data-quality" class="tag">Data Quality</a>
+                    </div>
+                    <div class="post-card-actions">
+                        <a href="/blog/achilles-data-quality" class="action-btn">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Post Card 5 -->
+            <article class="post-card">
+                <div class="post-card-header">
+                    <h3 class="post-card-title">
+                        <a href="/blog/clinical-nlp-pipeline">Building a Clinical NLP Pipeline with BioBERT</a>
+                    </h3>
+                    <p class="post-card-excerpt">From raw clinical notes to structured OMOP data. Implementing named entity recognition, concept normalization, and relation extraction.</p>
+                    <div class="post-card-meta">
+                        <span class="post-card-author">DataGodzilla</span>
+                        <div class="post-card-stats">
+                            <span class="post-card-stat">📅 Nov 30</span>
+                            <span class="post-card-stat">⏱️ 25 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-card-tags">
+                        <a href="/tags/nlp" class="tag">NLP</a>
+                        <a href="/tags/biobert" class="tag">BioBERT</a>
+                        <a href="/tags/ner" class="tag">NER</a>
+                    </div>
+                    <div class="post-card-actions">
+                        <a href="/blog/clinical-nlp-pipeline" class="action-btn">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Post Card 6 -->
+            <article class="post-card">
+                <div class="post-card-header">
+                    <h3 class="post-card-title">
+                        <a href="/blog/broadsea-docker-setup">OHDSI Broadsea: Complete Docker Setup Guide</a>
+                    </h3>
+                    <p class="post-card-excerpt">Step-by-step guide to deploying the complete OHDSI stack with Docker Compose. ATLAS, WebAPI, and connecting external databases.</p>
+                    <div class="post-card-meta">
+                        <span class="post-card-author">DataGodzilla</span>
+                        <div class="post-card-stats">
+                            <span class="post-card-stat">📅 Nov 23</span>
+                            <span class="post-card-stat">⏱️ 14 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-card-footer">
+                    <div class="post-card-tags">
+                        <a href="/tags/docker" class="tag">Docker</a>
+                        <a href="/tags/broadsea" class="tag">Broadsea</a>
+                        <a href="/tags/setup" class="tag">Setup</a>
+                    </div>
+                    <div class="post-card-actions">
+                        <a href="/blog/broadsea-docker-setup" class="action-btn">
+                            Read →
+                        </a>
+                    </div>
+                </div>
+            </article>
+            
+        </div>
+        
+        <!-- Features -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <div class="feature-title">Clinical Informatics</div>
+                <div class="feature-desc">Deep dives into OHDSI tools, OMOP CDM, and standardized healthcare data.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-title">Healthcare AI</div>
+                <div class="feature-desc">NLP pipelines, BioBERT, and machine learning for clinical applications.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Real-World Evidence</div>
+                <div class="feature-desc">Cohort studies, comparative effectiveness, and observational research.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learn More -->
+    <section class="learn-more">
+        <h2>Learn More About OHDSI</h2>
+        <div class="learn-grid">
+            <div class="learn-card">
+                <div class="learn-card-title">The Book of OHDSI</div>
+                <p>The definitive guide to observational health data science. Free online at <a href="https://ohdsi.github.io/TheBookOfOhdsi/">ohdsi.github.io/TheBookOfOhdsi</a>.</p>
+            </div>
+            <div class="learn-card">
+                <div class="learn-card-title">EHDEN Academy</div>
+                <p>Free online courses for OHDSI tools and OMOP CDM. Start learning at <a href="https://academy.ehden.eu/">academy.ehden.eu</a>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="/blog">All Posts</a></li>
+                        <li><a href="/tags">Tags</a></li>
+                        <li><a href="/projects">Projects</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Topics</h4>
+                    <ul>
+                        <li><a href="/tags/ohdsi">OHDSI</a></li>
+                        <li><a href="/tags/omop">OMOP CDM</a></li>
+                        <li><a href="/tags/nlp">Clinical NLP</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                        <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                        <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                        <li><a href="https://linkedin.com/in/datagodzilla">LinkedIn</a></li>
+                        <li><a href="/about">About</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2025 DataGodzilla</span>
+                <span>Built with Jekyll • Hosted on GitHub Pages</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

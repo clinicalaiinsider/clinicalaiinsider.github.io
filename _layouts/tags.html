@@ -1,0 +1,103 @@
+---
+layout: default
+---
+
+<header class="page-header">
+    <h1 class="page-title">{{ page.title | default: "Tags" }}</h1>
+    <p class="page-description">Browse posts by topic</p>
+</header>
+
+<section class="tags-page">
+    {% assign tags = site.tags | sort %}
+    
+    <div class="tags-cloud">
+        {% for tag in tags %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% endfor %}
+    </div>
+    
+    <div class="tags-sections">
+        {% for tag in tags %}
+        <section id="{{ tag[0] | slugify }}" class="tag-section">
+            <h2>{{ tag[0] }}</h2>
+            <ul class="tag-posts">
+                {% for post in tag[1] %}
+                <li>
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                    <span class="post-date">{{ post.date | date: "%b %d, %Y" }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tag-large {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+.tag-count {
+    background: var(--color-border);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    margin-left: 4px;
+}
+
+.tag-section {
+    margin-bottom: 40px;
+}
+
+.tag-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tag-posts {
+    list-style: none;
+    padding: 0;
+}
+
+.tag-posts li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.tag-posts li:last-child {
+    border-bottom: none;
+}
+
+.tag-posts a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tag-posts a:hover {
+    color: var(--color-accent);
+}
+
+.post-date {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+</style>
