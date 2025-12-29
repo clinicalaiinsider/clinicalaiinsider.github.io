@@ -1,4 +1,4 @@
-# DataGodzilla Blog
+# Clinical AI Insider - Blog
 
 A clean, minimal Jekyll blog for clinical informatics and healthcare AI content.
 
