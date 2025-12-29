@@ -2,6 +2,8 @@
 # Site Settings
 # ==============================================================================
 title: Clinical AI Insider
+brand: Clinical AI Insider
+tagline: Clinical informatics and healthcare AI research
 description: Deep dives into the healthcare ecosystem, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights
 author: datagodzilla
 email: your-email@example.com

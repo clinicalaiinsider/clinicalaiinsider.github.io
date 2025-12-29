@@ -4,7 +4,7 @@ layout: default
 
 <!-- Hero Section -->
 <section class="hero">
-    <h1>{{ site.title | default: "Clinical informatics and healthcare AI research" }}</h1>
+    <h1>{{ site.tagline | default: site.title }}</h1>
     <p>{{ site.description }}</p>
     <div class="hero-buttons">
         <a href="{{ '/blog/' | relative_url }}" class="btn btn-primary">
