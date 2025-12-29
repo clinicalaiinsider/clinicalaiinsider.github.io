@@ -138,3 +138,4 @@ exclude:
   - README.md
   - CLAUDE.md
   - LICENSE
+  - .gitignore
