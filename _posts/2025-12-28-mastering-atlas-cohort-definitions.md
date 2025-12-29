@@ -229,7 +229,8 @@ To understand ATLAS fully, you need to know what's happening in the database whe
 
 ### The Data Model for Cohorts
 
-```mermaid
+<div class="diagram-container">
+<pre class="mermaid">
 erDiagram
     COHORT_DEFINITION ||--o{ COHORT : generates
     COHORT_DEFINITION ||--o{ COHORT_INCLUSION : has
@@ -264,7 +265,8 @@ erDiagram
         int gender_concept_id
         int year_of_birth
     }
-```
+</pre>
+</div>
 
 ### The Cohort Generation Pipeline
 
