@@ -1,28 +1,37 @@
 <article class="post-card">
     <div class="post-card-header">
+        {% assign first_tag = include.post.tags.first %}
+        {% if first_tag %}
+        <div class="post-card-category">{{ first_tag }}</div>
+        {% endif %}
         <h3 class="post-card-title">
             <a href="{{ include.post.url | relative_url }}">{{ include.post.title }}</a>
         </h3>
         <p class="post-card-excerpt">{{ include.post.description | default: include.post.excerpt | strip_html | truncate: 160 }}</p>
-        <div class="post-card-meta">
-            <span class="post-card-author">{{ include.post.author | default: site.author }}</span>
-            <div class="post-card-stats">
-                <span class="post-card-stat">📅 {{ include.post.date | date: "%b %d" }}</span>
-                <span class="post-card-stat">⏱️ {% if include.post.reading_time %}{{ include.post.reading_time }}{% else %}{{ include.post.content | number_of_words | divided_by: 200 | plus: 1 }}{% endif %} min</span>
-            </div>
-        </div>
     </div>
-    <div class="post-card-footer">
-        <div class="post-card-tags">
-            {% for tag in include.post.tags limit:3 %}
-            <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
-            {% endfor %}
-            {% if include.post.tags.size > 3 %}
-            <span class="tag tag-more">+{{ include.post.tags.size | minus: 3 }}</span>
-            {% endif %}
+    <div class="post-card-meta">
+        <div class="post-card-stats">
+            <span>{{ include.post.date | date: "%b %d, %Y" }}</span>
+            <span>{% if include.post.reading_time %}{{ include.post.reading_time }}{% else %}{{ include.post.content | number_of_words | divided_by: 200 | plus: 1 }}{% endif %} min read</span>
         </div>
-        <div class="post-card-actions">
-            <a href="{{ include.post.url | relative_url }}" class="action-btn">Read →</a>
-        </div>
+        <a href="{{ include.post.url | relative_url }}" class="read-link">Read →</a>
+    </div>
+    <div class="post-card-tags">
+        {% for tag in include.post.tags limit:3 %}
+        {% assign tag_lower = tag | downcase %}
+        {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'broadsea' or tag_lower == 'cohort' %}
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-ohdsi">{{ tag }}</a>
+        {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical nlp' %}
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-nlp">{{ tag }}</a>
+        {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-python">{{ tag }}</a>
+        {% elsif tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'data' or tag_lower == 'vocabulary' or tag_lower == 'snomed' or tag_lower == 'loinc' or tag_lower == 'rxnorm' or tag_lower == 'data quality' %}
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-data">{{ tag }}</a>
+        {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-tutorial">{{ tag }}</a>
+        {% else %}
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
+        {% endif %}
+        {% endfor %}
     </div>
 </article>

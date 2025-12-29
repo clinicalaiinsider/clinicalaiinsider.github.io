@@ -4,11 +4,11 @@ layout: default
 
 <!-- Hero Section -->
 <section class="hero">
-    <h1>{{ site.title }}</h1>
+    <h1>{{ site.title | default: "Clinical informatics and healthcare AI research" }}</h1>
     <p>{{ site.description }}</p>
     <div class="hero-buttons">
         <a href="{{ '/blog/' | relative_url }}" class="btn btn-primary">
-            Browse Posts →
+            Browse Posts
         </a>
         <a href="{{ '/about/' | relative_url }}" class="btn btn-secondary">
             About Me
@@ -19,34 +19,39 @@ layout: default
 <!-- Recent Posts Section -->
 <section class="section">
     <div class="section-header">
-        <h2 class="section-title">📝 Recent Posts</h2>
-        <a href="{{ '/blog/' | relative_url }}" class="view-all">View All</a>
+        <span class="section-title">Featured</span>
+        <a href="{{ '/blog/' | relative_url }}" class="view-all">View all posts →</a>
     </div>
     
-    <div class="posts-grid">
+    <div class="posts-grid" style="max-width: var(--max-width-wide); margin: 0 auto; padding: 0 var(--space-lg);">
         {% assign posts = site.posts | slice: 0, 6 %}
         {% for post in posts %}
         {% include post-card.html post=post %}
         {% endfor %}
     </div>
-    
-    <!-- Features -->
-    {% if site.features %}
-    <div class="features-grid">
-        {% for feature in site.features %}
-        <div class="feature-card">
-            <div class="feature-icon">{{ feature.icon }}</div>
-            <div class="feature-title">{{ feature.title }}</div>
-            <div class="feature-desc">{{ feature.description }}</div>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
 </section>
+
+<!-- Topics Section -->
+{% if site.features %}
+<section style="padding: 80px 24px; background: var(--color-bg);">
+    <div style="max-width: var(--max-width-wide); margin: 0 auto;">
+        <span class="section-title">Topics</span>
+        <div class="features-grid" style="margin-top: 40px;">
+            {% for feature in site.features %}
+            <div class="feature-card">
+                <div class="feature-icon">{{ feature.icon }}</div>
+                <div class="feature-title">{{ feature.title }}</div>
+                <div class="feature-desc">{{ feature.description }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 
 <!-- Learn More Section -->
 {% if site.learn_more %}
-<section class="learn-more">
+<section class="learn-more" style="background: var(--color-bg-alt);">
     <h2>{{ site.learn_more.title | default: "Learn More" }}</h2>
     <div class="learn-grid">
         {% for item in site.learn_more.items %}
