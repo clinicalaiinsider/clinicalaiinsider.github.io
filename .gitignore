@@ -42,6 +42,13 @@ package-lock.json
 .env
 .env.local
 .env.*.local
+.venv/
+
+# Claude
+.claude/
+
+# GitHub workflows (local only)
+.github/
 
 # Drafts and local files
 _drafts/*.md

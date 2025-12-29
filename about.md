@@ -5,17 +5,17 @@ description: Clinical Informatics & Healthcare AI
 permalink: /about/
 ---
 
-## Hi, I'm DataGodzilla 👋
+## Hi, I'm Narayana Surampudi 👋
 
-I'm a clinical informaticist and data scientist exploring the intersection of healthcare data and artificial intelligence. My work focuses on:
+I'm a senior data scientist exploring the intersection of healthcare data and artificial intelligence. My work focuses on:
 
-- **OHDSI Ecosystem** — Building with OMOP CDM, ATLAS, and the global network of observational health databases
 - **Clinical NLP** — Extracting structured insights from unstructured clinical text using BioBERT and custom pipelines
+- **Healthcare Data Interoperability** — Implementing OMOP CDM and FHIR standards for seamless data exchange
 - **Real-World Evidence** — Designing cohort studies and comparative effectiveness research
 
 ## Background
 
-With a background in [your background here], I've spent [X years] working on healthcare data problems ranging from ETL pipelines to predictive modeling.
+With a background in [your background here], I've spent close to 7 years working on healthcare data problems ranging from ETL pipelines to predictive modeling.
 
 ## This Blog
 
@@ -31,8 +31,8 @@ This site documents my learning journey through clinical informatics. Each post 
 
 ## Get in Touch
 
+- **Blog**: [clinicalaiinsider.github.io](https://clinicalaiinsider.github.io/)
 - **GitHub:** [github.com/datagodzilla](https://github.com/datagodzilla)
-- **LinkedIn:** [linkedin.com/in/datagodzilla](https://linkedin.com/in/datagodzilla)
-- **OHDSI Forums:** [forums.ohdsi.org](https://forums.ohdsi.org)
+- **LinkedIn:** [linkedin.com/in/datagodzilla](https://www.linkedin.com/in/lalitsurampudi/)
 
 Feel free to reach out if you're working on similar problems or have questions about any of the posts!

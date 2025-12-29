@@ -1,9 +1,9 @@
 # ==============================================================================
 # Site Settings
 # ==============================================================================
-title: Clinical informatics and healthcare AI research
+title: Clinical AI Insider
 description: Deep dives into the healthcare ecosystem, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights
-author: DataGodzilla
+author: datagodzilla
 email: your-email@example.com
 url: "https://clinicalaiinsider.github.io"
 baseurl: "" # Leave empty for user/org pages, or "/repo-name" for project pages
