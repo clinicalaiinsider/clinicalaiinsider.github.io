@@ -1,0 +1,22 @@
+<!--
+  Claim-Evidence-Interpretation Block
+  Usage: {% include claim-evidence.html
+           claim="OHDSI network studies achieve 48% faster time-to-results compared to traditional multi-site research."
+           evidence="<img src='/assets/charts/performance-comparison.svg' alt='Performance Chart'>"
+           interpretation="This improvement stems from standardized data formats and reusable analytics packages, eliminating the need for site-specific data transformations."
+         %}
+-->
+
+<div class="claim-evidence-block">
+  <div class="claim">
+    {{ include.claim }}
+  </div>
+
+  <div class="evidence">
+    {{ include.evidence }}
+  </div>
+
+  <div class="interpretation">
+    {{ include.interpretation }}
+  </div>
+</div>

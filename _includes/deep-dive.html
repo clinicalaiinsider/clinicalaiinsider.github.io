@@ -1,0 +1,25 @@
+<!--
+  Deep Dive Expandable Component
+  Usage: {% include deep-dive.html
+           icon="🔬"
+           title="Technical Deep Dive: How the Algorithm Works"
+           content="<p>Detailed technical content here...</p><pre><code>code example</code></pre>"
+         %}
+
+  For longer content, use capture:
+  {% capture deep_dive_content %}
+  <p>Your detailed content here...</p>
+  <pre><code class="language-python">
+  def example():
+      pass
+  </code></pre>
+  {% endcapture %}
+  {% include deep-dive.html title="Technical Details" content=deep_dive_content %}
+-->
+
+<details class="deep-dive">
+  <summary>{{ include.icon | default: "🔬" }} {{ include.title | default: "Technical Deep Dive" }}</summary>
+  <div class="technical-content">
+    {{ include.content }}
+  </div>
+</details>

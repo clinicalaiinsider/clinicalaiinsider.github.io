@@ -1,0 +1,35 @@
+<!--
+  Before/After Transformation Component
+  Usage: {% include before-after.html
+           before_title="Manual Process"
+           before_items="4 hours per analysis|12% error rate|Limited to single database"
+           after_title="Automated with OHDSI"
+           after_items="15 minutes automated|0.1% error rate|Runs across 450+ databases"
+         %}
+
+  Note: Items are pipe-separated (|)
+-->
+
+<div class="transformation-story">
+  <div class="before">
+    <h4>{{ include.before_title | default: "Before" }}</h4>
+    <ul>
+      {% assign before_list = include.before_items | split: "|" %}
+      {% for item in before_list %}
+      <li>{{ item | strip }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="after">
+    <h4>{{ include.after_title | default: "After" }}</h4>
+    <ul>
+      {% assign after_list = include.after_items | split: "|" %}
+      {% for item in after_list %}
+      <li>{{ item | strip }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

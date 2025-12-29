@@ -1,0 +1,69 @@
+<!--
+  Stat Grid Component
+  Usage: {% include stat-grid.html
+           stat1_value="4,200+"
+           stat1_label="Collaborators"
+           stat1_detail="across 83 countries"
+           stat2_value="810M"
+           stat2_label="Patient Records"
+           stat2_detail="~12% of world population"
+           stat2_highlight="true"
+           stat3_value="453+"
+           stat3_label="Data Partners"
+           stat3_detail="EHRs, claims, registries"
+         %}
+-->
+
+<div class="stats-grid">
+  {% if include.stat1_value %}
+  <div class="stat-card{% if include.stat1_highlight == 'true' %} highlight{% endif %}{% if include.stat1_dark == 'true' %} dark{% endif %}">
+    <span class="stat-value">{{ include.stat1_value }}</span>
+    <span class="stat-label">{{ include.stat1_label }}</span>
+    {% if include.stat1_detail %}
+    <span class="stat-detail">{{ include.stat1_detail }}</span>
+    {% endif %}
+    {% if include.stat1_source %}
+    <span class="stat-source">{{ include.stat1_source }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.stat2_value %}
+  <div class="stat-card{% if include.stat2_highlight == 'true' %} highlight{% endif %}{% if include.stat2_dark == 'true' %} dark{% endif %}">
+    <span class="stat-value">{{ include.stat2_value }}</span>
+    <span class="stat-label">{{ include.stat2_label }}</span>
+    {% if include.stat2_detail %}
+    <span class="stat-detail">{{ include.stat2_detail }}</span>
+    {% endif %}
+    {% if include.stat2_source %}
+    <span class="stat-source">{{ include.stat2_source }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.stat3_value %}
+  <div class="stat-card{% if include.stat3_highlight == 'true' %} highlight{% endif %}{% if include.stat3_dark == 'true' %} dark{% endif %}">
+    <span class="stat-value">{{ include.stat3_value }}</span>
+    <span class="stat-label">{{ include.stat3_label }}</span>
+    {% if include.stat3_detail %}
+    <span class="stat-detail">{{ include.stat3_detail }}</span>
+    {% endif %}
+    {% if include.stat3_source %}
+    <span class="stat-source">{{ include.stat3_source }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.stat4_value %}
+  <div class="stat-card{% if include.stat4_highlight == 'true' %} highlight{% endif %}{% if include.stat4_dark == 'true' %} dark{% endif %}">
+    <span class="stat-value">{{ include.stat4_value }}</span>
+    <span class="stat-label">{{ include.stat4_label }}</span>
+    {% if include.stat4_detail %}
+    <span class="stat-detail">{{ include.stat4_detail }}</span>
+    {% endif %}
+    {% if include.stat4_source %}
+    <span class="stat-source">{{ include.stat4_source }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>

@@ -1,0 +1,562 @@
+/**
+ * Visual Storytelling CSS
+ * Anthropic-style visual components for technical blog posts
+ *
+ * Version: 1.0.0
+ * Last Updated: December 2024
+ */
+
+/* ==========================================================================
+   CSS Variables - Design System Tokens
+   ========================================================================== */
+
+:root {
+  /* Primary Colors */
+  --vs-primary: #4F46E5;
+  --vs-primary-light: #6366F1;
+  --vs-primary-dark: #4338CA;
+
+  /* Secondary Colors */
+  --vs-secondary: #10B981;
+  --vs-secondary-light: #34D399;
+  --vs-secondary-dark: #059669;
+
+  /* Semantic Colors */
+  --vs-success: #10B981;
+  --vs-warning: #F59E0B;
+  --vs-error: #EF4444;
+  --vs-info: #3B82F6;
+
+  /* Background Colors */
+  --vs-bg-primary: #F5F3FF;
+  --vs-bg-secondary: #F0FDF4;
+  --vs-bg-tertiary: #ECFDF5;
+  --vs-bg-dark: #1E1B4B;
+
+  /* Border Colors */
+  --vs-border-light: #E2E8F0;
+  --vs-border-primary: #C7D2FE;
+
+  /* Text Colors */
+  --vs-text-primary: #1E293B;
+  --vs-text-secondary: #64748B;
+  --vs-text-light: #94A3B8;
+  --vs-text-inverse: #FFFFFF;
+
+  /* Gradients */
+  --vs-gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --vs-gradient-secondary: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --vs-gradient-dark: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
+
+  /* Shadows */
+  --vs-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --vs-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --vs-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Border Radius */
+  --vs-radius-sm: 4px;
+  --vs-radius-md: 8px;
+  --vs-radius-lg: 12px;
+  --vs-radius-xl: 16px;
+
+  /* Spacing */
+  --vs-space-xs: 0.25rem;
+  --vs-space-sm: 0.5rem;
+  --vs-space-md: 1rem;
+  --vs-space-lg: 1.5rem;
+  --vs-space-xl: 2rem;
+  --vs-space-2xl: 3rem;
+
+  /* Typography */
+  --vs-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --vs-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ==========================================================================
+   Stats Grid Component
+   ========================================================================== */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--vs-space-lg);
+  margin: var(--vs-space-xl) 0;
+}
+
+.stat-card {
+  background: var(--vs-gradient-primary);
+  color: var(--vs-text-inverse);
+  padding: var(--vs-space-lg);
+  border-radius: var(--vs-radius-lg);
+  text-align: center;
+  box-shadow: var(--vs-shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--vs-shadow-lg);
+}
+
+.stat-card.highlight {
+  background: var(--vs-gradient-secondary);
+}
+
+.stat-card.dark {
+  background: var(--vs-gradient-dark);
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: block;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 1rem;
+  font-weight: 500;
+  display: block;
+  margin-top: var(--vs-space-xs);
+  opacity: 0.9;
+}
+
+.stat-detail {
+  font-size: 0.85rem;
+  display: block;
+  margin-top: var(--vs-space-xs);
+  opacity: 0.75;
+}
+
+.stat-source {
+  font-size: 0.75rem;
+  display: block;
+  margin-top: var(--vs-space-sm);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Concept Card Component
+   ========================================================================== */
+
+.concept-card {
+  border-left: 4px solid var(--vs-primary);
+  background: var(--vs-bg-primary);
+  padding: var(--vs-space-md) var(--vs-space-lg);
+  margin: var(--vs-space-md) 0;
+  border-radius: 0 var(--vs-radius-md) var(--vs-radius-md) 0;
+}
+
+.concept-card .concept-icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--vs-space-sm);
+}
+
+.concept-card h4 {
+  margin: 0 0 var(--vs-space-sm) 0;
+  color: var(--vs-primary-dark);
+  font-weight: 600;
+}
+
+.concept-card .definition {
+  margin: 0 0 var(--vs-space-sm) 0;
+  color: var(--vs-text-primary);
+}
+
+.concept-card .example {
+  margin: 0;
+  color: var(--vs-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Before/After Transformation Component
+   ========================================================================== */
+
+.transformation-story {
+  display: flex;
+  align-items: stretch;
+  gap: var(--vs-space-xl);
+  margin: var(--vs-space-xl) 0;
+}
+
+.transformation-story .before,
+.transformation-story .after {
+  flex: 1;
+  padding: var(--vs-space-lg);
+  border-radius: var(--vs-radius-lg);
+}
+
+.transformation-story .before {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+}
+
+.transformation-story .after {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+}
+
+.transformation-story h4 {
+  margin: 0 0 var(--vs-space-md) 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.transformation-story .before h4 {
+  color: #991B1B;
+}
+
+.transformation-story .after h4 {
+  color: #166534;
+}
+
+.transformation-story ul {
+  margin: 0;
+  padding-left: var(--vs-space-lg);
+}
+
+.transformation-story li {
+  margin-bottom: var(--vs-space-sm);
+  color: var(--vs-text-primary);
+}
+
+.transformation-story .arrow {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  color: var(--vs-text-light);
+  font-weight: bold;
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 768px) {
+  .transformation-story {
+    flex-direction: column;
+  }
+
+  .transformation-story .arrow {
+    transform: rotate(90deg);
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Deep Dive Expandable Component
+   ========================================================================== */
+
+details.deep-dive {
+  background: #F8FAFC;
+  border: 1px solid var(--vs-border-light);
+  border-radius: var(--vs-radius-md);
+  margin: var(--vs-space-lg) 0;
+}
+
+details.deep-dive summary {
+  padding: var(--vs-space-md);
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--vs-text-primary);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-sm);
+}
+
+details.deep-dive summary::-webkit-details-marker {
+  display: none;
+}
+
+details.deep-dive summary::before {
+  content: '▶';
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+details.deep-dive[open] summary::before {
+  transform: rotate(90deg);
+}
+
+details.deep-dive .technical-content {
+  padding: 0 var(--vs-space-md) var(--vs-space-md);
+  border-top: 1px solid var(--vs-border-light);
+}
+
+/* ==========================================================================
+   Quote Carousel / Testimonial Component
+   ========================================================================== */
+
+.testimonial-carousel {
+  position: relative;
+  margin: var(--vs-space-xl) 0;
+}
+
+.testimonial-card {
+  background: var(--vs-bg-primary);
+  border-radius: var(--vs-radius-lg);
+  padding: var(--vs-space-xl);
+  text-align: center;
+}
+
+.testimonial-card .company-logo {
+  height: 40px;
+  margin-bottom: var(--vs-space-md);
+  opacity: 0.8;
+}
+
+.testimonial-card blockquote {
+  margin: 0;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--vs-text-primary);
+  line-height: 1.6;
+}
+
+.testimonial-card blockquote::before {
+  content: '"';
+  font-size: 3rem;
+  color: var(--vs-primary-light);
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.testimonial-card cite {
+  display: block;
+  margin-top: var(--vs-space-md);
+  font-size: 0.9rem;
+  font-style: normal;
+  color: var(--vs-text-secondary);
+}
+
+/* ==========================================================================
+   Claim-Evidence-Interpretation Block
+   ========================================================================== */
+
+.claim-evidence-block {
+  margin: var(--vs-space-xl) 0;
+  border: 1px solid var(--vs-border-light);
+  border-radius: var(--vs-radius-lg);
+  overflow: hidden;
+}
+
+.claim-evidence-block .claim {
+  background: #F8FAFC;
+  padding: var(--vs-space-md) var(--vs-space-lg);
+  border-bottom: 1px solid var(--vs-border-light);
+}
+
+.claim-evidence-block .claim::before {
+  content: '📝 ';
+}
+
+.claim-evidence-block .evidence {
+  padding: var(--vs-space-lg);
+  background: white;
+  text-align: center;
+}
+
+.claim-evidence-block .evidence::before {
+  content: '📊 Evidence';
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--vs-text-light);
+  margin-bottom: var(--vs-space-sm);
+}
+
+.claim-evidence-block .interpretation {
+  background: var(--vs-bg-secondary);
+  padding: var(--vs-space-md) var(--vs-space-lg);
+  border-top: 1px solid var(--vs-border-light);
+}
+
+.claim-evidence-block .interpretation::before {
+  content: '💡 ';
+}
+
+/* ==========================================================================
+   Complexity Markers
+   ========================================================================== */
+
+.complexity-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vs-space-sm);
+  padding: var(--vs-space-xs) var(--vs-space-sm);
+  border-radius: var(--vs-radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.complexity-indicator.beginner {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.complexity-indicator.intermediate {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.complexity-indicator.advanced {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+/* ==========================================================================
+   Visual Section Headers
+   ========================================================================== */
+
+.visual-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-md);
+  margin: var(--vs-space-2xl) 0 var(--vs-space-lg);
+  padding-bottom: var(--vs-space-md);
+  border-bottom: 2px solid var(--vs-border-light);
+}
+
+.visual-section-header .icon {
+  font-size: 1.5rem;
+}
+
+.visual-section-header h2 {
+  margin: 0;
+  flex: 1;
+}
+
+.visual-section-header .complexity {
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   Mermaid Diagram Container
+   ========================================================================== */
+
+.mermaid-container {
+  margin: var(--vs-space-xl) 0;
+  padding: var(--vs-space-lg);
+  background: white;
+  border: 1px solid var(--vs-border-light);
+  border-radius: var(--vs-radius-lg);
+  text-align: center;
+}
+
+.mermaid-container .diagram-title {
+  font-size: 0.9rem;
+  color: var(--vs-text-secondary);
+  margin-bottom: var(--vs-space-md);
+  font-weight: 500;
+}
+
+.mermaid-container .mermaid {
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Inline Callouts
+   ========================================================================== */
+
+.callout {
+  padding: var(--vs-space-md) var(--vs-space-lg);
+  border-radius: var(--vs-radius-md);
+  margin: var(--vs-space-md) 0;
+}
+
+.callout-info {
+  background: #EFF6FF;
+  border-left: 4px solid var(--vs-info);
+}
+
+.callout-success {
+  background: #F0FDF4;
+  border-left: 4px solid var(--vs-success);
+}
+
+.callout-warning {
+  background: #FFFBEB;
+  border-left: 4px solid var(--vs-warning);
+}
+
+.callout-error {
+  background: #FEF2F2;
+  border-left: 4px solid var(--vs-error);
+}
+
+/* ==========================================================================
+   Feature Comparison Table
+   ========================================================================== */
+
+.feature-comparison {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--vs-space-xl) 0;
+}
+
+.feature-comparison th,
+.feature-comparison td {
+  padding: var(--vs-space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--vs-border-light);
+}
+
+.feature-comparison th {
+  background: #F8FAFC;
+  font-weight: 600;
+  color: var(--vs-text-primary);
+}
+
+.feature-comparison tr:hover {
+  background: #FAFAFA;
+}
+
+.feature-comparison .check {
+  color: var(--vs-success);
+  font-size: 1.2rem;
+}
+
+.feature-comparison .cross {
+  color: var(--vs-error);
+  font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   Responsive Utilities
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .testimonial-card blockquote {
+    font-size: 1rem;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+  .stat-card {
+    background: #F3F4F6 !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  details.deep-dive {
+    display: block !important;
+  }
+
+  details.deep-dive[open] .technical-content {
+    display: block !important;
+  }
+}

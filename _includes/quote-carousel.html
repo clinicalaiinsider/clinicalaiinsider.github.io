@@ -1,0 +1,24 @@
+<!--
+  Quote/Testimonial Component
+  Usage: {% include quote-carousel.html
+           quote="This platform transformed how we conduct observational research across our network."
+           author="Dr. Jane Smith"
+           title="Chief Medical Informatics Officer"
+           company="Academic Medical Center"
+           logo="/assets/images/logos/amc-logo.svg"
+         %}
+-->
+
+<div class="testimonial-carousel">
+  <div class="testimonial-card">
+    {% if include.logo %}
+    <img src="{{ include.logo }}" alt="{{ include.company }}" class="company-logo">
+    {% endif %}
+
+    <blockquote>{{ include.quote }}</blockquote>
+
+    <cite>
+      — {{ include.author }}{% if include.title %}, {{ include.title }}{% endif %}{% if include.company %} at {{ include.company }}{% endif %}
+    </cite>
+  </div>
+</div>

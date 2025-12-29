@@ -1,0 +1,446 @@
+/**
+ * Visual Storytelling SCSS Partial
+ * Import this in your main.scss: @import "visual-storytelling";
+ */
+
+// ==========================================================================
+// Variables
+// ==========================================================================
+
+$vs-primary: #4F46E5 !default;
+$vs-primary-light: #6366F1 !default;
+$vs-primary-dark: #4338CA !default;
+
+$vs-secondary: #10B981 !default;
+$vs-secondary-light: #34D399 !default;
+$vs-secondary-dark: #059669 !default;
+
+$vs-success: #10B981 !default;
+$vs-warning: #F59E0B !default;
+$vs-error: #EF4444 !default;
+$vs-info: #3B82F6 !default;
+
+$vs-bg-primary: #F5F3FF !default;
+$vs-bg-secondary: #F0FDF4 !default;
+$vs-bg-tertiary: #ECFDF5 !default;
+
+$vs-border-light: #E2E8F0 !default;
+$vs-border-primary: #C7D2FE !default;
+
+$vs-text-primary: #1E293B !default;
+$vs-text-secondary: #64748B !default;
+$vs-text-light: #94A3B8 !default;
+$vs-text-inverse: #FFFFFF !default;
+
+$vs-gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !default;
+$vs-gradient-secondary: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !default;
+$vs-gradient-dark: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%) !default;
+
+$vs-radius-sm: 4px !default;
+$vs-radius-md: 8px !default;
+$vs-radius-lg: 12px !default;
+
+$vs-space-xs: 0.25rem !default;
+$vs-space-sm: 0.5rem !default;
+$vs-space-md: 1rem !default;
+$vs-space-lg: 1.5rem !default;
+$vs-space-xl: 2rem !default;
+
+// ==========================================================================
+// Stats Grid
+// ==========================================================================
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $vs-space-lg;
+  margin: $vs-space-xl 0;
+}
+
+.stat-card {
+  background: $vs-gradient-primary;
+  color: $vs-text-inverse;
+  padding: $vs-space-lg;
+  border-radius: $vs-radius-lg;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  &.highlight {
+    background: $vs-gradient-secondary;
+  }
+
+  &.dark {
+    background: $vs-gradient-dark;
+  }
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: block;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 1rem;
+  font-weight: 500;
+  display: block;
+  margin-top: $vs-space-xs;
+  opacity: 0.9;
+}
+
+.stat-detail {
+  font-size: 0.85rem;
+  display: block;
+  margin-top: $vs-space-xs;
+  opacity: 0.75;
+}
+
+.stat-source {
+  font-size: 0.75rem;
+  display: block;
+  margin-top: $vs-space-sm;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+// ==========================================================================
+// Concept Card
+// ==========================================================================
+
+.concept-card {
+  border-left: 4px solid $vs-primary;
+  background: $vs-bg-primary;
+  padding: $vs-space-md $vs-space-lg;
+  margin: $vs-space-md 0;
+  border-radius: 0 $vs-radius-md $vs-radius-md 0;
+
+  .concept-icon {
+    font-size: 1.5rem;
+    margin-bottom: $vs-space-sm;
+  }
+
+  h4 {
+    margin: 0 0 $vs-space-sm 0;
+    color: $vs-primary-dark;
+    font-weight: 600;
+  }
+
+  .definition {
+    margin: 0 0 $vs-space-sm 0;
+    color: $vs-text-primary;
+  }
+
+  .example {
+    margin: 0;
+    color: $vs-text-secondary;
+    font-size: 0.9rem;
+  }
+}
+
+// ==========================================================================
+// Before/After Transformation
+// ==========================================================================
+
+.transformation-story {
+  display: flex;
+  align-items: stretch;
+  gap: $vs-space-xl;
+  margin: $vs-space-xl 0;
+
+  .before,
+  .after {
+    flex: 1;
+    padding: $vs-space-lg;
+    border-radius: $vs-radius-lg;
+  }
+
+  .before {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+
+    h4 {
+      color: #991B1B;
+    }
+  }
+
+  .after {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+
+    h4 {
+      color: #166534;
+    }
+  }
+
+  h4 {
+    margin: 0 0 $vs-space-md 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: $vs-space-lg;
+  }
+
+  li {
+    margin-bottom: $vs-space-sm;
+    color: $vs-text-primary;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    color: $vs-text-light;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .arrow {
+      transform: rotate(90deg);
+      justify-content: center;
+    }
+  }
+}
+
+// ==========================================================================
+// Deep Dive Expandable
+// ==========================================================================
+
+details.deep-dive {
+  background: #F8FAFC;
+  border: 1px solid $vs-border-light;
+  border-radius: $vs-radius-md;
+  margin: $vs-space-lg 0;
+
+  summary {
+    padding: $vs-space-md;
+    cursor: pointer;
+    font-weight: 600;
+    color: $vs-text-primary;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: $vs-space-sm;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: '▶';
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .technical-content {
+    padding: 0 $vs-space-md $vs-space-md;
+    border-top: 1px solid $vs-border-light;
+  }
+}
+
+// ==========================================================================
+// Quote Carousel
+// ==========================================================================
+
+.testimonial-carousel {
+  position: relative;
+  margin: $vs-space-xl 0;
+}
+
+.testimonial-card {
+  background: $vs-bg-primary;
+  border-radius: $vs-radius-lg;
+  padding: $vs-space-xl;
+  text-align: center;
+
+  .company-logo {
+    height: 40px;
+    margin-bottom: $vs-space-md;
+    opacity: 0.8;
+  }
+
+  blockquote {
+    margin: 0;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: $vs-text-primary;
+    line-height: 1.6;
+
+    &::before {
+      content: '"';
+      font-size: 3rem;
+      color: $vs-primary-light;
+      line-height: 0;
+      vertical-align: middle;
+    }
+  }
+
+  cite {
+    display: block;
+    margin-top: $vs-space-md;
+    font-size: 0.9rem;
+    font-style: normal;
+    color: $vs-text-secondary;
+  }
+}
+
+// ==========================================================================
+// Claim-Evidence Block
+// ==========================================================================
+
+.claim-evidence-block {
+  margin: $vs-space-xl 0;
+  border: 1px solid $vs-border-light;
+  border-radius: $vs-radius-lg;
+  overflow: hidden;
+
+  .claim {
+    background: #F8FAFC;
+    padding: $vs-space-md $vs-space-lg;
+    border-bottom: 1px solid $vs-border-light;
+
+    &::before {
+      content: '📝 ';
+    }
+  }
+
+  .evidence {
+    padding: $vs-space-lg;
+    background: white;
+    text-align: center;
+
+    &::before {
+      content: '📊 Evidence';
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: $vs-text-light;
+      margin-bottom: $vs-space-sm;
+    }
+  }
+
+  .interpretation {
+    background: $vs-bg-secondary;
+    padding: $vs-space-md $vs-space-lg;
+    border-top: 1px solid $vs-border-light;
+
+    &::before {
+      content: '💡 ';
+    }
+  }
+}
+
+// ==========================================================================
+// Callouts
+// ==========================================================================
+
+.callout {
+  padding: $vs-space-md $vs-space-lg;
+  border-radius: $vs-radius-md;
+  margin: $vs-space-md 0;
+
+  &-info {
+    background: #EFF6FF;
+    border-left: 4px solid $vs-info;
+  }
+
+  &-success {
+    background: #F0FDF4;
+    border-left: 4px solid $vs-success;
+  }
+
+  &-warning {
+    background: #FFFBEB;
+    border-left: 4px solid $vs-warning;
+  }
+
+  &-error {
+    background: #FEF2F2;
+    border-left: 4px solid $vs-error;
+  }
+}
+
+// ==========================================================================
+// Complexity Markers
+// ==========================================================================
+
+.complexity-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: $vs-space-sm;
+  padding: $vs-space-xs $vs-space-sm;
+  border-radius: $vs-radius-sm;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  &.beginner {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  &.intermediate {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+
+  &.advanced {
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+}
+
+// ==========================================================================
+// Responsive
+// ==========================================================================
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .testimonial-card blockquote {
+    font-size: 1rem;
+  }
+}
+
+// ==========================================================================
+// Print
+// ==========================================================================
+
+@media print {
+  .stat-card {
+    background: #F3F4F6 !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  details.deep-dive {
+    display: block !important;
+
+    &[open] .technical-content {
+      display: block !important;
+    }
+  }
+}
