@@ -11,8 +11,6 @@ layout: post
 mermaid: true
 ---
 
-# Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide
-
 ## The Journey So Far
 
 Building on our exploration of the OMOP Common Data Model, standardized vocabularies like SNOMED CT, RxNorm, and LOINC, ETL fundamentals, and data quality assessment with Achilles, we've reached a pivotal milestone: **defining patient cohorts in OHDSI ATLAS**.
