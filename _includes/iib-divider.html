@@ -1,0 +1,26 @@
+<!--
+  IIB Section Divider with Headline
+
+  Usage:
+  {% include iib-divider.html
+     color="teal"
+     headline="Autism is a complex condition, affected by many genetic & environmental factors"
+     highlight1="genetic"
+     highlight1_color="teal"
+     highlight2="environmental"
+     highlight2_color="gold"
+  %}
+-->
+<div class="iib-section-divider">
+  <div class="divider-line" style="--color: var(--iib-{{ include.color | default: 'teal' }});"></div>
+  <h2 class="divider-headline">
+    {% assign headline = include.headline %}
+    {% if include.highlight1 %}
+      {% assign headline = headline | replace: include.highlight1, '<span class="highlight-' | append: include.highlight1_color | append: '">' | append: include.highlight1 | append: '</span>' %}
+    {% endif %}
+    {% if include.highlight2 %}
+      {% assign headline = headline | replace: include.highlight2, '<span class="highlight-' | append: include.highlight2_color | append: '">' | append: include.highlight2 | append: '</span>' %}
+    {% endif %}
+    {{ headline }}
+  </h2>
+</div>

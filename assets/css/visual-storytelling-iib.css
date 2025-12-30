@@ -1,0 +1,595 @@
+/**
+ * Information Is Beautiful - Dark Infographic Theme
+ * Inspired by IIB Vaccines & Autism visualization
+ */
+
+/* ==========================================================================
+   CSS Custom Properties
+   ========================================================================== */
+
+:root {
+  /* IIB Dark Theme */
+  --iib-bg-dark: #0d1117;
+  --iib-bg-section: #161b22;
+  --iib-bg-card: #21262d;
+
+  /* Semantic Accent Colors */
+  --iib-teal: #00d4ff;
+  --iib-teal-dim: rgba(0, 212, 255, 0.2);
+  --iib-coral: #ff6b6b;
+  --iib-coral-dim: rgba(255, 107, 107, 0.2);
+  --iib-gold: #ffd93d;
+  --iib-gold-dim: rgba(255, 217, 61, 0.2);
+  --iib-purple: #a855f7;
+
+  /* Data Visualization */
+  --iib-bubble-light: #58a6ff;
+  --iib-bubble-dark: #1f6feb;
+
+  /* Text */
+  --iib-text-primary: #f0f6fc;
+  --iib-text-secondary: #8b949e;
+  --iib-text-muted: #484f58;
+}
+
+/* ==========================================================================
+   Dark Section Container
+   ========================================================================== */
+
+.iib-section {
+  background: var(--iib-bg-dark);
+  color: var(--iib-text-primary);
+  padding: 4rem 2rem;
+  margin: 2rem -2rem;
+  position: relative;
+}
+
+.iib-section.alt {
+  background: var(--iib-bg-section);
+}
+
+.iib-section-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Headlines with Colored Keywords
+   ========================================================================== */
+
+.iib-headline {
+  font-size: 2.5rem;
+  font-weight: 300;
+  line-height: 1.3;
+  margin-bottom: 2rem;
+  color: var(--iib-text-primary);
+}
+
+.iib-headline .keyword-teal {
+  color: var(--iib-teal);
+  font-weight: 600;
+}
+
+.iib-headline .keyword-coral {
+  color: var(--iib-coral);
+  font-weight: 600;
+}
+
+.iib-headline .keyword-gold {
+  color: var(--iib-gold);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Statistical Statement
+   ========================================================================== */
+
+.iib-stat-statement {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: var(--iib-text-secondary);
+  max-width: 800px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.iib-stat-statement .stat-highlight {
+  color: var(--iib-teal);
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.iib-stat-statement .stat-emphasis {
+  color: var(--iib-gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   Proportional Bubble Chart
+   ========================================================================== */
+
+.iib-bubble-chart {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2rem;
+  padding: 3rem 0;
+}
+
+.iib-bubble-chart .bubble {
+  width: var(--size, 80px);
+  height: var(--size, 80px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--iib-bubble-light) 0%, var(--iib-bubble-dark) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.iib-bubble-chart .bubble:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 40px rgba(88, 166, 255, 0.5);
+}
+
+.iib-bubble-chart .bubble.highlight {
+  background: linear-gradient(135deg, var(--iib-teal) 0%, #0891b2 100%);
+}
+
+.iib-bubble-chart .bubble-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.iib-bubble-chart .bubble-value {
+  font-size: 1rem;
+  font-weight: 700;
+  display: block;
+}
+
+.iib-bubble-chart .bubble-detail {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  position: absolute;
+  bottom: -1.5rem;
+  white-space: nowrap;
+}
+
+/* Large bubble variant */
+.iib-bubble-chart .bubble.large {
+  --size: 140px;
+}
+
+.iib-bubble-chart .bubble.large .bubble-value {
+  font-size: 1.5rem;
+}
+
+/* ==========================================================================
+   Line Chart Container
+   ========================================================================== */
+
+.iib-line-chart {
+  background: var(--iib-bg-card);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.iib-line-chart .chart-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--iib-text-muted);
+  margin-bottom: 1rem;
+}
+
+.iib-line-chart .chart-area {
+  height: 250px;
+  position: relative;
+}
+
+.iib-line-chart .chart-stat {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  text-align: right;
+}
+
+.iib-line-chart .chart-stat .stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--iib-coral);
+  display: block;
+}
+
+.iib-line-chart .chart-stat .stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--iib-text-secondary);
+}
+
+.iib-line-chart .chart-annotation {
+  position: absolute;
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  background: var(--iib-bg-dark);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  max-width: 200px;
+  border-left: 3px solid var(--iib-coral);
+}
+
+/* ==========================================================================
+   Word Cloud
+   ========================================================================== */
+
+.iib-word-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.iib-word-cloud .word-item {
+  --scale: calc(0.7 + (var(--importance, 1) * 0.25));
+  font-size: calc(var(--scale) * 1rem);
+  font-weight: calc(300 + (var(--importance, 1) * 100));
+  color: var(--iib-text-primary);
+  opacity: calc(0.4 + (var(--importance, 1) * 0.12));
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.iib-word-cloud .word-item:hover {
+  color: var(--iib-teal);
+  opacity: 1;
+}
+
+.iib-word-cloud .word-item.highlight {
+  color: var(--iib-gold);
+}
+
+/* ==========================================================================
+   Icon Metric
+   ========================================================================== */
+
+.iib-icon-metric {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--iib-bg-card);
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+
+.iib-icon-metric .icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--iib-teal-dim);
+  border: 2px solid var(--iib-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iib-icon-metric .icon-circle .icon {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--iib-teal);
+}
+
+.iib-icon-metric .metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--iib-text-primary);
+  display: block;
+}
+
+.iib-icon-metric .metric-label {
+  font-size: 0.9rem;
+  color: var(--iib-text-secondary);
+}
+
+/* ==========================================================================
+   Comparison Pills
+   ========================================================================== */
+
+.iib-comparison-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.iib-comparison-pills .pill-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.iib-comparison-pills .pill-item.linked {
+  background: var(--iib-coral-dim);
+  border: 1px solid var(--iib-coral);
+  color: var(--iib-coral);
+}
+
+.iib-comparison-pills .pill-item.not-linked {
+  background: var(--iib-bg-card);
+  border: 1px solid var(--iib-text-muted);
+  color: var(--iib-text-secondary);
+}
+
+.iib-comparison-pills .pill-icon {
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Section Divider
+   ========================================================================== */
+
+.iib-section-divider {
+  padding: 3rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.iib-section-divider .divider-line {
+  height: 3px;
+  background: var(--color, var(--iib-teal));
+  margin-bottom: 2rem;
+}
+
+.iib-section-divider .divider-headline {
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--iib-text-primary);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+.iib-section-divider .highlight-teal {
+  color: var(--iib-teal);
+  font-weight: 600;
+}
+
+.iib-section-divider .highlight-gold {
+  color: var(--iib-gold);
+  font-weight: 600;
+}
+
+.iib-section-divider .highlight-coral {
+  color: var(--iib-coral);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Quote Block (IIB Style)
+   ========================================================================== */
+
+.iib-quote {
+  font-size: 1.75rem;
+  line-height: 1.5;
+  text-align: center;
+  padding: 3rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.iib-quote .quote-word {
+  display: inline;
+}
+
+.iib-quote .quote-word.normal {
+  color: var(--iib-text-secondary);
+}
+
+.iib-quote .quote-word.emphasis {
+  color: var(--iib-text-primary);
+  font-weight: 500;
+}
+
+.iib-quote .quote-word.highlight-teal {
+  color: var(--iib-teal);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.iib-quote .quote-word.highlight-gold {
+  color: var(--iib-gold);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.iib-quote .quote-word.emphasis-coral {
+  color: var(--iib-coral);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Two Column Layout
+   ========================================================================== */
+
+.iib-two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: 2rem 0;
+}
+
+.iib-two-column .column {
+  padding: 1.5rem;
+}
+
+.iib-two-column .column h3 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--iib-text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.iib-two-column .column p {
+  color: var(--iib-text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .iib-two-column {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ==========================================================================
+   Data Source Footer
+   ========================================================================== */
+
+.iib-data-source {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--iib-bg-card);
+  margin-top: 3rem;
+}
+
+.iib-data-source a {
+  color: var(--iib-teal);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.iib-data-source a:hover {
+  text-decoration: underline;
+}
+
+.iib-data-source .credit {
+  font-size: 0.8rem;
+  color: var(--iib-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+.iib-fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.iib-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iib-scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.iib-scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Staggered animation delays */
+.iib-stagger > *:nth-child(1) { transition-delay: 0.1s; }
+.iib-stagger > *:nth-child(2) { transition-delay: 0.2s; }
+.iib-stagger > *:nth-child(3) { transition-delay: 0.3s; }
+.iib-stagger > *:nth-child(4) { transition-delay: 0.4s; }
+.iib-stagger > *:nth-child(5) { transition-delay: 0.5s; }
+
+/* ==========================================================================
+   Counter Animation (JS Required)
+   ========================================================================== */
+
+.iib-counter {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .iib-section {
+    padding: 2rem 1rem;
+    margin: 1rem -1rem;
+  }
+
+  .iib-headline {
+    font-size: 1.75rem;
+  }
+
+  .iib-stat-statement {
+    font-size: 1.2rem;
+  }
+
+  .iib-bubble-chart .bubble {
+    --size: 70px !important;
+  }
+
+  .iib-bubble-chart .bubble.large {
+    --size: 100px !important;
+  }
+
+  .iib-quote {
+    font-size: 1.25rem;
+    padding: 2rem 1rem;
+  }
+
+  .iib-word-cloud {
+    gap: 0.5rem 1rem;
+  }
+}
+
+/* ==========================================================================
+   Print
+   ========================================================================== */
+
+@media print {
+  .iib-section {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .iib-bubble-chart .bubble {
+    background: #ddd !important;
+    color: black !important;
+  }
+
+  .iib-headline .keyword-teal,
+  .iib-headline .keyword-coral,
+  .iib-headline .keyword-gold {
+    color: black !important;
+    text-decoration: underline;
+  }
+}

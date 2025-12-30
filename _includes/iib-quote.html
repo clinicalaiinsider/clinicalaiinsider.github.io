@@ -1,0 +1,36 @@
+<!--
+  IIB Styled Quote Block
+
+  Usage:
+  {% include iib-quote.html
+     text="Simple explanations are often compelling & convincing but not always accurate"
+     highlights="compelling:teal,convincing:gold,not always accurate:coral"
+  %}
+
+  Highlights format: "word:color,word:color,..."
+  Colors: teal, gold, coral
+-->
+{% assign highlight_list = include.highlights | split: "," %}
+
+<blockquote class="iib-quote">
+  {% assign remaining_text = include.text %}
+  {% for hl in highlight_list %}
+    {% assign hl_parts = hl | split: ":" %}
+    {% assign hl_word = hl_parts[0] | strip %}
+    {% assign hl_color = hl_parts[1] | strip %}
+    {% assign remaining_text = remaining_text | replace: hl_word, '|||HIGHLIGHT_START_' | append: hl_color | append: '|||' | append: hl_word | append: '|||HIGHLIGHT_END|||' %}
+  {% endfor %}
+
+  {% assign words = remaining_text | split: " " %}
+  {% for word in words %}
+    {% if word contains "|||HIGHLIGHT_START_" %}
+      {% assign color = word | split: "|||HIGHLIGHT_START_" | last | split: "|||" | first %}
+      {% assign clean_word = word | split: "|||" %}
+      <span class="quote-word highlight-{{ color }}">{{ clean_word[2] }}</span>
+    {% elsif word contains "|||HIGHLIGHT_END|||" %}
+      {%- comment -%}Skip end markers{%- endcomment -%}
+    {% else %}
+      <span class="quote-word normal">{{ word }}</span>
+    {% endif %}
+  {% endfor %}
+</blockquote>

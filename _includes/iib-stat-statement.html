@@ -1,0 +1,21 @@
+<!--
+  IIB Statistical Statement
+
+  Usage:
+  {% include iib-stat-statement.html
+     before="Large studies of over"
+     stat="1.4 million"
+     middle="vaccinated children have found"
+     emphasis="no link"
+     after="between vaccines & autism"
+  %}
+-->
+<div class="iib-stat-statement">
+  {{ include.before }}
+  <span class="stat-highlight">{{ include.stat }}</span>
+  {{ include.middle }}
+  {% if include.emphasis %}
+  <span class="stat-emphasis">{{ include.emphasis }}</span>
+  {% endif %}
+  {{ include.after }}
+</div>

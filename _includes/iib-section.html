@@ -1,0 +1,30 @@
+<!--
+  IIB Dark Section Container
+
+  Usage:
+  {% include iib-section.html
+     headline="vaccines & autism"
+     keyword1="vaccines"
+     keyword1_color="teal"
+     keyword2="autism"
+     keyword2_color="coral"
+     subtext="what does the evidence say?"
+     alt="true"
+  %}
+    [Content goes here]
+  {% include iib-section-end.html %}
+-->
+<section class="iib-section{% if include.alt == 'true' %} alt{% endif %}">
+  <div class="iib-section-content">
+    {% if include.headline %}
+    <h2 class="iib-headline">
+      {% if include.keyword1 %}
+        {{ include.headline | replace: include.keyword1, '<span class="keyword-' | append: include.keyword1_color | append: '">' | append: include.keyword1 | append: '</span>' }}
+      {% else %}
+        {{ include.headline }}
+      {% endif %}
+      {% if include.subtext %}
+      – {{ include.subtext }}
+      {% endif %}
+    </h2>
+    {% endif %}

@@ -1,0 +1,71 @@
+<!--
+  IIB Proportional Bubble Chart
+
+  Usage:
+  {% include iib-bubble-chart.html
+     bubble1_size="140"
+     bubble1_label="MMR study"
+     bubble1_value="657,461"
+     bubble1_detail="children studied"
+     bubble1_highlight="true"
+
+     bubble2_size="100"
+     bubble2_label="Danish study"
+     bubble2_value="357,303"
+
+     bubble3_size="80"
+     bubble3_label="US study"
+     bubble3_value="95,727"
+  %}
+-->
+<div class="iib-bubble-chart iib-stagger">
+  {% if include.bubble1_value %}
+  <div class="bubble{% if include.bubble1_highlight == 'true' %} highlight large{% endif %}" style="--size: {{ include.bubble1_size | default: 80 }}px;">
+    <span class="bubble-label">{{ include.bubble1_label }}</span>
+    <span class="bubble-value">{{ include.bubble1_value }}</span>
+    {% if include.bubble1_detail %}
+    <span class="bubble-detail">{{ include.bubble1_detail }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.bubble2_value %}
+  <div class="bubble{% if include.bubble2_highlight == 'true' %} highlight{% endif %}" style="--size: {{ include.bubble2_size | default: 80 }}px;">
+    <span class="bubble-label">{{ include.bubble2_label }}</span>
+    <span class="bubble-value">{{ include.bubble2_value }}</span>
+    {% if include.bubble2_detail %}
+    <span class="bubble-detail">{{ include.bubble2_detail }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.bubble3_value %}
+  <div class="bubble{% if include.bubble3_highlight == 'true' %} highlight{% endif %}" style="--size: {{ include.bubble3_size | default: 80 }}px;">
+    <span class="bubble-label">{{ include.bubble3_label }}</span>
+    <span class="bubble-value">{{ include.bubble3_value }}</span>
+    {% if include.bubble3_detail %}
+    <span class="bubble-detail">{{ include.bubble3_detail }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.bubble4_value %}
+  <div class="bubble{% if include.bubble4_highlight == 'true' %} highlight{% endif %}" style="--size: {{ include.bubble4_size | default: 80 }}px;">
+    <span class="bubble-label">{{ include.bubble4_label }}</span>
+    <span class="bubble-value">{{ include.bubble4_value }}</span>
+    {% if include.bubble4_detail %}
+    <span class="bubble-detail">{{ include.bubble4_detail }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.bubble5_value %}
+  <div class="bubble{% if include.bubble5_highlight == 'true' %} highlight{% endif %}" style="--size: {{ include.bubble5_size | default: 80 }}px;">
+    <span class="bubble-label">{{ include.bubble5_label }}</span>
+    <span class="bubble-value">{{ include.bubble5_value }}</span>
+    {% if include.bubble5_detail %}
+    <span class="bubble-detail">{{ include.bubble5_detail }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>

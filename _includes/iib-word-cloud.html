@@ -1,0 +1,29 @@
+<!--
+  IIB Word Cloud / Tag Cloud
+
+  Usage:
+  {% include iib-word-cloud.html
+     words="identical twin is autistic:5,fraternal twin autistic:4,sibling with autism:3,very low birth weight:2,father older than 50:2,air pollution:1"
+     highlight="vaccination,food sensitivity"
+  %}
+
+  Format: "word:importance,word:importance,..."
+  Importance: 1-5 (affects size and opacity)
+-->
+{% assign word_list = include.words | split: "," %}
+{% assign highlight_list = include.highlight | split: "," %}
+
+<div class="iib-word-cloud">
+  {% for word_entry in word_list %}
+    {% assign parts = word_entry | split: ":" %}
+    {% assign word = parts[0] | strip %}
+    {% assign importance = parts[1] | default: 2 %}
+    {% assign is_highlight = false %}
+    {% for hl in highlight_list %}
+      {% if word contains hl %}
+        {% assign is_highlight = true %}
+      {% endif %}
+    {% endfor %}
+    <span class="word-item{% if is_highlight %} highlight{% endif %}" style="--importance: {{ importance }};">{{ word }}</span>
+  {% endfor %}
+</div>
