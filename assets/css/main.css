@@ -254,9 +254,11 @@ main {
 
 /* ========== SECTIONS ========== */
 .section {
-    padding: 24px 0 60px 0;
+    padding: 32px 32px 48px 32px;
     background: var(--color-bg-alt);
-    width: 100%;
+    border-radius: var(--radius-lg);
+    margin: 0 24px 40px 24px;
+    max-width: calc(100% - 48px);
 }
 
 .section-header {
@@ -276,7 +278,7 @@ main {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-text-muted);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .section-icon {
