@@ -1,0 +1,192 @@
+<!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic-inspired warm terracotta with transparency */
+    background: rgba(196, 93, 58, 0.12);
+    color: #C45D3A;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(196, 93, 58, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(196, 93, 58, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(196, 93, 58, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 6px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(196, 93, 58, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
