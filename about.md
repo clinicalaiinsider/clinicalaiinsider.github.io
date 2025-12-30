@@ -33,6 +33,6 @@ This site documents my learning journey through clinical informatics. Each post 
 
 - **Blog**: [clinicalaiinsider.github.io](https://clinicalaiinsider.github.io/)
 - **GitHub:** [github.com/datagodzilla](https://github.com/datagodzilla)
-- **LinkedIn:** [linkedin.com/in/datagodzilla](https://www.linkedin.com/in/lalitsurampudi/)
+- **LinkedIn:** [linkedin.com/in/lalitsurampudi](https://www.linkedin.com/in/lalitsurampudi/)
 
 Feel free to reach out if you're working on similar problems or have questions about any of the posts!
