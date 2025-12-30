@@ -254,11 +254,11 @@ main {
 
 /* ========== SECTIONS ========== */
 .section {
-    padding: 14px 28px 28px 28px;
+    padding: 14px 24px 24px 24px;
     background: var(--color-bg-alt);
     border-radius: var(--radius-lg);
     margin: 0 auto 32px auto;
-    max-width: calc(100% - 54px);
+    max-width: calc(100% - 48px);
 }
 
 .section-header {
@@ -273,8 +273,8 @@ main {
 }
 
 .section-title {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-text-muted);
@@ -291,12 +291,12 @@ main {
 }
 
 .view-all {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--color-text-secondary);
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .view-all:hover {
