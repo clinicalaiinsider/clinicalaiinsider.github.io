@@ -1,0 +1,17 @@
+<!--
+  Data Callout Box
+
+  Usage:
+  {% include data-callout.html
+     stat="94%"
+     context="reduction in manual review time after implementing automated ETL"
+     source="Internal benchmark study, 2024"
+  %}
+-->
+<div class="data-callout">
+  <span class="callout-stat">{{ include.stat }}</span>
+  <p class="callout-context">{{ include.context }}</p>
+  {% if include.source %}
+  <span class="callout-source">Source: {{ include.source }}</span>
+  {% endif %}
+</div>

@@ -1,0 +1,53 @@
+<!--
+  Hero Stats Banner
+
+  Usage:
+  {% include hero-stats.html
+     stat1_value="810"
+     stat1_unit="Million"
+     stat1_label="Patient Records"
+     stat2_value="4,200"
+     stat2_unit="+"
+     stat2_label="Collaborators"
+     stat2_highlight="true"
+     stat3_value="83"
+     stat3_unit=""
+     stat3_label="Countries"
+  %}
+-->
+<div class="hero-stats-banner">
+  {% if include.stat1_value %}
+  <div class="hero-stat">
+    <span class="hero-number">{{ include.stat1_value }}</span>
+    {% if include.stat1_unit %}<span class="hero-unit">{{ include.stat1_unit }}</span>{% endif %}
+    <span class="hero-label">{{ include.stat1_label }}</span>
+  </div>
+  {% endif %}
+
+  {% if include.stat2_value %}
+  <div class="hero-divider"></div>
+  <div class="hero-stat{% if include.stat2_highlight == 'true' %} highlight{% endif %}">
+    <span class="hero-number">{{ include.stat2_value }}</span>
+    {% if include.stat2_unit %}<span class="hero-unit">{{ include.stat2_unit }}</span>{% endif %}
+    <span class="hero-label">{{ include.stat2_label }}</span>
+  </div>
+  {% endif %}
+
+  {% if include.stat3_value %}
+  <div class="hero-divider"></div>
+  <div class="hero-stat{% if include.stat3_highlight == 'true' %} highlight{% endif %}">
+    <span class="hero-number">{{ include.stat3_value }}</span>
+    {% if include.stat3_unit %}<span class="hero-unit">{{ include.stat3_unit }}</span>{% endif %}
+    <span class="hero-label">{{ include.stat3_label }}</span>
+  </div>
+  {% endif %}
+
+  {% if include.stat4_value %}
+  <div class="hero-divider"></div>
+  <div class="hero-stat{% if include.stat4_highlight == 'true' %} highlight{% endif %}">
+    <span class="hero-number">{{ include.stat4_value }}</span>
+    {% if include.stat4_unit %}<span class="hero-unit">{{ include.stat4_unit }}</span>{% endif %}
+    <span class="hero-label">{{ include.stat4_label }}</span>
+  </div>
+  {% endif %}
+</div>

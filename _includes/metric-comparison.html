@@ -1,0 +1,84 @@
+<!--
+  Metric Comparison Cards
+
+  Usage:
+  {% include metric-comparison.html
+     metric1_type="negative"
+     metric1_icon="warning"
+     metric1_value="4 hours"
+     metric1_label="Manual Review Time"
+     metric1_trend="down"
+     metric1_trend_text="+23% from last year"
+
+     metric2_type="positive"
+     metric2_icon="check"
+     metric2_value="15 min"
+     metric2_label="Automated Processing"
+     metric2_trend="up"
+     metric2_trend_text="-94% reduction"
+  %}
+-->
+<div class="metric-comparison">
+  {% if include.metric1_value %}
+  <div class="metric-card {{ include.metric1_type | default: 'neutral' }}">
+    <span class="metric-icon">
+      {% case include.metric1_icon %}
+        {% when 'warning' %}⚠️
+        {% when 'check' %}✓
+        {% when 'chart' %}📊
+        {% when 'clock' %}⏱️
+        {% when 'dollar' %}💰
+        {% when 'users' %}👥
+        {% else %}📌
+      {% endcase %}
+    </span>
+    <span class="metric-value">{{ include.metric1_value }}</span>
+    <span class="metric-label">{{ include.metric1_label }}</span>
+    {% if include.metric1_trend %}
+    <span class="metric-trend {{ include.metric1_trend }}">{{ include.metric1_trend_text }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.metric2_value %}
+  <div class="metric-card {{ include.metric2_type | default: 'neutral' }}">
+    <span class="metric-icon">
+      {% case include.metric2_icon %}
+        {% when 'warning' %}⚠️
+        {% when 'check' %}✓
+        {% when 'chart' %}📊
+        {% when 'clock' %}⏱️
+        {% when 'dollar' %}💰
+        {% when 'users' %}👥
+        {% else %}📌
+      {% endcase %}
+    </span>
+    <span class="metric-value">{{ include.metric2_value }}</span>
+    <span class="metric-label">{{ include.metric2_label }}</span>
+    {% if include.metric2_trend %}
+    <span class="metric-trend {{ include.metric2_trend }}">{{ include.metric2_trend_text }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if include.metric3_value %}
+  <div class="metric-card {{ include.metric3_type | default: 'neutral' }}">
+    <span class="metric-icon">
+      {% case include.metric3_icon %}
+        {% when 'warning' %}⚠️
+        {% when 'check' %}✓
+        {% when 'chart' %}📊
+        {% when 'clock' %}⏱️
+        {% when 'dollar' %}💰
+        {% when 'users' %}👥
+        {% else %}📌
+      {% endcase %}
+    </span>
+    <span class="metric-value">{{ include.metric3_value }}</span>
+    <span class="metric-label">{{ include.metric3_label }}</span>
+    {% if include.metric3_trend %}
+    <span class="metric-trend {{ include.metric3_trend }}">{{ include.metric3_trend_text }}</span>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>

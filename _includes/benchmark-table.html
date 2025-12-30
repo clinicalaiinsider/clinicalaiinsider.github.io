@@ -1,0 +1,93 @@
+<!--
+  Benchmark Comparison Table
+
+  Usage:
+  {% include benchmark-table.html
+     headers="Model|SWE-bench|Aider|GPQA"
+     row1="Claude Opus 4.5|72.5%*|84.2%*|67.1%"
+     row1_highlight="true"
+     row2="GPT-4o|65.2%|78.1%|53.6%"
+     row3="Gemini 2.0|61.8%|72.4%|58.2%"
+  %}
+
+  Note: Use * after value to mark as best in column
+-->
+{% assign header_cells = include.headers | split: "|" %}
+
+<div class="benchmark-table">
+  <table>
+    <thead>
+      <tr>
+        {% for header in header_cells %}
+        <th>{{ header }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% if include.row1 %}
+      {% assign row1_cells = include.row1 | split: "|" %}
+      <tr{% if include.row1_highlight == "true" %} class="highlight-row"{% endif %}>
+        {% for cell in row1_cells %}
+        {% if cell contains "*" %}
+        <td class="best">{{ cell | remove: "*" }}</td>
+        {% else %}
+        <td>{{ cell }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endif %}
+
+      {% if include.row2 %}
+      {% assign row2_cells = include.row2 | split: "|" %}
+      <tr{% if include.row2_highlight == "true" %} class="highlight-row"{% endif %}>
+        {% for cell in row2_cells %}
+        {% if cell contains "*" %}
+        <td class="best">{{ cell | remove: "*" }}</td>
+        {% else %}
+        <td>{{ cell }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endif %}
+
+      {% if include.row3 %}
+      {% assign row3_cells = include.row3 | split: "|" %}
+      <tr{% if include.row3_highlight == "true" %} class="highlight-row"{% endif %}>
+        {% for cell in row3_cells %}
+        {% if cell contains "*" %}
+        <td class="best">{{ cell | remove: "*" }}</td>
+        {% else %}
+        <td>{{ cell }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endif %}
+
+      {% if include.row4 %}
+      {% assign row4_cells = include.row4 | split: "|" %}
+      <tr{% if include.row4_highlight == "true" %} class="highlight-row"{% endif %}>
+        {% for cell in row4_cells %}
+        {% if cell contains "*" %}
+        <td class="best">{{ cell | remove: "*" }}</td>
+        {% else %}
+        <td>{{ cell }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endif %}
+
+      {% if include.row5 %}
+      {% assign row5_cells = include.row5 | split: "|" %}
+      <tr{% if include.row5_highlight == "true" %} class="highlight-row"{% endif %}>
+        {% for cell in row5_cells %}
+        {% if cell contains "*" %}
+        <td class="best">{{ cell | remove: "*" }}</td>
+        {% else %}
+        <td>{{ cell }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,89 @@
+<!--
+  Progress Timeline
+
+  Usage:
+  {% include progress-timeline.html
+     step1_status="completed"
+     step1_title="Data Ingestion"
+     step1_desc="Raw EHR data loaded"
+
+     step2_status="active"
+     step2_title="ETL Processing"
+     step2_desc="Transforming to OMOP CDM"
+     step2_progress="65"
+
+     step3_status="pending"
+     step3_title="Quality Checks"
+     step3_desc="ACHILLES + DQD validation"
+
+     step4_status="pending"
+     step4_title="Analysis Ready"
+     step4_desc="Data warehouse complete"
+  %}
+-->
+<div class="progress-timeline">
+  {% if include.step1_title %}
+  <div class="timeline-step {{ include.step1_status | default: 'pending' }}">
+    <div class="step-marker">{% if include.step1_status == 'completed' %}{% else %}1{% endif %}</div>
+    <div class="step-content">
+      <h4>{{ include.step1_title }}</h4>
+      <p>{{ include.step1_desc }}</p>
+      {% if include.step1_progress %}
+      <div class="progress-bar" style="width: {{ include.step1_progress }}%"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if include.step2_title %}
+  <div class="timeline-step {{ include.step2_status | default: 'pending' }}">
+    <div class="step-marker">{% if include.step2_status == 'completed' %}{% else %}2{% endif %}</div>
+    <div class="step-content">
+      <h4>{{ include.step2_title }}</h4>
+      <p>{{ include.step2_desc }}</p>
+      {% if include.step2_progress %}
+      <div class="progress-bar" style="width: {{ include.step2_progress }}%"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if include.step3_title %}
+  <div class="timeline-step {{ include.step3_status | default: 'pending' }}">
+    <div class="step-marker">{% if include.step3_status == 'completed' %}{% else %}3{% endif %}</div>
+    <div class="step-content">
+      <h4>{{ include.step3_title }}</h4>
+      <p>{{ include.step3_desc }}</p>
+      {% if include.step3_progress %}
+      <div class="progress-bar" style="width: {{ include.step3_progress }}%"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if include.step4_title %}
+  <div class="timeline-step {{ include.step4_status | default: 'pending' }}">
+    <div class="step-marker">{% if include.step4_status == 'completed' %}{% else %}4{% endif %}</div>
+    <div class="step-content">
+      <h4>{{ include.step4_title }}</h4>
+      <p>{{ include.step4_desc }}</p>
+      {% if include.step4_progress %}
+      <div class="progress-bar" style="width: {{ include.step4_progress }}%"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if include.step5_title %}
+  <div class="timeline-step {{ include.step5_status | default: 'pending' }}">
+    <div class="step-marker">{% if include.step5_status == 'completed' %}{% else %}5{% endif %}</div>
+    <div class="step-content">
+      <h4>{{ include.step5_title }}</h4>
+      <p>{{ include.step5_desc }}</p>
+      {% if include.step5_progress %}
+      <div class="progress-bar" style="width: {{ include.step5_progress }}%"></div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
