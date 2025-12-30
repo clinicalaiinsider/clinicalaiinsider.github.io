@@ -258,7 +258,7 @@ main {
     background: var(--color-bg-alt);
     border-radius: var(--radius-lg);
     margin: 0 auto 32px auto;
-    max-width: calc(100% - 108px);
+    max-width: calc(100% - 54px);
 }
 
 .section-header {
@@ -281,6 +281,11 @@ main {
     margin-bottom: 24px;
 }
 
+/* Remove bottom margin when section-title is inside section-header (for horizontal alignment) */
+.section-header .section-title {
+    margin-bottom: 0;
+}
+
 .section-icon {
     display: none;
 }
@@ -289,6 +294,9 @@ main {
     font-size: 0.9rem;
     color: var(--color-text-secondary);
     text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
 }
 
 .view-all:hover {
