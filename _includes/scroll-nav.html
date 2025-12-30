@@ -1,12 +1,12 @@
 <!-- Floating Scroll Navigation -->
 <div class="scroll-nav" id="scrollNav">
     <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
     <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
     </button>
@@ -20,7 +20,7 @@
     right: 32px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     z-index: 1000;
     opacity: 0;
     transform: translateY(20px);
@@ -35,8 +35,8 @@
 }
 
 .scroll-nav-btn {
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: none;
     cursor: pointer;
@@ -45,22 +45,22 @@
     justify-content: center;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Anthropic-inspired warm terracotta with transparency */
-    background: rgba(196, 93, 58, 0.12);
-    color: #C45D3A;
+    /* Anthropic green with transparency */
+    background: rgba(16, 163, 127, 0.12);
+    color: #10a37f;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow:
-        0 4px 16px rgba(196, 93, 58, 0.1),
+        0 4px 16px rgba(16, 163, 127, 0.1),
         0 2px 8px rgba(0, 0, 0, 0.04),
         inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .scroll-nav-btn:hover {
-    background: rgba(196, 93, 58, 0.22);
+    background: rgba(16, 163, 127, 0.22);
     transform: scale(1.08);
     box-shadow:
-        0 6px 24px rgba(196, 93, 58, 0.18),
+        0 6px 24px rgba(16, 163, 127, 0.18),
         0 4px 12px rgba(0, 0, 0, 0.06),
         inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
@@ -89,8 +89,8 @@
     }
 
     .scroll-nav-btn {
-        width: 44px;
-        height: 44px;
+        width: 32px;
+        height: 32px;
     }
 }
 
@@ -100,8 +100,8 @@
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 28px;
-    padding: 6px;
+    border-radius: 24px;
+    padding: 5px;
     gap: 4px;
     box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.08),
@@ -109,14 +109,14 @@
 }
 
 .scroll-nav.pill-style .scroll-nav-btn {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     background: transparent;
     box-shadow: none;
 }
 
 .scroll-nav.pill-style .scroll-nav-btn:hover {
-    background: rgba(196, 93, 58, 0.15);
+    background: rgba(16, 163, 127, 0.15);
 }
 </style>
 
