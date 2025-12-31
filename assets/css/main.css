@@ -889,8 +889,9 @@ main {
     font-family: var(--font-serif);
     font-size: 1.6rem;
     font-weight: 600;
-    margin: 2.25rem 0 1rem;
+    margin: 2rem 0 0.75rem;
     letter-spacing: -0.01em;
+    text-align: center;
 }
 
 .post-content h3 {
@@ -904,7 +905,8 @@ main {
     font-family: var(--font-serif);
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 2rem 0 0.75rem;
+    margin: 1.75rem 0 0.5rem;
+    text-align: center;
 }
 
 .post-content h4 {
@@ -918,15 +920,13 @@ main {
     font-family: var(--font-serif);
     font-size: 1.1rem;
     font-weight: 600;
-    margin: 1.75rem 0 0.6rem;
+    margin: 1.5rem 0 0.5rem;
+    text-align: center;
 }
 
-.post-content p {
-    margin-bottom: 1rem;
-}
-
+.post-content p,
 .page-content p {
-    margin-bottom: 1.15rem;
+    margin-bottom: 1rem;
 }
 
 .post-content a,
@@ -951,23 +951,16 @@ main {
 }
 
 .post-content ul,
-.post-content ol {
+.post-content ol,
+.page-content ul,
+.page-content ol {
     padding-left: 1.5rem;
     margin-bottom: 1rem;
 }
 
-.page-content ul,
-.page-content ol {
-    padding-left: 1.5rem;
-    margin-bottom: 1.25rem;
-}
-
-.post-content li {
-    margin-bottom: 0.35rem;
-}
-
+.post-content li,
 .page-content li {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
 }
 
 .post-content li:last-child,
@@ -975,16 +968,11 @@ main {
     margin-bottom: 0;
 }
 
-.post-content hr {
-    border: none;
-    border-top: 1px solid var(--color-border);
-    margin: 1.5rem 0;
-}
-
+.post-content hr,
 .page-content hr {
     border: none;
     border-top: 1px solid var(--color-border);
-    margin: 2rem 0;
+    margin: 1.5rem 0;
 }
 
 .post-content blockquote,
