@@ -1,23 +1,32 @@
+{% assign first_tag = include.post.tags.first %}
+{% assign first_tag_lower = first_tag | downcase %}
+{% if first_tag_lower == 'ohdsi' or first_tag_lower == 'atlas' or first_tag_lower == 'achilles' or first_tag_lower == 'plp' or first_tag_lower == 'patient-level-prediction' or first_tag_lower == 'webapi' %}
+    {% assign accent_class = 'accent-ohdsi' %}
+    {% assign category_class = 'tag-ohdsi-text' %}
+{% elsif first_tag_lower == 'fhir' or first_tag_lower == 'hl7' or first_tag_lower == 'interoperability' %}
+    {% assign accent_class = 'accent-fhir' %}
+    {% assign category_class = 'tag-fhir-text' %}
+{% elsif first_tag_lower == 'omop-cdm' or first_tag_lower == 'omop' or first_tag_lower == 'etl' or first_tag_lower == 'clinical-terminologies' or first_tag_lower == 'loinc' or first_tag_lower == 'snomed' %}
+    {% assign accent_class = 'accent-data' %}
+    {% assign category_class = 'tag-data-text' %}
+{% elsif first_tag_lower == 'nlp' or first_tag_lower == 'biobert' or first_tag_lower == 'healthcare-ai' or first_tag_lower == 'ner' or first_tag_lower == 'clinical-nlp' %}
+    {% assign accent_class = 'accent-nlp' %}
+    {% assign category_class = 'tag-nlp-text' %}
+{% elsif first_tag_lower == 'python' or first_tag_lower == 'docker' or first_tag_lower == 'streamlit' %}
+    {% assign accent_class = 'accent-python' %}
+    {% assign category_class = 'tag-python-text' %}
+{% elsif first_tag_lower == 'tutorial' or first_tag_lower == 'guide' or first_tag_lower == 'how-to' %}
+    {% assign accent_class = 'accent-tutorial' %}
+    {% assign category_class = 'tag-tutorial-text' %}
+{% else %}
+    {% assign accent_class = '' %}
+    {% assign category_class = '' %}
+{% endif %}
 <article class="post-card">
+    <div class="post-card-accent {{ accent_class }}"></div>
     <div class="post-card-header">
-        {% assign first_tag = include.post.tags.first %}
         {% if first_tag %}
-        {% assign first_tag_lower = first_tag | downcase %}
-        {% if first_tag_lower == 'ohdsi' or first_tag_lower == 'atlas' or first_tag_lower == 'achilles' or first_tag_lower == 'plp' or first_tag_lower == 'patient-level-prediction' or first_tag_lower == 'webapi' %}
-        <div class="post-card-category tag-ohdsi-text">{{ first_tag }}</div>
-        {% elsif first_tag_lower == 'fhir' or first_tag_lower == 'hl7' or first_tag_lower == 'interoperability' %}
-        <div class="post-card-category tag-fhir-text">{{ first_tag }}</div>
-        {% elsif first_tag_lower == 'omop-cdm' or first_tag_lower == 'omop' or first_tag_lower == 'etl' or first_tag_lower == 'clinical-terminologies' or first_tag_lower == 'loinc' or first_tag_lower == 'snomed' %}
-        <div class="post-card-category tag-data-text">{{ first_tag }}</div>
-        {% elsif first_tag_lower == 'nlp' or first_tag_lower == 'biobert' or first_tag_lower == 'healthcare-ai' or first_tag_lower == 'ner' or first_tag_lower == 'clinical-nlp' %}
-        <div class="post-card-category tag-nlp-text">{{ first_tag }}</div>
-        {% elsif first_tag_lower == 'python' or first_tag_lower == 'docker' or first_tag_lower == 'streamlit' %}
-        <div class="post-card-category tag-python-text">{{ first_tag }}</div>
-        {% elsif first_tag_lower == 'tutorial' or first_tag_lower == 'guide' or first_tag_lower == 'how-to' %}
-        <div class="post-card-category tag-tutorial-text">{{ first_tag }}</div>
-        {% else %}
-        <div class="post-card-category">{{ first_tag }}</div>
-        {% endif %}
+        <div class="post-card-category {{ category_class }}">{{ first_tag }}</div>
         {% endif %}
         <h3 class="post-card-title">
             <a href="{{ include.post.url | relative_url }}">{{ include.post.title }}</a>
