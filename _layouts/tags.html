@@ -2,129 +2,526 @@
 layout: default
 ---
 
-<header class="page-header">
-    <h1 class="page-title">{{ page.title | default: "Tags" }}</h1>
-    <p class="page-description">Browse posts by topic</p>
+<header class="tags-header">
+    <h1 class="tags-title">{{ page.title | default: "Tags" }}</h1>
+    <p class="tags-subtitle">Browse {{ site.tags.size }} topics</p>
+    <div class="search-wrapper">
+        <input type="search" id="tag-search" class="tag-search" placeholder="Search tags..." autocomplete="off">
+        <span class="search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+        </span>
+    </div>
 </header>
 
-<section class="tags-page">
+<section class="tags-container">
     {% assign tags = site.tags | sort %}
-    
-    <div class="tags-cloud">
+
+    <div class="tags-grid" id="tags-grid">
         {% for tag in tags %}
         {% assign tag_lower = tag[0] | downcase %}
         {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'plp' or tag_lower == 'patient-level-prediction' or tag_lower == 'webapi' %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-ohdsi">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = 'tag-ohdsi' %}
         {% elsif tag_lower == 'fhir' or tag_lower == 'hl7' or tag_lower == 'interoperability' or tag_lower == 'loinc' or tag_lower == 'snomed-ct' %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-fhir">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = 'tag-fhir' %}
         {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical-nlp' or tag_lower == 'healthcare-ai' %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-nlp">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = 'tag-nlp' %}
         {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-python">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = 'tag-python' %}
         {% elsif tag_lower == 'omop-cdm' or tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'clinical-terminologies' or tag_lower == 'data-quality' %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-data">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = 'tag-data' %}
         {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-tutorial">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = 'tag-tutorial' %}
         {% else %}
-        <a href="#{{ tag[0] | slugify }}" class="tag tag-large">
-            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
-        </a>
+            {% assign color_class = '' %}
         {% endif %}
+        <button class="tag-btn {{ color_class }}" data-tag="{{ tag[0] | slugify }}" data-name="{{ tag[0] }}">
+            <span class="tag-name">{{ tag[0] }}</span>
+            <span class="tag-count">{{ tag[1].size }}</span>
+        </button>
         {% endfor %}
     </div>
-    
-    <div class="tags-sections">
-        {% for tag in tags %}
-        <section id="{{ tag[0] | slugify }}" class="tag-section">
-            <h2>{{ tag[0] }}</h2>
-            <ul class="tag-posts">
-                {% for post in tag[1] %}
-                <li>
-                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                    <span class="post-date">{{ post.date | date: "%b %d, %Y" }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </section>
-        {% endfor %}
+
+    <div class="no-results" id="no-results" hidden>
+        <p>No tags found matching your search.</p>
+    </div>
+
+    <div class="posts-panel" id="posts-panel" hidden>
+        <div class="panel-header">
+            <h2 id="panel-tag-name"></h2>
+            <button class="close-btn" id="close-btn" aria-label="Close panel">&times;</button>
+        </div>
+        <ol class="posts-list" id="posts-list"></ol>
     </div>
 </section>
 
+<!-- JSON data for JavaScript -->
+<script type="application/json" id="tags-data">
+{
+  {% for tag in site.tags %}
+  "{{ tag[0] | slugify }}": {
+    "name": "{{ tag[0] }}",
+    "posts": [
+      {% for post in tag[1] %}
+      {
+        "title": {{ post.title | jsonify }},
+        "url": "{{ post.url | relative_url }}",
+        "date": "{{ post.date | date: '%b %d, %Y' }}"
+      }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tagsData = JSON.parse(document.getElementById('tags-data').textContent);
+    const searchInput = document.getElementById('tag-search');
+    const tagsGrid = document.getElementById('tags-grid');
+    const tagButtons = document.querySelectorAll('.tag-btn');
+    const postsPanel = document.getElementById('posts-panel');
+    const panelTagName = document.getElementById('panel-tag-name');
+    const postsList = document.getElementById('posts-list');
+    const closeBtn = document.getElementById('close-btn');
+    const noResults = document.getElementById('no-results');
+
+    let activeTag = null;
+
+    // Search filtering
+    searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        tagButtons.forEach(btn => {
+            const tagName = btn.dataset.tag.toLowerCase();
+            const displayName = btn.dataset.name.toLowerCase();
+            const matches = tagName.includes(query) || displayName.includes(query);
+
+            btn.classList.toggle('hidden', !matches);
+            if (matches) visibleCount++;
+        });
+
+        noResults.hidden = visibleCount > 0;
+
+        // Close panel if active tag is filtered out
+        if (activeTag && query) {
+            const activeBtn = document.querySelector(`[data-tag="${activeTag}"]`);
+            if (activeBtn && activeBtn.classList.contains('hidden')) {
+                closePanel();
+            }
+        }
+    });
+
+    // Tag click handler
+    tagButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tagSlug = this.dataset.tag;
+            const tagInfo = tagsData[tagSlug];
+
+            if (!tagInfo) return;
+
+            // If clicking the same tag, close the panel
+            if (activeTag === tagSlug) {
+                closePanel();
+                return;
+            }
+
+            // Update active state
+            tagButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            activeTag = tagSlug;
+
+            // Update URL hash
+            history.replaceState(null, null, `#${tagSlug}`);
+
+            // Populate panel
+            const postCount = tagInfo.posts.length;
+            panelTagName.textContent = `${tagInfo.name} (${postCount} ${postCount === 1 ? 'post' : 'posts'})`;
+
+            postsList.innerHTML = tagInfo.posts.map((post, index) => `
+                <li>
+                    <a href="${post.url}" class="post-link">
+                        <span class="post-title">${post.title}</span>
+                        <span class="post-date">${post.date}</span>
+                    </a>
+                </li>
+            `).join('');
+
+            // Show panel with animation
+            postsPanel.hidden = false;
+            postsPanel.classList.add('visible');
+
+            // Scroll panel into view
+            setTimeout(() => {
+                postsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
+        });
+    });
+
+    // Close panel function
+    function closePanel() {
+        postsPanel.hidden = true;
+        postsPanel.classList.remove('visible');
+        tagButtons.forEach(b => b.classList.remove('active'));
+        activeTag = null;
+        history.replaceState(null, null, window.location.pathname);
+    }
+
+    // Close button handler
+    closeBtn.addEventListener('click', closePanel);
+
+    // Keyboard support for close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !postsPanel.hidden) {
+            closePanel();
+        }
+    });
+
+    // Handle URL hash for direct linking
+    if (window.location.hash) {
+        const tagSlug = window.location.hash.slice(1);
+        const targetBtn = document.querySelector(`[data-tag="${tagSlug}"]`);
+        if (targetBtn) {
+            setTimeout(() => targetBtn.click(), 100);
+        }
+    }
+
+    // Focus search on / key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === '/' && document.activeElement !== searchInput) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+    });
+});
+</script>
+
 <style>
-.tags-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 48px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--color-border);
+/* Tags Header */
+.tags-header {
+    text-align: center;
+    padding: 60px 24px 40px;
+    max-width: var(--max-width);
+    margin: 0 auto;
 }
 
-.tag-large {
-    padding: 8px 16px;
-    font-size: 0.85rem;
+.tags-title {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text);
+}
+
+.tags-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+}
+
+/* Search */
+.search-wrapper {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.tag-search {
+    width: 100%;
+    padding: 14px 16px 14px 44px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tag-search:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(196, 93, 58, 0.1);
+}
+
+.tag-search::placeholder {
+    color: var(--color-text-muted);
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    pointer-events: none;
+}
+
+/* Tags Container */
+.tags-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px 60px;
+}
+
+/* Tags Grid - 3 Columns */
+.tags-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+    .tags-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .tags-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tags-title {
+        font-size: 2rem;
+    }
+}
+
+/* Tag Buttons */
+.tag-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.tag-btn:hover {
+    border-color: var(--color-text-muted);
+    transform: translateY(-1px);
+}
+
+.tag-btn.active {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(196, 93, 58, 0.2);
+}
+
+.tag-btn.hidden {
+    display: none;
+}
+
+.tag-name {
+    font-weight: 500;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .tag-count {
     background: var(--color-border);
+    color: var(--color-text-muted);
     padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.75rem;
-    margin-left: 4px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 8px;
+    flex-shrink: 0;
 }
 
-.tag-section {
-    margin-bottom: 40px;
+/* Color-coded tags - override background and border */
+.tag-btn.tag-ohdsi {
+    background: var(--color-ohdsi-light);
+    border-color: transparent;
+}
+.tag-btn.tag-ohdsi .tag-name { color: var(--color-ohdsi); }
+.tag-btn.tag-ohdsi .tag-count { background: rgba(124, 58, 237, 0.15); color: var(--color-ohdsi); }
+.tag-btn.tag-ohdsi:hover { background: var(--color-ohdsi); }
+.tag-btn.tag-ohdsi:hover .tag-name,
+.tag-btn.tag-ohdsi:hover .tag-count { color: white; }
+.tag-btn.tag-ohdsi:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+
+.tag-btn.tag-fhir {
+    background: var(--color-fhir-light);
+    border-color: transparent;
+}
+.tag-btn.tag-fhir .tag-name { color: var(--color-fhir); }
+.tag-btn.tag-fhir .tag-count { background: rgba(8, 145, 178, 0.15); color: var(--color-fhir); }
+.tag-btn.tag-fhir:hover { background: var(--color-fhir); }
+.tag-btn.tag-fhir:hover .tag-name,
+.tag-btn.tag-fhir:hover .tag-count { color: white; }
+.tag-btn.tag-fhir:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+
+.tag-btn.tag-nlp {
+    background: var(--color-nlp-light);
+    border-color: transparent;
+}
+.tag-btn.tag-nlp .tag-name { color: var(--color-nlp); }
+.tag-btn.tag-nlp .tag-count { background: rgba(5, 150, 105, 0.15); color: var(--color-nlp); }
+.tag-btn.tag-nlp:hover { background: var(--color-nlp); }
+.tag-btn.tag-nlp:hover .tag-name,
+.tag-btn.tag-nlp:hover .tag-count { color: white; }
+.tag-btn.tag-nlp:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+
+.tag-btn.tag-data {
+    background: var(--color-data-light);
+    border-color: transparent;
+}
+.tag-btn.tag-data .tag-name { color: var(--color-data); }
+.tag-btn.tag-data .tag-count { background: rgba(217, 119, 6, 0.15); color: var(--color-data); }
+.tag-btn.tag-data:hover { background: var(--color-data); }
+.tag-btn.tag-data:hover .tag-name,
+.tag-btn.tag-data:hover .tag-count { color: white; }
+.tag-btn.tag-data:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+
+.tag-btn.tag-python {
+    background: var(--color-python-light);
+    border-color: transparent;
+}
+.tag-btn.tag-python .tag-name { color: var(--color-python); }
+.tag-btn.tag-python .tag-count { background: rgba(37, 99, 235, 0.15); color: var(--color-python); }
+.tag-btn.tag-python:hover { background: var(--color-python); }
+.tag-btn.tag-python:hover .tag-name,
+.tag-btn.tag-python:hover .tag-count { color: white; }
+.tag-btn.tag-python:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+
+.tag-btn.tag-tutorial {
+    background: var(--color-tutorial-light);
+    border-color: transparent;
+}
+.tag-btn.tag-tutorial .tag-name { color: var(--color-tutorial); }
+.tag-btn.tag-tutorial .tag-count { background: rgba(220, 38, 38, 0.15); color: var(--color-tutorial); }
+.tag-btn.tag-tutorial:hover { background: var(--color-tutorial); }
+.tag-btn.tag-tutorial:hover .tag-name,
+.tag-btn.tag-tutorial:hover .tag-count { color: white; }
+.tag-btn.tag-tutorial:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-text-muted);
 }
 
-.tag-section h2 {
-    font-size: 1.25rem;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--color-border);
+/* Posts Panel */
+.posts-panel {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 16px;
+    animation: slideDown 0.25s ease-out;
 }
 
-.tag-posts {
-    list-style: none;
-    padding: 0;
+.posts-panel[hidden] {
+    display: none;
 }
 
-.tag-posts li {
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.panel-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+}
+
+/* Posts List - Numbered */
+.posts-list {
+    list-style: decimal;
+    padding-left: 24px;
+    margin: 0;
+    counter-reset: post-counter;
+}
+
+.posts-list li {
     padding: 12px 0;
     border-bottom: 1px solid var(--color-border);
 }
 
-.tag-posts li:last-child {
+.posts-list li:last-child {
     border-bottom: none;
+    padding-bottom: 0;
 }
 
-.tag-posts a {
-    color: var(--color-text);
+.post-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
     text-decoration: none;
-    font-weight: 500;
+    color: var(--color-text);
+    transition: color 0.2s;
 }
 
-.tag-posts a:hover {
+.post-link:hover {
     color: var(--color-accent);
+}
+
+.post-title {
+    flex: 1;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
 .post-date {
     color: var(--color-text-muted);
     font-size: 0.85rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Keyboard hint */
+.tag-search:focus::placeholder {
+    opacity: 0.5;
 }
 </style>
