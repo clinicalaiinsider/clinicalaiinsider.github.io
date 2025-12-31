@@ -19,27 +19,25 @@ layout: default
 <section class="tags-container">
     {% assign tags = site.tags | sort %}
 
-    <div class="tags-grid" id="tags-grid">
+    <div class="tags-tabs" id="tags-tabs">
         {% for tag in tags %}
         {% assign tag_lower = tag[0] | downcase %}
         {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'plp' or tag_lower == 'patient-level-prediction' or tag_lower == 'webapi' %}
-            {% assign color_class = 'tag-ohdsi' %}
+            {% assign color_class = 'tab-ohdsi' %}
         {% elsif tag_lower == 'fhir' or tag_lower == 'hl7' or tag_lower == 'interoperability' or tag_lower == 'loinc' or tag_lower == 'snomed-ct' %}
-            {% assign color_class = 'tag-fhir' %}
+            {% assign color_class = 'tab-fhir' %}
         {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical-nlp' or tag_lower == 'healthcare-ai' %}
-            {% assign color_class = 'tag-nlp' %}
+            {% assign color_class = 'tab-nlp' %}
         {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
-            {% assign color_class = 'tag-python' %}
+            {% assign color_class = 'tab-python' %}
         {% elsif tag_lower == 'omop-cdm' or tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'clinical-terminologies' or tag_lower == 'data-quality' %}
-            {% assign color_class = 'tag-data' %}
+            {% assign color_class = 'tab-data' %}
         {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
-            {% assign color_class = 'tag-tutorial' %}
+            {% assign color_class = 'tab-tutorial' %}
         {% else %}
             {% assign color_class = '' %}
         {% endif %}
-        <button class="tag-bubble {{ color_class }}" data-tag="{{ tag[0] | slugify }}" data-name="{{ tag[0] }}">
-            {{ tag[0] }} <span class="count">{{ tag[1].size }}</span>
-        </button>
+        <button class="tag-tab {{ color_class }}" data-tag="{{ tag[0] | slugify }}" data-name="{{ tag[0] }}">{{ tag[0] }}<sup>{{ tag[1].size }}</sup></button>{% unless forloop.last %}<span class="tab-divider">|</span>{% endunless %}
         {% endfor %}
     </div>
 
@@ -80,8 +78,9 @@ layout: default
 document.addEventListener('DOMContentLoaded', function() {
     const tagsData = JSON.parse(document.getElementById('tags-data').textContent);
     const searchInput = document.getElementById('tag-search');
-    const tagsGrid = document.getElementById('tags-grid');
-    const tagButtons = document.querySelectorAll('.tag-bubble');
+    const tagsTabs = document.getElementById('tags-tabs');
+    const tagButtons = document.querySelectorAll('.tag-tab');
+    const dividers = document.querySelectorAll('.tab-divider');
     const postsPanel = document.getElementById('posts-panel');
     const panelTagName = document.getElementById('panel-tag-name');
     const postsList = document.getElementById('posts-list');
@@ -94,14 +93,27 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', function(e) {
         const query = e.target.value.toLowerCase().trim();
         let visibleCount = 0;
+        let lastVisibleIndex = -1;
 
-        tagButtons.forEach(btn => {
+        tagButtons.forEach((btn, index) => {
             const tagName = btn.dataset.tag.toLowerCase();
             const displayName = btn.dataset.name.toLowerCase();
             const matches = tagName.includes(query) || displayName.includes(query);
 
             btn.classList.toggle('hidden', !matches);
-            if (matches) visibleCount++;
+            if (matches) {
+                visibleCount++;
+                lastVisibleIndex = index;
+            }
+        });
+
+        // Update divider visibility
+        dividers.forEach((div, index) => {
+            const prevBtn = tagButtons[index];
+            const nextBtn = tagButtons[index + 1];
+            const prevVisible = prevBtn && !prevBtn.classList.contains('hidden');
+            const nextVisible = nextBtn && !nextBtn.classList.contains('hidden');
+            div.classList.toggle('hidden', !prevVisible || !nextVisible);
         });
 
         noResults.hidden = visibleCount > 0;
@@ -114,13 +126,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Tag click handler
+    // Tag click handler with press animation
     tagButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             const tagSlug = this.dataset.tag;
             const tagInfo = tagsData[tagSlug];
 
             if (!tagInfo) return;
+
+            // Add press animation
+            this.classList.add('pressed');
+            setTimeout(() => this.classList.remove('pressed'), 150);
 
             if (activeTag === tagSlug) {
                 closePanel();
@@ -248,131 +264,135 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 0 24px 40px;
 }
 
-/* Tags Grid - 6 Columns */
-.tags-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
+/* Tags Tabs - Linear Text Format */
+.tags-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0;
+    line-height: 2.2;
     margin-bottom: 20px;
+    text-align: left;
 }
 
-@media (max-width: 900px) {
-    .tags-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+/* Tab Divider */
+.tab-divider {
+    color: var(--color-border-dark);
+    padding: 0 8px;
+    font-size: 0.85rem;
+    user-select: none;
 }
 
-@media (max-width: 600px) {
-    .tags-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 400px) {
-    .tags-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Tag Bubbles - Compact like blog post tags */
-.tag-bubble {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 6px 10px;
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    font-family: var(--font-sans);
-    background: var(--color-bg-alt);
-    color: var(--color-text-secondary);
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.tag-bubble:hover {
-    background: var(--color-border);
-    color: var(--color-text);
-}
-
-.tag-bubble.active {
-    border-color: var(--color-accent);
-    background: var(--color-accent);
-    color: white;
-}
-
-.tag-bubble.hidden {
+.tab-divider.hidden {
     display: none;
 }
 
-.tag-bubble .count {
-    font-size: 0.65rem;
-    opacity: 0.7;
+/* Tag Tab - Text Button */
+.tag-tab {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    padding: 4px 6px;
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    transition: all 0.1s ease;
+    position: relative;
+    white-space: nowrap;
 }
 
-/* Color-coded tags */
-.tag-bubble.tag-ohdsi {
-    background: var(--color-ohdsi-light);
+.tag-tab sup {
+    font-size: 0.6rem;
+    opacity: 0.6;
+    margin-left: 1px;
+}
+
+.tag-tab:hover {
+    background: var(--color-bg-alt);
+}
+
+/* Press Animation */
+.tag-tab.pressed {
+    transform: scale(0.95);
+}
+
+/* Active State */
+.tag-tab.active {
+    background: var(--color-text);
+    color: var(--color-bg) !important;
+    font-weight: 600;
+}
+
+.tag-tab.hidden {
+    display: none;
+}
+
+/* Color-coded tabs - text color */
+.tag-tab.tab-ohdsi {
     color: var(--color-ohdsi);
-    border-color: transparent;
 }
-.tag-bubble.tag-ohdsi:hover {
+.tag-tab.tab-ohdsi:hover {
+    background: var(--color-ohdsi-light);
+}
+.tag-tab.tab-ohdsi.active {
     background: var(--color-ohdsi);
-    color: white;
+    color: white !important;
 }
 
-.tag-bubble.tag-fhir {
-    background: var(--color-fhir-light);
+.tag-tab.tab-fhir {
     color: var(--color-fhir);
-    border-color: transparent;
 }
-.tag-bubble.tag-fhir:hover {
+.tag-tab.tab-fhir:hover {
+    background: var(--color-fhir-light);
+}
+.tag-tab.tab-fhir.active {
     background: var(--color-fhir);
-    color: white;
+    color: white !important;
 }
 
-.tag-bubble.tag-nlp {
-    background: var(--color-nlp-light);
+.tag-tab.tab-nlp {
     color: var(--color-nlp);
-    border-color: transparent;
 }
-.tag-bubble.tag-nlp:hover {
+.tag-tab.tab-nlp:hover {
+    background: var(--color-nlp-light);
+}
+.tag-tab.tab-nlp.active {
     background: var(--color-nlp);
-    color: white;
+    color: white !important;
 }
 
-.tag-bubble.tag-data {
-    background: var(--color-data-light);
+.tag-tab.tab-data {
     color: var(--color-data);
-    border-color: transparent;
 }
-.tag-bubble.tag-data:hover {
+.tag-tab.tab-data:hover {
+    background: var(--color-data-light);
+}
+.tag-tab.tab-data.active {
     background: var(--color-data);
-    color: white;
+    color: white !important;
 }
 
-.tag-bubble.tag-python {
-    background: var(--color-python-light);
+.tag-tab.tab-python {
     color: var(--color-python);
-    border-color: transparent;
 }
-.tag-bubble.tag-python:hover {
+.tag-tab.tab-python:hover {
+    background: var(--color-python-light);
+}
+.tag-tab.tab-python.active {
     background: var(--color-python);
-    color: white;
+    color: white !important;
 }
 
-.tag-bubble.tag-tutorial {
-    background: var(--color-tutorial-light);
+.tag-tab.tab-tutorial {
     color: var(--color-tutorial);
-    border-color: transparent;
 }
-.tag-bubble.tag-tutorial:hover {
+.tag-tab.tab-tutorial:hover {
+    background: var(--color-tutorial-light);
+}
+.tag-tab.tab-tutorial.active {
     background: var(--color-tutorial);
-    color: white;
+    color: white !important;
 }
 
 /* No Results */
@@ -468,5 +488,21 @@ document.addEventListener('DOMContentLoaded', function() {
     color: var(--color-text-muted);
     font-size: 0.75rem;
     margin-left: 6px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .tags-tabs {
+        line-height: 2;
+    }
+
+    .tag-tab {
+        font-size: 0.8rem;
+        padding: 3px 4px;
+    }
+
+    .tab-divider {
+        padding: 0 4px;
+    }
 }
 </style>
