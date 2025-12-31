@@ -156,15 +156,18 @@ main {
 
 .site-nav a {
     color: var(--color-text-secondary);
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: color 0.15s ease;
+    transition: text-decoration-color 0.2s ease, color 0.15s ease;
 }
 
 .site-nav a:hover,
 .site-nav a.active {
     color: var(--color-text);
+    text-decoration-color: currentColor;
 }
 
 .nav-toggle {
