@@ -834,16 +834,18 @@ main {
 .post-title,
 .page-title {
     font-family: var(--font-serif);
-    font-size: 2.25rem;
-    font-weight: 600;
-    line-height: 1.2;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.15;
     margin-bottom: 0.75rem;
     letter-spacing: -0.02em;
+    text-align: center;
 }
 
 .page-description {
     color: var(--color-text-secondary);
     font-size: 1.1rem;
+    text-align: center;
 }
 
 .post-meta {
@@ -851,6 +853,7 @@ main {
     flex-wrap: wrap;
     gap: var(--space-md);
     align-items: center;
+    justify-content: center;
     font-size: 0.9rem;
     color: var(--color-text-secondary);
 }
@@ -877,51 +880,29 @@ main {
     margin-bottom: 2rem;
 }
 
-.post-content h2 {
-    font-family: var(--font-serif);
-    font-size: 1.6rem;
-    font-weight: 600;
-    margin: 2rem 0 0.75rem;
-    letter-spacing: -0.01em;
-}
-
+.post-content h2,
 .page-content h2 {
     font-family: var(--font-serif);
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 600;
     margin: 2rem 0 0.75rem;
     letter-spacing: -0.01em;
-    text-align: center;
 }
 
-.post-content h3 {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 1.75rem 0 0.5rem;
-}
-
+.post-content h3,
 .page-content h3 {
     font-family: var(--font-serif);
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin: 1.75rem 0 0.5rem;
-    text-align: center;
 }
 
-.post-content h4 {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 1.5rem 0 0.5rem;
-}
-
+.post-content h4,
 .page-content h4 {
     font-family: var(--font-serif);
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 600;
     margin: 1.5rem 0 0.5rem;
-    text-align: center;
 }
 
 .post-content p,
