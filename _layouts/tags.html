@@ -607,48 +607,80 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 4px 8px;
 }
 
-/* Category Color Themes */
-.cat-ohdsi { border-left: 4px solid var(--color-ohdsi); }
-.cat-ohdsi .category-count { background: var(--color-ohdsi-light); color: var(--color-ohdsi); }
+/* Category Color Themes - Anthropic Palette */
+.cat-ohdsi {
+    background: var(--color-card-ohdsi);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-ohdsi .category-count { background: rgba(255,255,255,0.6); color: var(--color-ohdsi); }
 
-.cat-fhir { border-left: 4px solid var(--color-fhir); }
-.cat-fhir .category-count { background: var(--color-fhir-light); color: var(--color-fhir); }
+.cat-fhir {
+    background: var(--color-card-fhir);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-fhir .category-count { background: rgba(255,255,255,0.6); color: var(--color-fhir); }
 
-.cat-data { border-left: 4px solid var(--color-data); }
-.cat-data .category-count { background: var(--color-data-light); color: var(--color-data); }
+.cat-data {
+    background: var(--color-card-data);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-data .category-count { background: rgba(255,255,255,0.6); color: var(--color-data); }
 
-.cat-nlp { border-left: 4px solid var(--color-nlp); }
-.cat-nlp .category-count { background: var(--color-nlp-light); color: var(--color-nlp); }
+.cat-nlp {
+    background: var(--color-card-nlp);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-nlp .category-count { background: rgba(255,255,255,0.6); color: var(--color-nlp); }
 
-.cat-python { border-left: 4px solid var(--color-python); }
-.cat-python .category-count { background: var(--color-python-light); color: var(--color-python); }
+.cat-python {
+    background: var(--color-card-python);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-python .category-count { background: rgba(255,255,255,0.6); color: var(--color-python); }
 
-.cat-tutorial { border-left: 4px solid var(--color-tutorial); }
-.cat-tutorial .category-count { background: var(--color-tutorial-light); color: var(--color-tutorial); }
+.cat-tutorial {
+    background: var(--color-card-tutorial);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-tutorial .category-count { background: rgba(255,255,255,0.6); color: var(--color-tutorial); }
 
-.cat-default { border-left: 4px solid var(--color-border-dark); }
+.cat-default {
+    background: var(--color-bg-alt);
+    border-color: rgba(0, 0, 0, 0.06);
+}
 
-/* Tag Colors */
-.tag-ohdsi { background: var(--color-ohdsi-light); color: var(--color-ohdsi); }
+/* Tag Colors - White chips on colored backgrounds */
+.sub-tag {
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--color-text);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sub-tag:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tag-ohdsi { background: rgba(255,255,255,0.75); color: var(--color-ohdsi); font-weight: 500; }
 .tag-ohdsi:hover { background: var(--color-ohdsi); color: white; }
 
-.tag-fhir { background: var(--color-fhir-light); color: var(--color-fhir); }
+.tag-fhir { background: rgba(255,255,255,0.75); color: var(--color-fhir); font-weight: 500; }
 .tag-fhir:hover { background: var(--color-fhir); color: white; }
 
-.tag-data { background: var(--color-data-light); color: var(--color-data); }
+.tag-data { background: rgba(255,255,255,0.75); color: var(--color-data); font-weight: 500; }
 .tag-data:hover { background: var(--color-data); color: white; }
 
-.tag-nlp { background: var(--color-nlp-light); color: var(--color-nlp); }
+.tag-nlp { background: rgba(255,255,255,0.75); color: var(--color-nlp); font-weight: 500; }
 .tag-nlp:hover { background: var(--color-nlp); color: white; }
 
-.tag-python { background: var(--color-python-light); color: var(--color-python); }
+.tag-python { background: rgba(255,255,255,0.75); color: var(--color-python); font-weight: 500; }
 .tag-python:hover { background: var(--color-python); color: white; }
 
-.tag-tutorial { background: var(--color-tutorial-light); color: var(--color-tutorial); }
+.tag-tutorial { background: rgba(255,255,255,0.75); color: var(--color-tutorial); font-weight: 500; }
 .tag-tutorial:hover { background: var(--color-tutorial); color: white; }
 
-.tag-default { background: var(--color-bg-alt); color: var(--color-text-secondary); }
-.tag-default:hover { background: var(--color-border); color: var(--color-text); }
+.tag-default { background: rgba(255,255,255,0.6); color: var(--color-text-secondary); }
+.tag-default:hover { background: rgba(255,255,255,0.9); color: var(--color-text); }
 
 /* Category Text Colors */
 .cat-text-ohdsi { color: var(--color-ohdsi); }
