@@ -12,8 +12,6 @@ reading_time: 15
 pinned_bottom: true
 ---
 
-# Clinical Informatics Resources: A Comprehensive Reference Guide
-
 This reference guide provides a curated collection of essential resources for clinical informatics professionals, researchers, and developers. Navigate to the section most relevant to your work.
 
 ---

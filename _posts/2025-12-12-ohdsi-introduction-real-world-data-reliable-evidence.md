@@ -12,8 +12,6 @@ description: "Learn how OHDSI transforms messy healthcare data into reliable cli
 reading_time: 25
 ---
 
-# OHDSI Introduction: From Real-World Data to Reliable Evidence
-
 > **Listen to the Podcast**
 >
 > Prefer audio? Listen to this article as a conversational podcast (~18 min):

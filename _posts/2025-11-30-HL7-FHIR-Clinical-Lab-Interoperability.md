@@ -5,7 +5,7 @@ title: "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Intero
 date: 2025-11-30
 author: DataGodzilla
 categories: [Healthcare IT, Interoperability, Clinical Informatics]
-tags: [FHIR, HL7, LOINC, SNOMED CT, LIS, EHR, Healthcare Data, Clinical Workflow, Data Standards]
+tags: [fhir, hl7, loinc, snomed-ct, lis, ehr, healthcare-data, clinical-workflow, data-standards]
 description: "A comprehensive guide to understanding how HL7 v2.x message segments (PID, ORC, OBR, OBX) transform into modern FHIR resources, enabling semantic interoperability between Laboratory Information Systems and Electronic Health Records."
 excerpt: "Healthcare systems don't just need to talk—they need to understand each other. This guide bridges the gap between legacy HL7 messaging and modern FHIR APIs, showing how lab data flows from order to result while maintaining clinical meaning."
 image: /assets/images/fhir-hl7-interoperability.png
@@ -13,8 +13,6 @@ toc: true
 mermaid: false
 visualization_format: graphviz
 ---
-
-# From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability
 
 > **For clinical informaticists and data scientists:** Understanding the translation layer between legacy HL7 v2.x messages and modern FHIR resources is essential for building interoperable healthcare systems. This guide walks through the complete lab workflow—from physician order to clinical decision support—showing exactly how data transforms at each step.
 

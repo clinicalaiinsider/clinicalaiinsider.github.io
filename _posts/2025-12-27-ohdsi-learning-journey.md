@@ -8,8 +8,6 @@ description: "A comprehensive 11-module guide to transforming electronic health 
 image: "/assets/images/ohdsi-learning-journey.png"
 ---
 
-# From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey
-
 **TL;DR:** This comprehensive guide walks through transforming EHR data into standardized OMOP CDM format at scale. We loaded 40M+ vocabulary concepts, generated 2,411 Synthea patients with 4.9M clinical records, built 75+ SQL queries, created 50+ visualizations including interactive ERDs, executed ACHILLES data characterization (16,159 analyses), achieved a 97/100 data quality score, and validated research readiness for cohort studies and network participation.
 
 ---
