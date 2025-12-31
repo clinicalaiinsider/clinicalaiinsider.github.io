@@ -11,7 +11,23 @@ layout: default
         {% if page.tags.size > 0 %}
         <span class="meta-separator">·</span>
         {% for tag in page.tags limit:3 %}
-        <a href="{{ '/tags/#' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
+        {% assign tag_lower = tag | downcase %}
+        {% assign tag_slug = tag | slugify %}
+        {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'plp' or tag_lower == 'patient-level-prediction' or tag_lower == 'webapi' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-ohdsi">{{ tag }}</a>
+        {% elsif tag_lower == 'fhir' or tag_lower == 'hl7' or tag_lower == 'interoperability' or tag_lower == 'loinc' or tag_lower == 'snomed-ct' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-fhir">{{ tag }}</a>
+        {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical-nlp' or tag_lower == 'healthcare-ai' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-nlp">{{ tag }}</a>
+        {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-python">{{ tag }}</a>
+        {% elsif tag_lower == 'omop-cdm' or tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'clinical-terminologies' or tag_lower == 'data-quality' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-data">{{ tag }}</a>
+        {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-tutorial">{{ tag }}</a>
+        {% else %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag">{{ tag }}</a>
+        {% endif %}
         {% endfor %}
         {% endif %}
     </div>
@@ -50,7 +66,23 @@ layout: default
     <div class="tags-list">
         <strong>Tags:</strong>
         {% for tag in page.tags %}
-        <a href="{{ '/tags/#' | append: tag | downcase | relative_url }}">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% assign tag_lower = tag | downcase %}
+        {% assign tag_slug = tag | slugify %}
+        {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'plp' or tag_lower == 'patient-level-prediction' or tag_lower == 'webapi' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-ohdsi">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% elsif tag_lower == 'fhir' or tag_lower == 'hl7' or tag_lower == 'interoperability' or tag_lower == 'loinc' or tag_lower == 'snomed-ct' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-fhir">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical-nlp' or tag_lower == 'healthcare-ai' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-nlp">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-python">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% elsif tag_lower == 'omop-cdm' or tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'clinical-terminologies' or tag_lower == 'data-quality' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-data">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-tutorial">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% else %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        {% endif %}
         {% endfor %}
     </div>
     {% endif %}
