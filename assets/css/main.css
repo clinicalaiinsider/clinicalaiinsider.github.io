@@ -1383,9 +1383,10 @@ main {
 
 /* ========== SITE FOOTER ========== */
 .site-footer {
-    border-top: 1px solid var(--color-border);
+    border-top: none;
     padding: 60px var(--space-lg);
-    background: var(--color-bg);
+    background: #191918;
+    color: #ffffff;
 }
 
 .footer-container {
@@ -1405,11 +1406,12 @@ main {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 16px;
+    color: #ffffff;
 }
 
 .footer-tagline {
     font-size: 0.9rem;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.7);
     line-height: 1.5;
     max-width: 280px;
 }
@@ -1419,7 +1421,7 @@ main {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.5);
     margin-bottom: var(--space-md);
 }
 
@@ -1433,24 +1435,25 @@ main {
 
 .footer-section a {
     font-size: 0.9rem;
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .footer-section a:hover {
-    color: var(--color-text);
+    color: #ffffff;
 }
 
 .footer-bottom {
     padding-top: 32px;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: var(--space-md);
     font-size: 0.8rem;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* ========== RESPONSIVE ========== */
