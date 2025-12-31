@@ -8,7 +8,7 @@ layout: default
     <div class="search-wrapper">
         <input type="search" id="tag-search" class="tag-search" placeholder="Search tags..." autocomplete="off">
         <span class="search-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="M21 21l-4.35-4.35"></path>
             </svg>
@@ -37,9 +37,8 @@ layout: default
         {% else %}
             {% assign color_class = '' %}
         {% endif %}
-        <button class="tag-btn {{ color_class }}" data-tag="{{ tag[0] | slugify }}" data-name="{{ tag[0] }}">
-            <span class="tag-name">{{ tag[0] }}</span>
-            <span class="tag-count">{{ tag[1].size }}</span>
+        <button class="tag-bubble {{ color_class }}" data-tag="{{ tag[0] | slugify }}" data-name="{{ tag[0] }}">
+            {{ tag[0] }} <span class="count">{{ tag[1].size }}</span>
         </button>
         {% endfor %}
     </div>
@@ -50,10 +49,10 @@ layout: default
 
     <div class="posts-panel" id="posts-panel" hidden>
         <div class="panel-header">
-            <h2 id="panel-tag-name"></h2>
+            <span id="panel-tag-name"></span>
             <button class="close-btn" id="close-btn" aria-label="Close panel">&times;</button>
         </div>
-        <ol class="posts-list" id="posts-list"></ol>
+        <ul class="posts-list" id="posts-list"></ul>
     </div>
 </section>
 
@@ -68,7 +67,7 @@ layout: default
       {
         "title": {{ post.title | jsonify }},
         "url": "{{ post.url | relative_url }}",
-        "date": "{{ post.date | date: '%b %d, %Y' }}"
+        "date": "{{ post.date | date: '%b %d' }}"
       }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ]
@@ -82,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tagsData = JSON.parse(document.getElementById('tags-data').textContent);
     const searchInput = document.getElementById('tag-search');
     const tagsGrid = document.getElementById('tags-grid');
-    const tagButtons = document.querySelectorAll('.tag-btn');
+    const tagButtons = document.querySelectorAll('.tag-bubble');
     const postsPanel = document.getElementById('posts-panel');
     const panelTagName = document.getElementById('panel-tag-name');
     const postsList = document.getElementById('posts-list');
@@ -107,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         noResults.hidden = visibleCount > 0;
 
-        // Close panel if active tag is filtered out
         if (activeTag && query) {
             const activeBtn = document.querySelector(`[data-tag="${activeTag}"]`);
             if (activeBtn && activeBtn.classList.contains('hidden')) {
@@ -124,64 +122,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!tagInfo) return;
 
-            // If clicking the same tag, close the panel
             if (activeTag === tagSlug) {
                 closePanel();
                 return;
             }
 
-            // Update active state
             tagButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             activeTag = tagSlug;
 
-            // Update URL hash
             history.replaceState(null, null, `#${tagSlug}`);
 
-            // Populate panel
             const postCount = tagInfo.posts.length;
-            panelTagName.textContent = `${tagInfo.name} (${postCount} ${postCount === 1 ? 'post' : 'posts'})`;
+            panelTagName.textContent = `${tagInfo.name} (${postCount})`;
 
-            postsList.innerHTML = tagInfo.posts.map((post, index) => `
-                <li>
-                    <a href="${post.url}" class="post-link">
-                        <span class="post-title">${post.title}</span>
-                        <span class="post-date">${post.date}</span>
-                    </a>
-                </li>
+            postsList.innerHTML = tagInfo.posts.map(post => `
+                <li><a href="${post.url}">${post.title}</a> <span class="date">${post.date}</span></li>
             `).join('');
 
-            // Show panel with animation
             postsPanel.hidden = false;
-            postsPanel.classList.add('visible');
 
-            // Scroll panel into view
             setTimeout(() => {
                 postsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 50);
         });
     });
 
-    // Close panel function
     function closePanel() {
         postsPanel.hidden = true;
-        postsPanel.classList.remove('visible');
         tagButtons.forEach(b => b.classList.remove('active'));
         activeTag = null;
         history.replaceState(null, null, window.location.pathname);
     }
 
-    // Close button handler
     closeBtn.addEventListener('click', closePanel);
 
-    // Keyboard support for close
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && !postsPanel.hidden) {
             closePanel();
         }
     });
 
-    // Handle URL hash for direct linking
     if (window.location.hash) {
         const tagSlug = window.location.hash.slice(1);
         const targetBtn = document.querySelector(`[data-tag="${tagSlug}"]`);
@@ -190,7 +171,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Focus search on / key
     document.addEventListener('keydown', function(e) {
         if (e.key === '/' && document.activeElement !== searchInput) {
             e.preventDefault();
@@ -204,38 +184,38 @@ document.addEventListener('DOMContentLoaded', function() {
 /* Tags Header */
 .tags-header {
     text-align: center;
-    padding: 60px 24px 40px;
+    padding: 40px 24px 30px;
     max-width: var(--max-width);
     margin: 0 auto;
 }
 
 .tags-title {
     font-family: var(--font-serif);
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: var(--color-text);
 }
 
 .tags-subtitle {
     color: var(--color-text-muted);
-    font-size: 1.1rem;
-    margin-bottom: 24px;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
 }
 
 /* Search */
 .search-wrapper {
     position: relative;
-    max-width: 400px;
+    max-width: 300px;
     margin: 0 auto;
 }
 
 .tag-search {
     width: 100%;
-    padding: 14px 16px 14px 44px;
+    padding: 10px 12px 10px 36px;
     border: 1px solid var(--color-border);
-    border-radius: 10px;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
     font-family: var(--font-sans);
     background: var(--color-bg-card);
     color: var(--color-text);
@@ -245,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .tag-search:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(196, 93, 58, 0.1);
+    box-shadow: 0 0 0 2px rgba(196, 93, 58, 0.1);
 }
 
 .tag-search::placeholder {
@@ -254,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .search-icon {
     position: absolute;
-    left: 14px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-text-muted);
@@ -263,167 +243,154 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /* Tags Container */
 .tags-container {
-    max-width: var(--max-width);
+    max-width: 900px;
     margin: 0 auto;
-    padding: 0 24px 60px;
+    padding: 0 24px 40px;
 }
 
-/* Tags Grid - 3 Columns */
+/* Tags Grid - 6 Columns */
 .tags-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 900px) {
     .tags-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
 @media (max-width: 600px) {
     .tags-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .tags-title {
-        font-size: 2rem;
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
-/* Tag Buttons */
-.tag-btn {
-    display: flex;
-    justify-content: space-between;
+@media (max-width: 400px) {
+    .tags-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tag Bubbles - Compact like blog post tags */
+.tag-bubble {
+    display: inline-flex;
     align-items: center;
-    padding: 12px 16px;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 10px;
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: 20px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     font-family: var(--font-sans);
-    background: var(--color-bg-card);
+    background: var(--color-bg-alt);
+    color: var(--color-text-secondary);
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tag-bubble:hover {
+    background: var(--color-border);
     color: var(--color-text);
-    transition: all 0.2s ease;
-    text-align: left;
 }
 
-.tag-btn:hover {
-    border-color: var(--color-text-muted);
-    transform: translateY(-1px);
-}
-
-.tag-btn.active {
+.tag-bubble.active {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(196, 93, 58, 0.2);
+    background: var(--color-accent);
+    color: white;
 }
 
-.tag-btn.hidden {
+.tag-bubble.hidden {
     display: none;
 }
 
-.tag-name {
-    font-weight: 500;
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.tag-bubble .count {
+    font-size: 0.65rem;
+    opacity: 0.7;
 }
 
-.tag-count {
-    background: var(--color-border);
-    color: var(--color-text-muted);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin-left: 8px;
-    flex-shrink: 0;
-}
-
-/* Color-coded tags - override background and border */
-.tag-btn.tag-ohdsi {
+/* Color-coded tags */
+.tag-bubble.tag-ohdsi {
     background: var(--color-ohdsi-light);
+    color: var(--color-ohdsi);
     border-color: transparent;
 }
-.tag-btn.tag-ohdsi .tag-name { color: var(--color-ohdsi); }
-.tag-btn.tag-ohdsi .tag-count { background: rgba(124, 58, 237, 0.15); color: var(--color-ohdsi); }
-.tag-btn.tag-ohdsi:hover { background: var(--color-ohdsi); }
-.tag-btn.tag-ohdsi:hover .tag-name,
-.tag-btn.tag-ohdsi:hover .tag-count { color: white; }
-.tag-btn.tag-ohdsi:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+.tag-bubble.tag-ohdsi:hover {
+    background: var(--color-ohdsi);
+    color: white;
+}
 
-.tag-btn.tag-fhir {
+.tag-bubble.tag-fhir {
     background: var(--color-fhir-light);
+    color: var(--color-fhir);
     border-color: transparent;
 }
-.tag-btn.tag-fhir .tag-name { color: var(--color-fhir); }
-.tag-btn.tag-fhir .tag-count { background: rgba(8, 145, 178, 0.15); color: var(--color-fhir); }
-.tag-btn.tag-fhir:hover { background: var(--color-fhir); }
-.tag-btn.tag-fhir:hover .tag-name,
-.tag-btn.tag-fhir:hover .tag-count { color: white; }
-.tag-btn.tag-fhir:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+.tag-bubble.tag-fhir:hover {
+    background: var(--color-fhir);
+    color: white;
+}
 
-.tag-btn.tag-nlp {
+.tag-bubble.tag-nlp {
     background: var(--color-nlp-light);
+    color: var(--color-nlp);
     border-color: transparent;
 }
-.tag-btn.tag-nlp .tag-name { color: var(--color-nlp); }
-.tag-btn.tag-nlp .tag-count { background: rgba(5, 150, 105, 0.15); color: var(--color-nlp); }
-.tag-btn.tag-nlp:hover { background: var(--color-nlp); }
-.tag-btn.tag-nlp:hover .tag-name,
-.tag-btn.tag-nlp:hover .tag-count { color: white; }
-.tag-btn.tag-nlp:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+.tag-bubble.tag-nlp:hover {
+    background: var(--color-nlp);
+    color: white;
+}
 
-.tag-btn.tag-data {
+.tag-bubble.tag-data {
     background: var(--color-data-light);
+    color: var(--color-data);
     border-color: transparent;
 }
-.tag-btn.tag-data .tag-name { color: var(--color-data); }
-.tag-btn.tag-data .tag-count { background: rgba(217, 119, 6, 0.15); color: var(--color-data); }
-.tag-btn.tag-data:hover { background: var(--color-data); }
-.tag-btn.tag-data:hover .tag-name,
-.tag-btn.tag-data:hover .tag-count { color: white; }
-.tag-btn.tag-data:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+.tag-bubble.tag-data:hover {
+    background: var(--color-data);
+    color: white;
+}
 
-.tag-btn.tag-python {
+.tag-bubble.tag-python {
     background: var(--color-python-light);
+    color: var(--color-python);
     border-color: transparent;
 }
-.tag-btn.tag-python .tag-name { color: var(--color-python); }
-.tag-btn.tag-python .tag-count { background: rgba(37, 99, 235, 0.15); color: var(--color-python); }
-.tag-btn.tag-python:hover { background: var(--color-python); }
-.tag-btn.tag-python:hover .tag-name,
-.tag-btn.tag-python:hover .tag-count { color: white; }
-.tag-btn.tag-python:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+.tag-bubble.tag-python:hover {
+    background: var(--color-python);
+    color: white;
+}
 
-.tag-btn.tag-tutorial {
+.tag-bubble.tag-tutorial {
     background: var(--color-tutorial-light);
+    color: var(--color-tutorial);
     border-color: transparent;
 }
-.tag-btn.tag-tutorial .tag-name { color: var(--color-tutorial); }
-.tag-btn.tag-tutorial .tag-count { background: rgba(220, 38, 38, 0.15); color: var(--color-tutorial); }
-.tag-btn.tag-tutorial:hover { background: var(--color-tutorial); }
-.tag-btn.tag-tutorial:hover .tag-name,
-.tag-btn.tag-tutorial:hover .tag-count { color: white; }
-.tag-btn.tag-tutorial:hover .tag-count { background: rgba(255, 255, 255, 0.2); }
+.tag-bubble.tag-tutorial:hover {
+    background: var(--color-tutorial);
+    color: white;
+}
 
 /* No Results */
 .no-results {
     text-align: center;
-    padding: 40px 20px;
+    padding: 30px 20px;
     color: var(--color-text-muted);
+    font-size: 0.9rem;
 }
 
-/* Posts Panel */
+/* Posts Panel - Compact */
 .posts-panel {
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-top: 16px;
-    animation: slideDown 0.25s ease-out;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    animation: slideDown 0.2s ease-out;
 }
 
 .posts-panel[hidden] {
@@ -433,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-8px);
     }
     to {
         opacity: 1;
@@ -445,29 +412,27 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--color-border);
 }
 
-.panel-header h2 {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
+.panel-header span {
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-text);
-    margin: 0;
 }
 
 .close-btn {
     background: none;
     border: none;
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     line-height: 1;
     cursor: pointer;
     color: var(--color-text-muted);
-    padding: 4px 8px;
+    padding: 2px 6px;
     border-radius: 4px;
-    transition: all 0.2s;
+    transition: all 0.15s;
 }
 
 .close-btn:hover {
@@ -475,53 +440,33 @@ document.addEventListener('DOMContentLoaded', function() {
     color: var(--color-text);
 }
 
-/* Posts List - Numbered */
+/* Posts List - Bulleted, Compact */
 .posts-list {
-    list-style: decimal;
-    padding-left: 24px;
+    list-style: disc;
+    padding-left: 20px;
     margin: 0;
-    counter-reset: post-counter;
 }
 
 .posts-list li {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.posts-list li:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.post-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    text-decoration: none;
-    color: var(--color-text);
-    transition: color 0.2s;
-}
-
-.post-link:hover {
-    color: var(--color-accent);
-}
-
-.post-title {
-    flex: 1;
-    font-weight: 500;
+    padding: 4px 0;
+    font-size: 0.85rem;
     line-height: 1.4;
 }
 
-.post-date {
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    flex-shrink: 0;
-    white-space: nowrap;
+.posts-list li a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s;
 }
 
-/* Keyboard hint */
-.tag-search:focus::placeholder {
-    opacity: 0.5;
+.posts-list li a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.posts-list .date {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    margin-left: 6px;
 }
 </style>
