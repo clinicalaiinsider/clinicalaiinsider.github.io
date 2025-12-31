@@ -11,7 +11,7 @@ layout: default
         {% if page.tags.size > 0 %}
         <span class="meta-separator">·</span>
         {% for tag in page.tags limit:3 %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
+        <a href="{{ '/tags/#' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
         {% endfor %}
         {% endif %}
     </div>
@@ -50,7 +50,7 @@ layout: default
     <div class="tags-list">
         <strong>Tags:</strong>
         {% for tag in page.tags %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
+        <a href="{{ '/tags/#' | append: tag | downcase | relative_url }}">{{ tag }}</a>{% unless forloop.last %} · {% endunless %}
         {% endfor %}
     </div>
     {% endif %}
