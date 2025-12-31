@@ -5,7 +5,7 @@ categories: [ohdsi, machine-learning, patient-level-prediction, healthcare-ai]
 tags: [ohdsi, plp, patient-level-prediction, atlas, healthcare-ai, omop-cdm, lasso-regression, gi-hemorrhage, clinical-informatics]
 description: "Learn how to build a clinical prediction model using OHDSI's Patient-Level Prediction framework to identify patients at risk of gastrointestinal hemorrhage."
 author: DataGodzilla
-reading_time: 12 min
+reading_time: 12
 keywords: [OHDSI PLP, patient-level prediction, OMOP CDM, GI hemorrhage, peptic ulcer, clinical machine learning, ATLAS, risk stratification]
 layout: post
 mermaid: false

@@ -5,7 +5,7 @@ categories: [ohdsi, atlas, cohort-studies, healthcare-data]
 tags: [ohdsi, atlas, webapi, postgresql, omop-cdm, broadsea, cohort-definitions, type-2-diabetes, clinical-research, real-world-evidence]
 description: "Learn how to build reproducible patient cohorts in OHDSI ATLAS with a hands-on Type 2 Diabetes use case, backend table explanations, and lessons learned from connecting to external databases."
 author: DataGodzilla
-reading_time: 18 min
+reading_time: 18
 keywords: [OHDSI ATLAS, cohort definitions, OMOP CDM, Type 2 Diabetes, clinical research, real-world evidence, PostgreSQL]
 layout: post
 mermaid: true
