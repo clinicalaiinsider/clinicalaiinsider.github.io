@@ -2,7 +2,22 @@
     <div class="post-card-header">
         {% assign first_tag = include.post.tags.first %}
         {% if first_tag %}
+        {% assign first_tag_lower = first_tag | downcase %}
+        {% if first_tag_lower == 'ohdsi' or first_tag_lower == 'atlas' or first_tag_lower == 'achilles' or first_tag_lower == 'plp' or first_tag_lower == 'patient-level-prediction' or first_tag_lower == 'webapi' %}
+        <div class="post-card-category tag-ohdsi-text">{{ first_tag }}</div>
+        {% elsif first_tag_lower == 'fhir' or first_tag_lower == 'hl7' or first_tag_lower == 'interoperability' %}
+        <div class="post-card-category tag-fhir-text">{{ first_tag }}</div>
+        {% elsif first_tag_lower == 'omop-cdm' or first_tag_lower == 'omop' or first_tag_lower == 'etl' or first_tag_lower == 'clinical-terminologies' or first_tag_lower == 'loinc' or first_tag_lower == 'snomed' %}
+        <div class="post-card-category tag-data-text">{{ first_tag }}</div>
+        {% elsif first_tag_lower == 'nlp' or first_tag_lower == 'biobert' or first_tag_lower == 'healthcare-ai' or first_tag_lower == 'ner' or first_tag_lower == 'clinical-nlp' %}
+        <div class="post-card-category tag-nlp-text">{{ first_tag }}</div>
+        {% elsif first_tag_lower == 'python' or first_tag_lower == 'docker' or first_tag_lower == 'streamlit' %}
+        <div class="post-card-category tag-python-text">{{ first_tag }}</div>
+        {% elsif first_tag_lower == 'tutorial' or first_tag_lower == 'guide' or first_tag_lower == 'how-to' %}
+        <div class="post-card-category tag-tutorial-text">{{ first_tag }}</div>
+        {% else %}
         <div class="post-card-category">{{ first_tag }}</div>
+        {% endif %}
         {% endif %}
         <h3 class="post-card-title">
             <a href="{{ include.post.url | relative_url }}">{{ include.post.title }}</a>
@@ -19,18 +34,21 @@
     <div class="post-card-tags">
         {% for tag in include.post.tags limit:3 %}
         {% assign tag_lower = tag | downcase %}
-        {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'broadsea' or tag_lower == 'cohort' %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-ohdsi">{{ tag }}</a>
-        {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical nlp' %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-nlp">{{ tag }}</a>
+        {% assign tag_slug = tag | slugify %}
+        {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'plp' or tag_lower == 'patient-level-prediction' or tag_lower == 'webapi' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-ohdsi">{{ tag }}</a>
+        {% elsif tag_lower == 'fhir' or tag_lower == 'hl7' or tag_lower == 'interoperability' or tag_lower == 'loinc' or tag_lower == 'snomed-ct' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-fhir">{{ tag }}</a>
+        {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical-nlp' or tag_lower == 'healthcare-ai' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-nlp">{{ tag }}</a>
         {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-python">{{ tag }}</a>
-        {% elsif tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'data' or tag_lower == 'vocabulary' or tag_lower == 'snomed' or tag_lower == 'loinc' or tag_lower == 'rxnorm' or tag_lower == 'data quality' %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-data">{{ tag }}</a>
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-python">{{ tag }}</a>
+        {% elsif tag_lower == 'omop-cdm' or tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'clinical-terminologies' or tag_lower == 'data-quality' %}
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-data">{{ tag }}</a>
         {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag tag-tutorial">{{ tag }}</a>
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag tag-tutorial">{{ tag }}</a>
         {% else %}
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}" class="tag">{{ tag }}</a>
+        <a href="{{ '/tags/#' | append: tag_slug | relative_url }}" class="tag">{{ tag }}</a>
         {% endif %}
         {% endfor %}
     </div>

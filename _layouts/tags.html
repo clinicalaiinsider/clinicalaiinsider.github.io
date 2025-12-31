@@ -12,9 +12,36 @@ layout: default
     
     <div class="tags-cloud">
         {% for tag in tags %}
+        {% assign tag_lower = tag[0] | downcase %}
+        {% if tag_lower == 'ohdsi' or tag_lower == 'atlas' or tag_lower == 'achilles' or tag_lower == 'plp' or tag_lower == 'patient-level-prediction' or tag_lower == 'webapi' %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-ohdsi">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% elsif tag_lower == 'fhir' or tag_lower == 'hl7' or tag_lower == 'interoperability' or tag_lower == 'loinc' or tag_lower == 'snomed-ct' %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-fhir">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% elsif tag_lower == 'nlp' or tag_lower == 'biobert' or tag_lower == 'ner' or tag_lower == 'clinical-nlp' or tag_lower == 'healthcare-ai' %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-nlp">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% elsif tag_lower == 'python' or tag_lower == 'docker' or tag_lower == 'streamlit' %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-python">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% elsif tag_lower == 'omop-cdm' or tag_lower == 'omop' or tag_lower == 'etl' or tag_lower == 'clinical-terminologies' or tag_lower == 'data-quality' %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-data">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% elsif tag_lower == 'tutorial' or tag_lower == 'guide' or tag_lower == 'how-to' %}
+        <a href="#{{ tag[0] | slugify }}" class="tag tag-large tag-tutorial">
+            {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% else %}
         <a href="#{{ tag[0] | slugify }}" class="tag tag-large">
             {{ tag[0] }} <span class="tag-count">{{ tag[1].size }}</span>
         </a>
+        {% endif %}
         {% endfor %}
     </div>
     

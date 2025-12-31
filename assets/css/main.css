@@ -32,7 +32,9 @@
     --color-python-light: #eff6ff;
     --color-tutorial: #dc2626;
     --color-tutorial-light: #fef2f2;
-    
+    --color-fhir: #0891b2;
+    --color-fhir-light: #ecfeff;
+
     /* Status colors */
     --color-success: #10b981;
     --color-warning: #f59e0b;
@@ -303,6 +305,79 @@ main {
     color: var(--color-text);
 }
 
+/* Section header with pagination */
+.section-header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* ========== PAGINATION ========== */
+.pagination-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+
+.pagination-link:hover {
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    border-color: var(--color-accent);
+}
+
+.pagination-current {
+    color: white;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.pagination-current:hover {
+    color: white;
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+}
+
+.pagination-ellipsis {
+    color: var(--color-text-muted);
+    padding: 0 4px;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .section-header-right {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 12px;
+    }
+
+    .pagination-inline {
+        gap: 2px;
+    }
+
+    .pagination-link {
+        min-width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+}
+
 /* ========== POST CARDS GRID ========== */
 .posts-grid {
     display: grid;
@@ -338,6 +413,26 @@ main {
     letter-spacing: 0.05em;
     color: var(--color-accent);
     margin-bottom: 12px;
+}
+
+/* Category color variants */
+.post-card-category.tag-ohdsi-text {
+    color: var(--color-ohdsi);
+}
+.post-card-category.tag-fhir-text {
+    color: var(--color-fhir);
+}
+.post-card-category.tag-data-text {
+    color: var(--color-data);
+}
+.post-card-category.tag-nlp-text {
+    color: var(--color-nlp);
+}
+.post-card-category.tag-python-text {
+    color: var(--color-python);
+}
+.post-card-category.tag-tutorial-text {
+    color: var(--color-tutorial);
 }
 
 .post-card-title {
@@ -574,6 +669,15 @@ main {
 }
 .tag-tutorial:hover {
     background: #fecaca;
+}
+
+.tag-fhir {
+    background: var(--color-fhir-light);
+    color: var(--color-fhir);
+    border-color: transparent;
+}
+.tag-fhir:hover {
+    background: #a5f3fc;
 }
 
 .tag-more {

@@ -13,7 +13,14 @@ layout: default
     <h2 class="section-title">Recent Posts</h2>
     <div class="posts-grid">
         {% for post in site.posts %}
+        {% unless post.pinned_bottom %}
         {% include post-card.html post=post %}
+        {% endunless %}
+        {% endfor %}
+        {% for post in site.posts %}
+        {% if post.pinned_bottom %}
+        {% include post-card.html post=post %}
+        {% endif %}
         {% endfor %}
     </div>
 </section>
