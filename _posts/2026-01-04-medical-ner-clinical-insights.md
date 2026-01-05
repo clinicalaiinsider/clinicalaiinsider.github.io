@@ -18,6 +18,19 @@ podcast_url: /assets/audio/medical-ner-podcast.mp3
 podcast_duration: "9:06"
 ---
 
+> **Listen to the Podcast**
+>
+> Prefer audio? Listen to this article as a conversational podcast (~9 min):
+>
+> <audio controls style="width: 100%; max-width: 500px;">
+>   <source src="/assets/audio/medical-ner-podcast.mp3" type="audio/mpeg">
+>   Your browser does not support the audio element.
+> </audio>
+>
+> [Download MP3](/assets/audio/medical-ner-podcast.mp3)
+
+---
+
 # Part 1: Unlocking Hidden Insights in Clinical Notes
 
 *How we built a system that reads clinical notes like a physician - understanding not just what's mentioned, but whether it's present, absent, historical, or running in the family*
@@ -32,25 +45,6 @@ podcast_duration: "9:06"
 > | [Part 2: Technical Deep-Dive](/blog/building-production-ready-medical-ner-pipeline/) | Architecture, algorithms, code implementation | Developers, ML Engineers, Data Scientists |
 >
 > *Start here to understand the "why" and "what." Continue to Part 2 for the "how."*
-
----
-
-<div class="podcast-player" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #cbd5e1;">
-  <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
-    <span style="font-size: 32px;">🎧</span>
-    <div>
-      <h4 style="margin: 0; color: #1e293b; font-size: 18px;">Listen to This Article</h4>
-      <p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">9 minute audio companion • Two-host conversational format</p>
-    </div>
-  </div>
-  <audio controls preload="metadata" style="width: 100%; height: 48px;">
-    <source src="/assets/audio/medical-ner-podcast.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-  <p style="margin: 12px 0 0 0; font-size: 13px; color: #64748b;">
-    <a href="/assets/audio/medical-ner-podcast.mp3" download style="color: #3b82f6; text-decoration: none;">Download MP3</a> • Perfect for commutes or multitasking
-  </p>
-</div>
 
 ---
 
