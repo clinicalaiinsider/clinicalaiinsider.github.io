@@ -771,3 +771,215 @@ details.deep-dive .technical-content {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   Anthropic-Style Image Styling
+   Rounded corners on all images, screenshots, and visualizations
+   ========================================================================== */
+
+/* Base image styling - 16px rounded corners (Anthropic pattern) */
+article img,
+.post-content img,
+.blog-content img {
+  border-radius: 16px;
+  overflow: clip;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Figure element styling */
+article figure,
+.post-content figure,
+.blog-content figure {
+  margin: var(--vs-space-lg) 0;
+  text-align: center;
+}
+
+article figure img,
+.post-content figure img,
+.blog-content figure img {
+  border-radius: 16px;
+  overflow: clip;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Figure captions */
+article figcaption,
+.post-content figcaption,
+.blog-content figcaption {
+  margin-top: var(--vs-space-sm);
+  font-size: 0.875rem;
+  color: var(--vs-text-secondary);
+  font-style: italic;
+}
+
+/* Screenshot card - elevated style with shadow */
+.screenshot-card,
+.image-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin: var(--vs-space-lg) 0;
+  background: white;
+}
+
+.screenshot-card img,
+.image-card img {
+  border-radius: 0;
+  display: block;
+  width: 100%;
+}
+
+.screenshot-card .caption,
+.image-card .caption {
+  padding: var(--vs-space-sm) var(--vs-space-md);
+  font-size: 0.875rem;
+  color: var(--vs-text-secondary);
+  background: #f8fafc;
+  border-top: 1px solid var(--vs-border-light);
+}
+
+/* Screenshot with browser frame */
+.browser-frame {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  margin: var(--vs-space-xl) 0;
+  background: white;
+  border: 1px solid var(--vs-border-light);
+}
+
+.browser-frame .browser-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--vs-border-light);
+}
+
+.browser-frame .browser-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.browser-frame .browser-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.browser-frame .browser-dot.red { background: #ef4444; }
+.browser-frame .browser-dot.yellow { background: #f59e0b; }
+.browser-frame .browser-dot.green { background: #10b981; }
+
+.browser-frame .browser-url {
+  flex: 1;
+  background: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  color: var(--vs-text-secondary);
+  font-family: var(--vs-font-mono);
+}
+
+.browser-frame img {
+  display: block;
+  width: 100%;
+  border-radius: 0;
+}
+
+/* Visualization containers with rounded corners */
+.visualization-container,
+.diagram-container,
+.chart-container {
+  border-radius: 16px;
+  overflow: hidden;
+  margin: var(--vs-space-lg) 0;
+  background: white;
+  border: 1px solid var(--vs-border-light);
+}
+
+.visualization-container img,
+.diagram-container img,
+.chart-container img {
+  border-radius: 0;
+  display: block;
+  width: 100%;
+}
+
+/* Mermaid diagram containers */
+.mermaid {
+  border-radius: 16px;
+  overflow: hidden;
+  padding: var(--vs-space-md);
+  background: #fafafa;
+  margin: var(--vs-space-lg) 0;
+}
+
+/* Image grid for multiple screenshots */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--vs-space-md);
+  margin: var(--vs-space-lg) 0;
+}
+
+.image-grid img {
+  border-radius: 16px;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Side-by-side comparison images */
+.image-comparison {
+  display: flex;
+  gap: var(--vs-space-md);
+  margin: var(--vs-space-lg) 0;
+  flex-wrap: wrap;
+}
+
+.image-comparison .comparison-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.image-comparison img {
+  border-radius: 16px;
+  width: 100%;
+}
+
+.image-comparison .comparison-label {
+  text-align: center;
+  margin-top: var(--vs-space-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--vs-text-secondary);
+}
+
+/* Responsive adjustments for images */
+@media (max-width: 640px) {
+  article img,
+  .post-content img,
+  .blog-content img {
+    border-radius: 12px;
+  }
+
+  .screenshot-card,
+  .image-card,
+  .browser-frame,
+  .visualization-container {
+    border-radius: 12px;
+  }
+
+  .mermaid {
+    border-radius: 12px;
+    padding: var(--vs-space-sm);
+  }
+
+  .image-comparison {
+    flex-direction: column;
+  }
+}
