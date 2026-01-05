@@ -1041,14 +1041,14 @@ main {
 .page-content img {
     max-width: 100%;
     height: auto;
-    border-radius: var(--radius);
+    border-radius: 16px; /* Anthropic-style rounded corners */
     margin: 1.25rem 0;
 }
 
 .image-container {
     margin: 1.5rem 0;
     border: none;
-    border-radius: var(--radius-lg);
+    border-radius: 16px; /* Anthropic-style rounded corners */
     overflow: hidden;
     background: transparent;
 }
@@ -1058,7 +1058,7 @@ main {
     height: auto;
     display: block;
     margin: 0;
-    border-radius: var(--radius-lg);
+    border-radius: 16px; /* Anthropic-style rounded corners */
 }
 
 .image-caption {
