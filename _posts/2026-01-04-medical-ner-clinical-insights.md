@@ -27,7 +27,7 @@ part: 1
 > | Part | Focus | Audience |
 > |------|-------|----------|
 > | **Part 1** (You are here) | Clinical use cases, patient care impact, business value | Clinical Researchers, Product Owners, Delivery Managers |
-> | [Part 2: Technical Deep-Dive](/ml-projects/nlp/healthcare/2026/01/04/building-production-ready-medical-ner-pipeline.html) | Architecture, algorithms, code implementation | Developers, ML Engineers, Data Scientists |
+> | [Part 2: Technical Deep-Dive](/blog/building-production-ready-medical-ner-pipeline/) | Architecture, algorithms, code implementation | Developers, ML Engineers, Data Scientists |
 >
 > *Start here to understand the "why" and "what." Continue to Part 2 for the "how."*
 
@@ -490,7 +490,7 @@ The system is available for demonstration with sample clinical texts. Contact us
 
 > **Ready to understand the technical implementation?**
 >
-> In **[Part 2: Technical Deep-Dive](/ml-projects/nlp/healthcare/2026/01/04/building-production-ready-medical-ner-pipeline.html)**, we explore:
+> In **[Part 2: Technical Deep-Dive](/blog/building-production-ready-medical-ner-pipeline/)**, we explore:
 >
 > | Topic | What You'll Learn |
 > |-------|-------------------|
@@ -502,7 +502,7 @@ The system is available for demonstration with sample clinical texts. Contact us
 >
 > *Part 2 is written for developers and data scientists who want to build or customize similar systems.*
 >
-> **[Read Part 2: Technical Deep-Dive →](/ml-projects/nlp/healthcare/2026/01/04/building-production-ready-medical-ner-pipeline.html)**
+> **[Read Part 2: Technical Deep-Dive →](/blog/building-production-ready-medical-ner-pipeline/)**
 
 ---
 

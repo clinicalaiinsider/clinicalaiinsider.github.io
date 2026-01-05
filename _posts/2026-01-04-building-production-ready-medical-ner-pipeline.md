@@ -25,10 +25,10 @@ part: 2
 >
 > | Part | Focus | Audience |
 > |------|-------|----------|
-> | [Part 1: Clinical Insights](/clinical/healthcare-ai/product/2026/01/04/medical-ner-clinical-insights.html) | Clinical use cases, patient care impact, business value | Clinical Researchers, Product Owners, Delivery Managers |
+> | [Part 1: Clinical Insights](/blog/medical-ner-clinical-insights/) | Clinical use cases, patient care impact, business value | Clinical Researchers, Product Owners, Delivery Managers |
 > | **Part 2** (You are here) | Architecture, algorithms, code implementation | Developers, ML Engineers, Data Scientists |
 >
-> *New to Medical NER? Start with [Part 1](/clinical/healthcare-ai/product/2026/01/04/medical-ner-clinical-insights.html) for the clinical context and use cases.*
+> *New to Medical NER? Start with [Part 1](/blog/medical-ner-clinical-insights/) for the clinical context and use cases.*
 
 ---
 
@@ -611,7 +611,7 @@ Building a production-ready medical NER pipeline requires more than just throwin
 >
 > ### Missed Part 1?
 >
-> **[Part 1: Unlocking Hidden Insights in Clinical Notes](/clinical/healthcare-ai/product/2026/01/04/medical-ner-clinical-insights.html)** covers:
+> **[Part 1: Unlocking Hidden Insights in Clinical Notes](/blog/medical-ner-clinical-insights/)** covers:
 >
 > | Topic | What You'll Learn |
 > |-------|-------------------|
@@ -623,7 +623,7 @@ Building a production-ready medical NER pipeline requires more than just throwin
 >
 > *Part 1 is written for clinical researchers, product owners, and delivery managers.*
 >
-> **[← Read Part 1: Clinical Insights](/clinical/healthcare-ai/product/2026/01/04/medical-ner-clinical-insights.html)**
+> **[← Read Part 1: Clinical Insights](/blog/medical-ner-clinical-insights/)**
 
 ---
 
