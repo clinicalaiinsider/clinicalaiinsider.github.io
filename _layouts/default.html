@@ -38,8 +38,10 @@
     {% if page.mermaid %}
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with custom theme
         mermaid.initialize({
-            startOnLoad: true,
+            startOnLoad: false,
             theme: 'neutral',
             themeVariables: {
                 primaryColor: '#f3f4f6',
@@ -49,6 +51,22 @@
                 secondaryColor: '#f9fafb',
                 fontFamily: 'Inter, sans-serif'
             }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
         });
     </script>
     {% endif %}
