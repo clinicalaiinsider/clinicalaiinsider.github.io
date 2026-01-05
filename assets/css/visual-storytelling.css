@@ -560,3 +560,214 @@ details.deep-dive .technical-content {
     display: block !important;
   }
 }
+
+/* ==========================================================================
+   Stylish Audio Player Component
+   ========================================================================== */
+
+.audio-player-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: var(--vs-radius-xl);
+  padding: var(--vs-space-lg) var(--vs-space-xl);
+  margin: var(--vs-space-xl) 0;
+  color: white;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.audio-player-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.audio-player-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.audio-player-header {
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-md);
+  margin-bottom: var(--vs-space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.audio-player-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.audio-player-title {
+  flex: 1;
+}
+
+.audio-player-title h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.audio-player-title p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.audio-player-controls {
+  position: relative;
+  z-index: 1;
+}
+
+.audio-player-controls audio {
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  outline: none;
+}
+
+/* Custom audio styling for webkit browsers */
+.audio-player-controls audio::-webkit-media-controls-panel {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+}
+
+.audio-player-controls audio::-webkit-media-controls-play-button {
+  background-color: white;
+  border-radius: 50%;
+}
+
+.audio-player-controls audio::-webkit-media-controls-current-time-display,
+.audio-player-controls audio::-webkit-media-controls-time-remaining-display {
+  color: white;
+}
+
+.audio-player-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--vs-space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.audio-player-footer a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-xs);
+  transition: color 0.2s ease;
+}
+
+.audio-player-footer a:hover {
+  color: white;
+}
+
+.audio-player-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+/* Alternative minimal audio player style */
+.audio-player-minimal {
+  background: #F8FAFC;
+  border: 1px solid var(--vs-border-light);
+  border-radius: var(--vs-radius-lg);
+  padding: var(--vs-space-md) var(--vs-space-lg);
+  margin: var(--vs-space-lg) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--vs-space-md);
+}
+
+.audio-player-minimal .play-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--vs-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.audio-player-minimal .audio-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.audio-player-minimal .audio-info h5 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--vs-text-primary);
+}
+
+.audio-player-minimal .audio-info span {
+  font-size: 0.8rem;
+  color: var(--vs-text-secondary);
+}
+
+.audio-player-minimal audio {
+  flex: 2;
+  height: 32px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .audio-player-card {
+    padding: var(--vs-space-md);
+  }
+
+  .audio-player-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .audio-player-footer {
+    flex-direction: column;
+    gap: var(--vs-space-sm);
+  }
+
+  .audio-player-minimal {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .audio-player-minimal audio {
+    width: 100%;
+  }
+}

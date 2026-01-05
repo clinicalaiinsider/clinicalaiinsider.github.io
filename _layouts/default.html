@@ -39,16 +39,50 @@
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 
-        // Initialize Mermaid with custom theme
+        // Initialize Mermaid with colorful theme
         mermaid.initialize({
             startOnLoad: false,
-            theme: 'neutral',
+            theme: 'base',
             themeVariables: {
-                primaryColor: '#f3f4f6',
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
                 primaryTextColor: '#1f2937',
-                primaryBorderColor: '#e5e7eb',
-                lineColor: '#9ca3af',
-                secondaryColor: '#f9fafb',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
                 fontFamily: 'Inter, sans-serif'
             }
         });

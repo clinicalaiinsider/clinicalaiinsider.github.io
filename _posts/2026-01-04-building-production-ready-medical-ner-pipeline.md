@@ -17,16 +17,25 @@ podcast_url: /assets/audio/medical-ner-podcast.mp3
 podcast_duration: "9:06"
 ---
 
-> **Listen to the Podcast**
->
-> Prefer audio? Listen to this article as a conversational podcast (~9 min):
->
-> <audio controls style="width: 100%; max-width: 500px;">
->   <source src="/assets/audio/medical-ner-podcast.mp3" type="audio/mpeg">
->   Your browser does not support the audio element.
-> </audio>
->
-> [Download MP3](/assets/audio/medical-ner-podcast.mp3)
+<div class="audio-player-card">
+  <div class="audio-player-header">
+    <div class="audio-player-icon">🎧</div>
+    <div class="audio-player-title">
+      <h4>Listen to This Article</h4>
+      <p>9 minute audio companion • Two-host conversational format</p>
+    </div>
+  </div>
+  <div class="audio-player-controls">
+    <audio controls preload="metadata">
+      <source src="/assets/audio/medical-ner-podcast.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+  <div class="audio-player-footer">
+    <a href="/assets/audio/medical-ner-podcast.mp3" download>📥 Download MP3</a>
+    <span class="audio-player-badge">Perfect for commutes</span>
+  </div>
+</div>
 
 ---
 
