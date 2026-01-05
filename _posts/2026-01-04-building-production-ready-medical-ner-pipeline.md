@@ -13,6 +13,8 @@ image: /assets/images/medical-ner-pipeline.png
 keywords: [medical NER, named entity recognition, BioBERT, clinical NLP, spaCy, healthcare AI, natural language processing, scope reversal, context classification]
 series: medical-ner-pipeline
 part: 2
+podcast_url: /assets/audio/medical-ner-podcast.mp3
+podcast_duration: "9:06"
 ---
 
 # Part 2: Building a Production-Ready Medical NER Pipeline
@@ -29,6 +31,25 @@ part: 2
 > | **Part 2** (You are here) | Architecture, algorithms, code implementation | Developers, ML Engineers, Data Scientists |
 >
 > *New to Medical NER? Start with [Part 1](/blog/medical-ner-clinical-insights/) for the clinical context and use cases.*
+
+---
+
+<div class="podcast-player" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #cbd5e1;">
+  <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+    <span style="font-size: 32px;">🎧</span>
+    <div>
+      <h4 style="margin: 0; color: #1e293b; font-size: 18px;">Listen to This Article</h4>
+      <p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">9 minute audio companion • Two-host conversational format</p>
+    </div>
+  </div>
+  <audio controls preload="metadata" style="width: 100%; height: 48px;">
+    <source src="/assets/audio/medical-ner-podcast.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <p style="margin: 12px 0 0 0; font-size: 13px; color: #64748b;">
+    <a href="/assets/audio/medical-ner-podcast.mp3" download style="color: #3b82f6; text-decoration: none;">Download MP3</a> • Perfect for commutes or multitasking
+  </p>
+</div>
 
 ---
 
