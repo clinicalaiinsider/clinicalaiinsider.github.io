@@ -304,33 +304,59 @@ Uncertain entities: ['pneumonia']
 Every detected entity is classified into exactly one context category:
 
 ```mermaid
-mindmap
-  root((Entity<br/>Context))
-    Confirmed
-      diagnosed with
-      presents with
-      positive for
-      exhibits
-    Negated
-      denies
-      no evidence of
-      negative for
-      absence of
-    Uncertain
-      possible
-      rule out
-      suspected
-      cannot exclude
-    Historical
-      history of
-      previous
-      past medical
-      prior
-    Family
-      mother has
-      father with
-      family history
-      hereditary
+flowchart TB
+    subgraph Input[" "]
+        E[("🔍 Medical Entity<br/>in Clinical Text")]
+    end
+
+    E --> C & N & H & F & U
+
+    subgraph C["✅ CONFIRMED"]
+        C1["diagnosed with"]
+        C2["presents with"]
+        C3["positive for"]
+        C4["exhibits"]
+        C5["<i>138 patterns</i>"]
+    end
+
+    subgraph N["❌ NEGATED"]
+        N1["denies"]
+        N2["no evidence of"]
+        N3["negative for"]
+        N4["absence of"]
+        N5["<i>99 patterns</i>"]
+    end
+
+    subgraph H["📅 HISTORICAL"]
+        H1["history of"]
+        H2["previous"]
+        H3["prior"]
+        H4["past medical"]
+        H5["<i>82 patterns</i>"]
+    end
+
+    subgraph F["👨‍👩‍👧 FAMILY"]
+        F1["family history"]
+        F2["mother has"]
+        F3["father with"]
+        F4["hereditary"]
+        F5["<i>79 patterns</i>"]
+    end
+
+    subgraph U["❓ UNCERTAIN"]
+        U1["possible"]
+        U2["suspected"]
+        U3["rule out"]
+        U4["cannot exclude"]
+        U5["<i>48 patterns</i>"]
+    end
+
+    style E fill:#6366F1,color:#fff,stroke:#4F46E5,stroke-width:3px
+    style C fill:#ECFDF5,stroke:#10B981,stroke-width:2px
+    style N fill:#FEF2F2,stroke:#EF4444,stroke-width:2px
+    style H fill:#F5F3FF,stroke:#8B5CF6,stroke-width:2px
+    style F fill:#FDF2F8,stroke:#EC4899,stroke-width:2px
+    style U fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px
 ```
 
 ### Priority Hierarchy
