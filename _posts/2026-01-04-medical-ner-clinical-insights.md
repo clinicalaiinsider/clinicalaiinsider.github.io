@@ -278,6 +278,7 @@ Results:
 **Scenario**: Care coordinators need to identify patients with suspected conditions requiring follow-up.
 
 **Query Results**:
+
 | Finding | Context | Required Action |
 |---------|---------|-----------------|
 | "Rule out lung cancer" | UNCERTAIN | Schedule CT scan |
@@ -291,6 +292,7 @@ Results:
 **Scenario**: Population health team wants to identify patients at elevated cancer risk based on family history.
 
 **Extracted Family History Patterns**:
+
 | Cancer Type | Family Member | Risk Implication |
 |-------------|---------------|------------------|
 | Breast cancer | Mother, age 48 | BRCA screening indicated |
