@@ -34,6 +34,6 @@ This site documents my learning journey through clinical informatics. Each post 
 - **Blog**: [clinicalaiinsider.github.io](https://clinicalaiinsider.github.io/)
 - **GitHub**: [github.com/datagodzilla](https://github.com/datagodzilla)
 - **LinkedIn**: [linkedin.com/in/lalitsurampudi](https://www.linkedin.com/in/lalitsurampudi/)
-- **CV/Resume**: [View PDF](/assets/cv.pdf){:target="_blank"} \| [Download](/assets/cv.pdf){:download="Narayana_Surampudi_CV.pdf"}
+- **CV/Resume**: [View PDF](/assets/NLSurampudi_CV.pdf){:target="_blank"} \| [Download](/assets/NLSurampudi_CV.pdf){:download="NLSurampudi_CV.pdf"}
 
 Feel free to reach out if you're working on similar problems or have questions about any of the posts!
