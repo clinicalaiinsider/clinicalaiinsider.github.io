@@ -47,8 +47,7 @@ package-lock.json
 # Claude
 .claude/
 
-# GitHub workflows (local only)
-.github/
+# GitHub workflows are needed for Pages deployment
 
 # Drafts and local files
 _drafts/*.md
