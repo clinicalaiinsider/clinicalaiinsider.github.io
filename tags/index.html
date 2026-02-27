@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Tags | Clinical AI Insider</title>
+    <meta name="description" content="Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.">
+    
+    
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Tags">
+    <meta property="og:description" content="Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/tags/">
+    
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tags">
+    <meta name="twitter:description" content="Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/tags/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="tags-header">
+    <h1 class="tags-title">Tags</h1>
+    <p class="tags-subtitle">Browse topics by category</p>
+    <div class="search-wrapper">
+        <input type="search" id="tag-search" class="tag-search" placeholder="Search tags..." autocomplete="off">
+        <span class="search-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+        </span>
+    </div>
+    <div class="search-results" id="search-results" hidden>
+        <div class="matched-category" id="matched-category"></div>
+        <div class="matched-tags" id="matched-tags"></div>
+    </div>
+</header>
+
+<section class="tags-container">
+    <div class="categories-grid" id="categories-grid">
+        <!-- Categories will be rendered by JavaScript -->
+    </div>
+
+    <div class="no-results" id="no-results" hidden>
+        <p>No tags found matching your search.</p>
+    </div>
+
+    <div class="posts-panel" id="posts-panel" hidden>
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <span class="panel-category" id="panel-category"></span>
+                <span class="panel-separator">:</span>
+                <span class="panel-tag" id="panel-tag"></span>
+            </div>
+            <button class="close-btn" id="close-btn" aria-label="Close panel">&times;</button>
+        </div>
+        <ul class="posts-list" id="posts-list"></ul>
+    </div>
+</section>
+
+<!-- Category Taxonomy Definition -->
+<script type="application/json" id="category-taxonomy">
+{
+    "OHDSI": {
+        "color": "ohdsi",
+        "icon": "🔬",
+        "description": "OHDSI ecosystem tools and methods",
+        "tags": ["ohdsi", "atlas", "achilles", "webapi", "broadsea", "plp", "patient-level-prediction", "cohort-definitions", "observational-research", "hades", "athena"]
+    },
+    "Data Standards": {
+        "color": "data",
+        "icon": "📊",
+        "description": "Healthcare data models and ETL",
+        "tags": ["omop-cdm", "omop", "cdm", "etl", "data-quality", "synthea", "data-standards", "data standards"]
+    },
+    "Terminology": {
+        "color": "fhir",
+        "icon": "📖",
+        "description": "Clinical vocabularies and coding systems",
+        "tags": ["loinc", "snomed-ct", "snomed ct", "rxnorm", "icd", "cpt", "clinical-terminologies", "vocabulary"]
+    },
+    "Interoperability": {
+        "color": "fhir",
+        "icon": "🔗",
+        "description": "Healthcare data exchange standards",
+        "tags": ["fhir", "hl7", "cda", "ehr", "healthcare-data", "healthcare data", "lis", "clinical-workflow", "clinical workflow", "interoperability"]
+    },
+    "Clinical AI": {
+        "color": "nlp",
+        "icon": "🤖",
+        "description": "Machine learning and NLP in healthcare",
+        "tags": ["nlp", "healthcare-ai", "biobert", "machine-learning", "deep-learning", "ner", "clinical-nlp", "lasso-regression", "healthcare-analytics"]
+    },
+    "Development": {
+        "color": "python",
+        "icon": "💻",
+        "description": "Technical tools and programming",
+        "tags": ["python", "docker", "postgresql", "streamlit", "r-programming"]
+    },
+    "Research": {
+        "color": "default",
+        "icon": "📑",
+        "description": "Clinical research methodology",
+        "tags": ["real-world-evidence", "real-world-data", "clinical-research", "clinical-informatics", "healthcare-analytics"]
+    },
+    "Clinical Domains": {
+        "color": "default",
+        "icon": "🏥",
+        "description": "Disease areas and specialties",
+        "tags": ["type-2-diabetes", "gi-hemorrhage", "cardiology", "oncology"]
+    },
+    "Learning": {
+        "color": "tutorial",
+        "icon": "📚",
+        "description": "Tutorials and educational content",
+        "tags": ["tutorial", "guide", "how-to", "resources"]
+    }
+}
+</script>
+
+<!-- Posts Data -->
+<script type="application/json" id="tags-data">
+{
+  
+  "fhir": {
+    "name": "fhir",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      },
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "hl7": {
+    "name": "hl7",
+    "posts": [
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "loinc": {
+    "name": "loinc",
+    "posts": [
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "snomed-ct": {
+    "name": "snomed-ct",
+    "posts": [
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "lis": {
+    "name": "lis",
+    "posts": [
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "ehr": {
+    "name": "ehr",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "healthcare-data": {
+    "name": "healthcare-data",
+    "posts": [
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      },
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "clinical-workflow": {
+    "name": "clinical-workflow",
+    "posts": [
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      },
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "data-standards": {
+    "name": "data-standards",
+    "posts": [
+      
+      {
+        "title": "From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability",
+        "url": "/blog/HL7-FHIR-Clinical-Lab-Interoperability/",
+        "date": "Nov 30"
+      }
+      
+    ]
+  },
+  
+  "interoperability": {
+    "name": "interoperability",
+    "posts": [
+      
+      {
+        "title": "Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained",
+        "url": "/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/",
+        "date": "Dec 01"
+      }
+      
+    ]
+  },
+  
+  "ohdsi": {
+    "name": "ohdsi",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      },
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      },
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      },
+      
+      {
+        "title": "OHDSI Introduction: From Real-World Data to Reliable Evidence",
+        "url": "/blog/ohdsi-introduction-real-world-data-reliable-evidence/",
+        "date": "Dec 12"
+      }
+      
+    ]
+  },
+  
+  "omop": {
+    "name": "omop",
+    "posts": [
+      
+      {
+        "title": "OHDSI Introduction: From Real-World Data to Reliable Evidence",
+        "url": "/blog/ohdsi-introduction-real-world-data-reliable-evidence/",
+        "date": "Dec 12"
+      }
+      
+    ]
+  },
+  
+  "cdm": {
+    "name": "cdm",
+    "posts": [
+      
+      {
+        "title": "OHDSI Introduction: From Real-World Data to Reliable Evidence",
+        "url": "/blog/ohdsi-introduction-real-world-data-reliable-evidence/",
+        "date": "Dec 12"
+      }
+      
+    ]
+  },
+  
+  "real-world-data": {
+    "name": "real-world-data",
+    "posts": [
+      
+      {
+        "title": "OHDSI Introduction: From Real-World Data to Reliable Evidence",
+        "url": "/blog/ohdsi-introduction-real-world-data-reliable-evidence/",
+        "date": "Dec 12"
+      }
+      
+    ]
+  },
+  
+  "observational-research": {
+    "name": "observational-research",
+    "posts": [
+      
+      {
+        "title": "OHDSI Introduction: From Real-World Data to Reliable Evidence",
+        "url": "/blog/ohdsi-introduction-real-world-data-reliable-evidence/",
+        "date": "Dec 12"
+      }
+      
+    ]
+  },
+  
+  "healthcare-analytics": {
+    "name": "healthcare-analytics",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      },
+      
+      {
+        "title": "OHDSI Introduction: From Real-World Data to Reliable Evidence",
+        "url": "/blog/ohdsi-introduction-real-world-data-reliable-evidence/",
+        "date": "Dec 12"
+      }
+      
+    ]
+  },
+  
+  "omop-cdm": {
+    "name": "omop-cdm",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      },
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      },
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      },
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "etl": {
+    "name": "etl",
+    "posts": [
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "clinical-terminologies": {
+    "name": "clinical-terminologies",
+    "posts": [
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "python": {
+    "name": "python",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      },
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "postgresql": {
+    "name": "postgresql",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      },
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "achilles": {
+    "name": "achilles",
+    "posts": [
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "synthea": {
+    "name": "synthea",
+    "posts": [
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "data-quality": {
+    "name": "data-quality",
+    "posts": [
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "cohort-definitions": {
+    "name": "cohort-definitions",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      },
+      
+      {
+        "title": "From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey",
+        "url": "/blog/ohdsi-learning-journey/",
+        "date": "Dec 27"
+      }
+      
+    ]
+  },
+  
+  "atlas": {
+    "name": "atlas",
+    "posts": [
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      },
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      }
+      
+    ]
+  },
+  
+  "webapi": {
+    "name": "webapi",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      }
+      
+    ]
+  },
+  
+  "broadsea": {
+    "name": "broadsea",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      }
+      
+    ]
+  },
+  
+  "type-2-diabetes": {
+    "name": "type-2-diabetes",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      }
+      
+    ]
+  },
+  
+  "clinical-research": {
+    "name": "clinical-research",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      }
+      
+    ]
+  },
+  
+  "real-world-evidence": {
+    "name": "real-world-evidence",
+    "posts": [
+      
+      {
+        "title": "Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide",
+        "url": "/blog/mastering-atlas-cohort-definitions/",
+        "date": "Dec 28"
+      }
+      
+    ]
+  },
+  
+  "plp": {
+    "name": "plp",
+    "posts": [
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      }
+      
+    ]
+  },
+  
+  "patient-level-prediction": {
+    "name": "patient-level-prediction",
+    "posts": [
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      }
+      
+    ]
+  },
+  
+  "healthcare-ai": {
+    "name": "healthcare-ai",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      },
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      }
+      
+    ]
+  },
+  
+  "lasso-regression": {
+    "name": "lasso-regression",
+    "posts": [
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      }
+      
+    ]
+  },
+  
+  "gi-hemorrhage": {
+    "name": "gi-hemorrhage",
+    "posts": [
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      }
+      
+    ]
+  },
+  
+  "clinical-informatics": {
+    "name": "clinical-informatics",
+    "posts": [
+      
+      {
+        "title": "Predicting GI Hemorrhage with OHDSI: A Clinical Machine Learning Case Study",
+        "url": "/blog/predicting-gi-hemorrhage-ohdsi-plp/",
+        "date": "Dec 29"
+      }
+      
+    ]
+  },
+  
+  "nlp": {
+    "name": "nlp",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      }
+      
+    ]
+  },
+  
+  "resources": {
+    "name": "resources",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      }
+      
+    ]
+  },
+  
+  "tutorial": {
+    "name": "tutorial",
+    "posts": [
+      
+      {
+        "title": "Clinical Informatics Resources: A Comprehensive Reference Guide",
+        "url": "/blog/clinical-informatics-resources-reference-guide/",
+        "date": "Dec 30"
+      }
+      
+    ]
+  },
+  
+  "ner": {
+    "name": "ner",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "biobert": {
+    "name": "biobert",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "clinical-nlp": {
+    "name": "clinical-nlp",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      },
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "spacy": {
+    "name": "spacy",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "transformers": {
+    "name": "transformers",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "streamlit": {
+    "name": "streamlit",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "healthcare": {
+    "name": "healthcare",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "medical-ai": {
+    "name": "medical-ai",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      },
+      
+      {
+        "title": "Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT",
+        "url": "/blog/building-production-ready-medical-ner-pipeline/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "patient-care": {
+    "name": "patient-care",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "clinical-documentation": {
+    "name": "clinical-documentation",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "care-coordination": {
+    "name": "care-coordination",
+    "posts": [
+      
+      {
+        "title": "Medical NER Pipeline Part 1: Unlocking Hidden Insights in Clinical Notes",
+        "url": "/blog/medical-ner-clinical-insights/",
+        "date": "Jan 04"
+      }
+      
+    ]
+  },
+  
+  "fhir": {
+    "name": "FHIR",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "hl7": {
+    "name": "HL7",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "interoperability": {
+    "name": "Interoperability",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "rest-api": {
+    "name": "REST-API",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "javascript": {
+    "name": "JavaScript",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "hapi-fhir": {
+    "name": "HAPI-FHIR",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "patient-management": {
+    "name": "Patient-Management",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "crud": {
+    "name": "CRUD",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "healthcare-it": {
+    "name": "Healthcare-IT",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  },
+  
+  "tutorial": {
+    "name": "Tutorial",
+    "posts": [
+      
+      {
+        "title": "Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application",
+        "url": "/blog/healthplus-patient-management-fhir-app/",
+        "date": "Feb 26"
+      }
+      
+    ]
+  }
+  
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const taxonomy = JSON.parse(document.getElementById('category-taxonomy').textContent);
+    const tagsData = JSON.parse(document.getElementById('tags-data').textContent);
+    const searchInput = document.getElementById('tag-search');
+    const searchResults = document.getElementById('search-results');
+    const matchedCategory = document.getElementById('matched-category');
+    const matchedTags = document.getElementById('matched-tags');
+    const categoriesGrid = document.getElementById('categories-grid');
+    const postsPanel = document.getElementById('posts-panel');
+    const panelCategory = document.getElementById('panel-category');
+    const panelTag = document.getElementById('panel-tag');
+    const postsList = document.getElementById('posts-list');
+    const closeBtn = document.getElementById('close-btn');
+    const noResults = document.getElementById('no-results');
+
+    // Build reverse lookup: tag -> category
+    const tagToCategory = {};
+    Object.entries(taxonomy).forEach(([category, data]) => {
+        data.tags.forEach(tag => {
+            tagToCategory[tag.toLowerCase()] = category;
+        });
+    });
+
+    // Get actual tags from posts data
+    const actualTags = Object.keys(tagsData);
+
+    // Group actual tags by category
+    function getTagsByCategory() {
+        const grouped = {};
+        Object.keys(taxonomy).forEach(cat => grouped[cat] = []);
+
+        actualTags.forEach(tagSlug => {
+            const tagName = tagsData[tagSlug].name.toLowerCase();
+            let found = false;
+
+            for (const [category, data] of Object.entries(taxonomy)) {
+                if (data.tags.some(t => t.toLowerCase() === tagName || t.toLowerCase() === tagSlug)) {
+                    if (!grouped[category].find(t => t.slug === tagSlug)) {
+                        grouped[category].push({
+                            slug: tagSlug,
+                            name: tagsData[tagSlug].name,
+                            count: tagsData[tagSlug].posts.length
+                        });
+                    }
+                    found = true;
+                    break;
+                }
+            }
+
+            // If not found in any category, add to appropriate default
+            if (!found) {
+                // Try to match partial names
+                const tagLower = tagName.toLowerCase();
+                if (tagLower.includes('ohdsi') || tagLower.includes('atlas') || tagLower.includes('achilles')) {
+                    grouped['OHDSI'].push({ slug: tagSlug, name: tagsData[tagSlug].name, count: tagsData[tagSlug].posts.length });
+                } else if (tagLower.includes('omop') || tagLower.includes('cdm') || tagLower.includes('etl')) {
+                    grouped['Data Standards'].push({ slug: tagSlug, name: tagsData[tagSlug].name, count: tagsData[tagSlug].posts.length });
+                } else if (tagLower.includes('fhir') || tagLower.includes('hl7') || tagLower.includes('ehr')) {
+                    grouped['Interoperability'].push({ slug: tagSlug, name: tagsData[tagSlug].name, count: tagsData[tagSlug].posts.length });
+                } else if (tagLower.includes('nlp') || tagLower.includes('ai') || tagLower.includes('ml')) {
+                    grouped['Clinical AI'].push({ slug: tagSlug, name: tagsData[tagSlug].name, count: tagsData[tagSlug].posts.length });
+                } else {
+                    grouped['Research'].push({ slug: tagSlug, name: tagsData[tagSlug].name, count: tagsData[tagSlug].posts.length });
+                }
+            }
+        });
+
+        return grouped;
+    }
+
+    const tagsByCategory = getTagsByCategory();
+
+    // Render categories
+    function renderCategories() {
+        categoriesGrid.innerHTML = Object.entries(taxonomy)
+            .filter(([cat]) => tagsByCategory[cat] && tagsByCategory[cat].length > 0)
+            .map(([category, data]) => {
+                const tags = tagsByCategory[category];
+                const totalPosts = tags.reduce((sum, t) => sum + t.count, 0);
+
+                return `
+                    <div class="category-card cat-${data.color}" data-category="${category}">
+                        <div class="category-header">
+                            <span class="category-icon">${data.icon}</span>
+                            <span class="category-name">${category}</span>
+                            <span class="category-count">${totalPosts}</span>
+                        </div>
+                        <p class="category-desc">${data.description}</p>
+                        <div class="category-tags">
+                            ${tags.slice(0, 6).map(tag =>
+                                `<button class="sub-tag tag-${data.color}" data-tag="${tag.slug}" data-category="${category}">${tag.name}<sup>${tag.count}</sup></button>`
+                            ).join('')}
+                            ${tags.length > 6 ? `<span class="more-tags">+${tags.length - 6} more</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        // Add click handlers to sub-tags
+        document.querySelectorAll('.sub-tag').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showPosts(this.dataset.tag, this.dataset.category);
+            });
+        });
+
+        // Add click handlers to category cards
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const category = this.dataset.category;
+                showCategoryPosts(category);
+            });
+        });
+    }
+
+    // Search functionality
+    searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase().trim();
+
+        if (!query) {
+            searchResults.hidden = true;
+            categoriesGrid.style.display = '';
+            noResults.hidden = true;
+            return;
+        }
+
+        // Find matching tags
+        const matches = [];
+        actualTags.forEach(tagSlug => {
+            const tagName = tagsData[tagSlug].name.toLowerCase();
+            if (tagName.includes(query) || tagSlug.includes(query)) {
+                // Find category for this tag
+                let category = 'Research';
+                for (const [cat, data] of Object.entries(taxonomy)) {
+                    if (data.tags.some(t => t.toLowerCase() === tagName || t.toLowerCase() === tagSlug)) {
+                        category = cat;
+                        break;
+                    }
+                }
+                matches.push({
+                    slug: tagSlug,
+                    name: tagsData[tagSlug].name,
+                    count: tagsData[tagSlug].posts.length,
+                    category: category,
+                    color: taxonomy[category]?.color || 'default'
+                });
+            }
+        });
+
+        if (matches.length === 0) {
+            searchResults.hidden = true;
+            categoriesGrid.style.display = 'none';
+            noResults.hidden = false;
+            return;
+        }
+
+        noResults.hidden = true;
+        categoriesGrid.style.display = 'none';
+        searchResults.hidden = false;
+
+        // Group matches by category
+        const byCategory = {};
+        matches.forEach(m => {
+            if (!byCategory[m.category]) byCategory[m.category] = [];
+            byCategory[m.category].push(m);
+        });
+
+        // Render search results
+        matchedCategory.innerHTML = Object.keys(byCategory).map(cat =>
+            `<span class="result-category cat-${taxonomy[cat]?.color || 'default'}">${taxonomy[cat]?.icon || '📁'} ${cat}</span>`
+        ).join('');
+
+        matchedTags.innerHTML = matches.map(m =>
+            `<button class="result-tag tag-${m.color}" data-tag="${m.slug}" data-category="${m.category}">
+                ${m.name}<sup>${m.count}</sup>
+            </button>`
+        ).join('');
+
+        // Add click handlers to result tags
+        document.querySelectorAll('.result-tag').forEach(btn => {
+            btn.addEventListener('click', function() {
+                showPosts(this.dataset.tag, this.dataset.category);
+            });
+        });
+    });
+
+    // Show posts for a specific tag
+    function showPosts(tagSlug, category) {
+        const tagInfo = tagsData[tagSlug];
+        if (!tagInfo) return;
+
+        const catData = taxonomy[category];
+        panelCategory.textContent = category;
+        panelCategory.className = `panel-category cat-text-${catData?.color || 'default'}`;
+        panelTag.textContent = `${tagInfo.name} (${tagInfo.posts.length})`;
+
+        postsList.innerHTML = tagInfo.posts.map(post =>
+            `<li><a href="${post.url}">${post.title}</a> <span class="date">${post.date}</span></li>`
+        ).join('');
+
+        postsPanel.hidden = false;
+        history.replaceState(null, null, `#${tagSlug}`);
+
+        setTimeout(() => {
+            postsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+    }
+
+    // Show all posts for a category
+    function showCategoryPosts(category) {
+        const tags = tagsByCategory[category];
+        if (!tags || tags.length === 0) return;
+
+        const catData = taxonomy[category];
+
+        // Collect all unique posts from this category
+        const allPosts = [];
+        const seenUrls = new Set();
+
+        tags.forEach(tag => {
+            tagsData[tag.slug].posts.forEach(post => {
+                if (!seenUrls.has(post.url)) {
+                    seenUrls.add(post.url);
+                    allPosts.push(post);
+                }
+            });
+        });
+
+        panelCategory.textContent = category;
+        panelCategory.className = `panel-category cat-text-${catData?.color || 'default'}`;
+        panelTag.textContent = `All (${allPosts.length} posts)`;
+
+        postsList.innerHTML = allPosts.map(post =>
+            `<li><a href="${post.url}">${post.title}</a> <span class="date">${post.date}</span></li>`
+        ).join('');
+
+        postsPanel.hidden = false;
+
+        setTimeout(() => {
+            postsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+    }
+
+    // Close panel
+    closeBtn.addEventListener('click', function() {
+        postsPanel.hidden = true;
+        history.replaceState(null, null, window.location.pathname);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !postsPanel.hidden) {
+            postsPanel.hidden = true;
+        }
+        if (e.key === '/' && document.activeElement !== searchInput) {
+            e.preventDefault();
+            searchInput.focus();
+        }
+    });
+
+    // Handle URL hash
+    if (window.location.hash) {
+        const tagSlug = window.location.hash.slice(1);
+        if (tagsData[tagSlug]) {
+            // Find category for this tag
+            let category = 'Research';
+            const tagName = tagsData[tagSlug].name.toLowerCase();
+            for (const [cat, data] of Object.entries(taxonomy)) {
+                if (data.tags.some(t => t.toLowerCase() === tagName || t.toLowerCase() === tagSlug)) {
+                    category = cat;
+                    break;
+                }
+            }
+            setTimeout(() => showPosts(tagSlug, category), 100);
+        }
+    }
+
+    // Initial render
+    renderCategories();
+});
+</script>
+
+<style>
+/* Header */
+.tags-header {
+    text-align: center;
+    padding: 40px 24px 20px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.tags-title {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.tags-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+/* Search */
+.search-wrapper {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto 16px;
+}
+
+.tag-search {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    background: var(--color-bg-card);
+    color: var(--color-text);
+    transition: all 0.2s;
+}
+
+.tag-search:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(196, 93, 58, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+/* Search Results */
+.search-results {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 16px;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.matched-category {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.result-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.matched-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.result-tag {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.result-tag:hover {
+    transform: scale(1.05);
+}
+
+.result-tag sup {
+    font-size: 0.6rem;
+    opacity: 0.7;
+    margin-left: 2px;
+}
+
+/* Categories Container */
+.tags-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+}
+
+/* Categories Grid */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* Category Card */
+.category-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.category-card:hover {
+    border-color: var(--color-text-muted);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.category-icon {
+    font-size: 1.25rem;
+}
+
+.category-name {
+    font-weight: 600;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.category-count {
+    background: var(--color-border);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.category-desc {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.sub-tag {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.sub-tag:hover {
+    transform: scale(1.05);
+}
+
+.sub-tag sup {
+    font-size: 0.55rem;
+    opacity: 0.7;
+    margin-left: 1px;
+}
+
+.more-tags {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    padding: 4px 8px;
+}
+
+/* Category Color Themes - Anthropic Palette */
+.cat-ohdsi {
+    background: var(--color-card-ohdsi);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-ohdsi .category-count { background: rgba(255,255,255,0.6); color: var(--color-ohdsi); }
+
+.cat-fhir {
+    background: var(--color-card-fhir);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-fhir .category-count { background: rgba(255,255,255,0.6); color: var(--color-fhir); }
+
+.cat-data {
+    background: var(--color-card-data);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-data .category-count { background: rgba(255,255,255,0.6); color: var(--color-data); }
+
+.cat-nlp {
+    background: var(--color-card-nlp);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-nlp .category-count { background: rgba(255,255,255,0.6); color: var(--color-nlp); }
+
+.cat-python {
+    background: var(--color-card-python);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-python .category-count { background: rgba(255,255,255,0.6); color: var(--color-python); }
+
+.cat-tutorial {
+    background: var(--color-card-tutorial);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+.cat-tutorial .category-count { background: rgba(255,255,255,0.6); color: var(--color-tutorial); }
+
+.cat-default {
+    background: var(--color-bg-alt);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Tag Colors - White chips on colored backgrounds */
+.sub-tag {
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--color-text);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sub-tag:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tag-ohdsi { background: rgba(255,255,255,0.75); color: var(--color-ohdsi); font-weight: 500; }
+.tag-ohdsi:hover { background: var(--color-ohdsi); color: white; }
+
+.tag-fhir { background: rgba(255,255,255,0.75); color: var(--color-fhir); font-weight: 500; }
+.tag-fhir:hover { background: var(--color-fhir); color: white; }
+
+.tag-data { background: rgba(255,255,255,0.75); color: var(--color-data); font-weight: 500; }
+.tag-data:hover { background: var(--color-data); color: white; }
+
+.tag-nlp { background: rgba(255,255,255,0.75); color: var(--color-nlp); font-weight: 500; }
+.tag-nlp:hover { background: var(--color-nlp); color: white; }
+
+.tag-python { background: rgba(255,255,255,0.75); color: var(--color-python); font-weight: 500; }
+.tag-python:hover { background: var(--color-python); color: white; }
+
+.tag-tutorial { background: rgba(255,255,255,0.75); color: var(--color-tutorial); font-weight: 500; }
+.tag-tutorial:hover { background: var(--color-tutorial); color: white; }
+
+.tag-default { background: rgba(255,255,255,0.6); color: var(--color-text-secondary); }
+.tag-default:hover { background: rgba(255,255,255,0.9); color: var(--color-text); }
+
+/* Category Text Colors */
+.cat-text-ohdsi { color: var(--color-ohdsi); }
+.cat-text-fhir { color: var(--color-fhir); }
+.cat-text-data { color: var(--color-data); }
+.cat-text-nlp { color: var(--color-nlp); }
+.cat-text-python { color: var(--color-python); }
+.cat-text-tutorial { color: var(--color-tutorial); }
+.cat-text-default { color: var(--color-text-muted); }
+
+/* Result Category Pills */
+.result-category.cat-ohdsi { background: var(--color-ohdsi-light); color: var(--color-ohdsi); }
+.result-category.cat-fhir { background: var(--color-fhir-light); color: var(--color-fhir); }
+.result-category.cat-data { background: var(--color-data-light); color: var(--color-data); }
+.result-category.cat-nlp { background: var(--color-nlp-light); color: var(--color-nlp); }
+.result-category.cat-python { background: var(--color-python-light); color: var(--color-python); }
+.result-category.cat-tutorial { background: var(--color-tutorial-light); color: var(--color-tutorial); }
+.result-category.cat-default { background: var(--color-bg-alt); color: var(--color-text-secondary); }
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-text-muted);
+}
+
+/* Posts Panel */
+.posts-panel {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+    animation: slideDown 0.2s ease-out;
+}
+
+.posts-panel[hidden] { display: none; }
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.panel-category {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.panel-separator {
+    color: var(--color-text-muted);
+}
+
+.panel-tag {
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.15s;
+}
+
+.close-btn:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+}
+
+/* Posts List */
+.posts-list {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.posts-list li {
+    padding: 6px 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.posts-list li a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.posts-list li a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.posts-list .date {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    margin-left: 8px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-card {
+        padding: 16px;
+    }
+}
+</style>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

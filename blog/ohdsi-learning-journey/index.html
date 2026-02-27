@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey | Clinical AI Insider</title>
+    <meta name="description" content="A comprehensive 11-module guide to transforming electronic health records into OMOP CDM for clinical research, covering EHR architecture, Synthea patient gen...">
+    
+    <meta name="author" content="Healthcare Data Engineer">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey">
+    <meta property="og:description" content="A comprehensive 11-module guide to transforming electronic health records into OMOP CDM for clinical research, covering EHR architecture, Synthea patient gen...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/ohdsi-learning-journey/">
+    <meta property="og:image" content="https://clinicalaiinsider.github.io/assets/images/ohdsi-learning-journey.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey">
+    <meta name="twitter:description" content="A comprehensive 11-module guide to transforming electronic health records into OMOP CDM for clinical research, covering EHR architecture, Synthea patient gen...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/ohdsi-learning-journey/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey</h1>
+    <div class="post-meta">
+        <time datetime="2025-12-27T00:00:00-05:00">December 27, 2025</time>
+        <span class="meta-separator">·</span>
+        <span>16 min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#omop-cdm" class="tag tag-data">omop-cdm</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#etl" class="tag tag-data">etl</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-terminologies" class="tag tag-data">clinical-terminologies</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <p><strong>TL;DR:</strong> This comprehensive guide walks through transforming EHR data into standardized OMOP CDM format at scale. We loaded 40M+ vocabulary concepts, generated 2,411 Synthea patients with 4.9M clinical records, built 75+ SQL queries, created 50+ visualizations including interactive ERDs, executed ACHILLES data characterization (16,159 analyses), achieved a 97/100 data quality score, and validated research readiness for cohort studies and network participation.</p>
+
+<hr />
+
+<h2 id="the-problem-with-healthcare-data">The Problem with Healthcare Data</h2>
+
+<p>Every healthcare organization speaks its own data language. Hospital A uses Epic with custom diagnosis codes. Hospital B uses Cerner with different table structures. Research across institutions becomes a nightmare of manual mapping and inconsistent logic.</p>
+
+<p>Enter <strong>OHDSI</strong> (Observational Health Data Sciences and Informatics) and the <strong>OMOP Common Data Model</strong>. By standardizing how we represent clinical data, we enable:</p>
+
+<ul>
+  <li>Multi-site research studies</li>
+  <li>Reproducible analytics</li>
+  <li>Portable cohort definitions</li>
+  <li>Evidence generation at scale</li>
+</ul>
+
+<p>This post documents my complete 11-module learning journey from EHR fundamentals through ACHILLES data quality validation to research-ready infrastructure.</p>
+
+<hr />
+
+<h2 id="what-we-built">What We Built</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Database</strong></td>
+      <td>PostgreSQL with 5 schemas (vocabulary, cdm, ehr, staging, results)</td>
+    </tr>
+    <tr>
+      <td><strong>Vocabulary</strong></td>
+      <td>40.4M concepts from ATHENA</td>
+    </tr>
+    <tr>
+      <td><strong>Patients</strong></td>
+      <td>2,411 Synthea patients + 5 hand-crafted profiles</td>
+    </tr>
+    <tr>
+      <td><strong>Clinical Records</strong></td>
+      <td>4,901,189 events (visits, conditions, drugs, measurements, procedures)</td>
+    </tr>
+    <tr>
+      <td><strong>SQL Queries</strong></td>
+      <td>75+ reusable queries across 11 files</td>
+    </tr>
+    <tr>
+      <td><strong>Visualizations</strong></td>
+      <td>50+ Mermaid diagrams + interactive Liam ERDs</td>
+    </tr>
+    <tr>
+      <td><strong>Dashboards</strong></td>
+      <td>2 Streamlit apps (Clinical Explorer + ACHILLES)</td>
+    </tr>
+    <tr>
+      <td><strong>ACHILLES</strong></td>
+      <td>25 analyses, 16,159 result rows</td>
+    </tr>
+    <tr>
+      <td><strong>Data Quality</strong></td>
+      <td>97/100 score, 3 minor findings</td>
+    </tr>
+    <tr>
+      <td><strong>Reports</strong></td>
+      <td>4 Excel workbooks with professional formatting</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="module-1-ehr-architecture">Module 1: EHR Architecture</h2>
+
+<p>Every EHR system has core clinical tables:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ehr.patient          → Demographics, contact info
+ehr.encounter        → Visits, admissions, discharges
+ehr.diagnosis        → ICD-10 coded conditions
+ehr.medication       → RxNorm coded prescriptions
+ehr.lab_result       → LOINC coded lab tests
+</code></pre></div></div>
+
+<p>We created 5 diverse patient profiles:</p>
+<ol>
+  <li><strong>John Mitchell (52M)</strong> - Type 2 Diabetes, chronic disease progression</li>
+  <li><strong>Sarah Johnson (58F)</strong> - Breast Cancer, oncology workflows</li>
+  <li><strong>Michael Chen (61M)</strong> - ALS, rare disease coding</li>
+  <li><strong>Emily Rodriguez (24F)</strong> - Congenital Heart, pediatric-to-adult transition</li>
+  <li><strong>David Thompson (45M)</strong> - Mental Health/SUD, behavioral health complexity</li>
+</ol>
+
+<p>Each patient has 20 years of clinical history with realistic progressions.</p>
+
+<hr />
+
+<h2 id="module-2-clinical-terminologies">Module 2: Clinical Terminologies</h2>
+
+<p>Five terminologies form the backbone of clinical coding:</p>
+
+<h3 id="icd-10-cm-diagnoses">ICD-10-CM (Diagnoses)</h3>
+<ul>
+  <li>Chapter-based structure (A-Z)</li>
+  <li>Example: <code class="language-plaintext highlighter-rouge">E11.9</code> = Type 2 diabetes without complications</li>
+  <li>Maps to SNOMED CT for standardization</li>
+</ul>
+
+<h3 id="loinc-laboratory">LOINC (Laboratory)</h3>
+<ul>
+  <li>6-part naming convention</li>
+  <li>Example: <code class="language-plaintext highlighter-rouge">4548-4</code> = Hemoglobin A1c in Blood</li>
+  <li>Standardizes lab test identity across systems</li>
+</ul>
+
+<h3 id="rxnorm-medications">RxNorm (Medications)</h3>
+<ul>
+  <li>Hierarchical: Ingredient → Clinical Drug → Branded Drug</li>
+  <li>Example: <code class="language-plaintext highlighter-rouge">860975</code> = Metformin 500 MG Oral Tablet</li>
+  <li>Handles drug complexity (generics, brands, formulations)</li>
+</ul>
+
+<h3 id="snomed-ct-clinical-findings">SNOMED CT (Clinical Findings)</h3>
+<ul>
+  <li>Comprehensive clinical ontology</li>
+  <li>400,000+ concepts with relationships</li>
+  <li>Standard vocabulary for conditions in OMOP</li>
+</ul>
+
+<h3 id="cpthcpcs-procedures">CPT/HCPCS (Procedures)</h3>
+<ul>
+  <li>Procedure and billing codes</li>
+  <li>Required for complete clinical picture</li>
+</ul>
+
+<hr />
+
+<h2 id="module-3-omop-cdm-architecture">Module 3: OMOP CDM Architecture</h2>
+
+<p>The OMOP Common Data Model v5.4 organizes data into:</p>
+
+<p><strong>Clinical Tables:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">PERSON</code> - One row per patient</li>
+  <li><code class="language-plaintext highlighter-rouge">VISIT_OCCURRENCE</code> - Each healthcare encounter</li>
+  <li><code class="language-plaintext highlighter-rouge">CONDITION_OCCURRENCE</code> - Diagnoses</li>
+  <li><code class="language-plaintext highlighter-rouge">DRUG_EXPOSURE</code> - Medications</li>
+  <li><code class="language-plaintext highlighter-rouge">MEASUREMENT</code> - Labs, vitals</li>
+  <li><code class="language-plaintext highlighter-rouge">PROCEDURE_OCCURRENCE</code> - Procedures</li>
+  <li><code class="language-plaintext highlighter-rouge">OBSERVATION</code> - Other clinical facts</li>
+  <li><code class="language-plaintext highlighter-rouge">NOTE</code> - Clinical text</li>
+</ul>
+
+<p><strong>Vocabulary Tables:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CONCEPT</code> - 40M+ clinical concepts</li>
+  <li><code class="language-plaintext highlighter-rouge">VOCABULARY</code> - 100+ source vocabularies</li>
+  <li><code class="language-plaintext highlighter-rouge">CONCEPT_RELATIONSHIP</code> - Mapping between concepts</li>
+  <li><code class="language-plaintext highlighter-rouge">CONCEPT_ANCESTOR</code> - Hierarchy navigation</li>
+</ul>
+
+<p>The power comes from standardization: ICD-10 codes map to SNOMED concepts, enabling consistent analytics across institutions.</p>
+
+<hr />
+
+<h2 id="module-4-postgresql-infrastructure">Module 4: PostgreSQL Infrastructure</h2>
+
+<p>Our database architecture:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">ohdsi_learning</span><span class="p">;</span>
+
+<span class="c1">-- Five schemas for separation of concerns</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">vocabulary</span><span class="p">;</span>   <span class="c1">-- ATHENA vocabulary (40M+ records)</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">cdm</span><span class="p">;</span>          <span class="c1">-- OMOP CDM clinical tables</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">ehr</span><span class="p">;</span>          <span class="c1">-- Source EHR data</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">staging</span><span class="p">;</span>      <span class="c1">-- ETL workspace</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">results</span><span class="p">;</span>      <span class="c1">-- Analysis output</span>
+</code></pre></div></div>
+
+<p>Key considerations:</p>
+<ul>
+  <li>Indexes on concept_id columns for vocabulary lookups</li>
+  <li>Foreign key relationships mirror CDM specification</li>
+  <li>Separate schemas prevent naming conflicts</li>
+</ul>
+
+<hr />
+
+<h2 id="module-5-python-etl-package">Module 5: Python ETL Package</h2>
+
+<p>Loading 40M vocabulary records required careful ETL:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Vocabulary load results
+</span><span class="n">vocabulary</span><span class="p">:</span>           <span class="mi">56</span> <span class="n">records</span>      <span class="o">&lt;</span> <span class="mi">1</span> <span class="n">sec</span>
+<span class="n">domain</span><span class="p">:</span>              <span class="mi">50</span> <span class="n">records</span>      <span class="o">&lt;</span> <span class="mi">1</span> <span class="n">sec</span>
+<span class="n">concept_class</span><span class="p">:</span>      <span class="mi">433</span> <span class="n">records</span>      <span class="o">&lt;</span> <span class="mi">1</span> <span class="n">sec</span>
+<span class="n">relationship</span><span class="p">:</span>       <span class="mi">722</span> <span class="n">records</span>      <span class="o">&lt;</span> <span class="mi">1</span> <span class="n">sec</span>
+<span class="n">concept</span><span class="p">:</span>      <span class="mi">3</span><span class="p">,</span><span class="mi">883</span><span class="p">,</span><span class="mi">055</span> <span class="n">records</span>      <span class="o">~</span><span class="mi">8</span> <span class="nb">min</span>
+<span class="n">concept_relationship</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span><span class="mi">055</span><span class="p">,</span><span class="mi">936</span>    <span class="o">~</span><span class="mi">27</span> <span class="nb">min</span>
+<span class="n">concept_synonym</span><span class="p">:</span>  <span class="mi">3</span><span class="p">,</span><span class="mi">435</span><span class="p">,</span><span class="mi">699</span>         <span class="o">~</span><span class="mi">2</span> <span class="nb">min</span>
+<span class="n">concept_ancestor</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span><span class="mi">792</span><span class="p">,</span><span class="mi">221</span>        <span class="o">~</span><span class="mi">13</span> <span class="nb">min</span>
+<span class="n">drug_strength</span><span class="p">:</span>      <span class="mi">207</span><span class="p">,</span><span class="mi">039</span>         <span class="o">~</span><span class="mi">30</span> <span class="n">sec</span>
+<span class="err">─────────────────────────────────────────────</span>
+<span class="n">Total</span><span class="p">:</span>           <span class="mi">40</span><span class="p">,</span><span class="mi">375</span><span class="p">,</span><span class="mi">211</span> <span class="n">records</span> <span class="o">~</span><span class="mi">50</span> <span class="nb">min</span>
+</code></pre></div></div>
+
+<p>Patient ETL transformed 352 clinical records:</p>
+<ul>
+  <li>5 persons</li>
+  <li>124 visit occurrences</li>
+  <li>8 conditions</li>
+  <li>6 drug exposures</li>
+  <li>209 measurements</li>
+</ul>
+
+<p>All validated: 96.88% CDM checks passed, 100% data quality.</p>
+
+<h3 id="erd-diagrams--field-level-mappings">ERD Diagrams &amp; Field-Level Mappings</h3>
+
+<p>We documented the complete ETL transformation with professional ERD diagrams:</p>
+
+<p><strong>Schema Diagrams (DBML → Liam Interactive ERD):</strong></p>
+<ul>
+  <li>EHR Source Schema (7 tables)</li>
+  <li>OMOP CDM Target Schema (8 clinical tables)</li>
+  <li>Complete ETL Mapping with annotations</li>
+</ul>
+
+<p><strong>Field-Level Mapping Diagrams:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mapping</th>
+      <th>Key Transformations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Patient → Person</td>
+      <td>Gender (M→8507, F→8532), Race/Ethnicity concept lookups</td>
+    </tr>
+    <tr>
+      <td>Encounter → Visit</td>
+      <td>Visit type mapping (IP→9201, OP→9202, ED→9203)</td>
+    </tr>
+    <tr>
+      <td>Diagnosis → Condition</td>
+      <td>ICD-10 → SNOMED via <code class="language-plaintext highlighter-rouge">concept_relationship</code> “Maps to”</td>
+    </tr>
+    <tr>
+      <td>Medication → Drug</td>
+      <td>RxNorm lookup + dose/route parsing via MedicationEnricher</td>
+    </tr>
+    <tr>
+      <td>Lab → Measurement</td>
+      <td>LOINC standard concepts + UCUM unit mapping</td>
+    </tr>
+    <tr>
+      <td>Procedure → Procedure</td>
+      <td>CPT4/SNOMED procedure concepts</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Interactive ERDs:</strong> We used <a href="https://github.com/liam-hq/liam">Liam ERD</a> to create zoomable, interactive web-based diagrams with:</p>
+<ul>
+  <li>Table details on click</li>
+  <li>Relationship highlighting on hover</li>
+  <li>Search and export capabilities</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Launch interactive ERD</span>
+<span class="nb">cd </span>docs/module-5-ETL-documentation
+npx serve interactive-erd/etl-mapping <span class="nt">-l</span> 3003
+<span class="c"># Open http://localhost:3003</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="module-6-sql-query-library">Module 6: SQL Query Library</h2>
+
+<p>75+ reusable queries organized across 11 SQL files:</p>
+
+<p><strong>EHR Queries (21):</strong></p>
+<ul>
+  <li>Patient demographics and age distribution</li>
+  <li>Encounter volume and length of stay</li>
+  <li>Diagnosis frequency by ICD-10 chapter</li>
+  <li>Medication lists and polypharmacy analysis</li>
+  <li>Lab result trends and abnormals</li>
+</ul>
+
+<p><strong>OMOP CDM Queries (13):</strong></p>
+<ul>
+  <li>Standard concept-based patient lookup</li>
+  <li>Visit, condition, drug, measurement exploration</li>
+  <li>Aggregate statistics with proper vocabulary joins</li>
+</ul>
+
+<p><strong>Vocabulary Queries (9):</strong></p>
+<ul>
+  <li>Concept search by name or code</li>
+  <li>Relationship navigation</li>
+  <li>ICD-10 to SNOMED mapping</li>
+  <li>Ancestor/descendant hierarchy</li>
+</ul>
+
+<p><strong>Cohort Queries (5):</strong></p>
+<ul>
+  <li>Type 2 Diabetes cohort with descendants</li>
+  <li>Drug exposure cohorts</li>
+  <li>Lab-based cohorts (elevated HbA1c)</li>
+</ul>
+
+<p><strong>Data Quality Queries (7):</strong></p>
+<ul>
+  <li>EHR-to-CDM record count validation</li>
+  <li>Orphan record detection</li>
+  <li>Concept mapping rates</li>
+</ul>
+
+<hr />
+
+<h2 id="module-7-visualizations">Module 7: Visualizations</h2>
+
+<p>18 Mermaid diagrams covering:</p>
+
+<p><strong>ER Diagrams (3):</strong></p>
+<ul>
+  <li>EHR schema relationships</li>
+  <li>OMOP CDM clinical tables</li>
+  <li>Vocabulary table relationships</li>
+</ul>
+
+<p><strong>ETL Flowcharts (4):</strong></p>
+<ul>
+  <li>High-level pipeline</li>
+  <li>Table-to-table transformation</li>
+  <li>Condition mapping detail</li>
+  <li>Drug mapping detail</li>
+</ul>
+
+<p><strong>Patient Timelines (4):</strong></p>
+<ul>
+  <li>Gantt charts for chronic conditions</li>
+  <li>Sequence diagram for STEMI workflow</li>
+  <li>State diagram for ADT flow</li>
+</ul>
+
+<p><strong>Terminology Mapping (4):</strong></p>
+<ul>
+  <li>ICD-10 → SNOMED → OMOP concept</li>
+  <li>LOINC lab mapping</li>
+  <li>RxNorm drug hierarchy</li>
+  <li>Visit type standardization</li>
+</ul>
+
+<p><strong>Data Quality (3):</strong></p>
+<ul>
+  <li>Pie charts for mapping rates</li>
+  <li>Domain distribution</li>
+  <li>Vocabulary coverage</li>
+</ul>
+
+<h3 id="streamlit-dashboard">Streamlit Dashboard</h3>
+
+<p>8-page interactive application:</p>
+<ol>
+  <li><strong>Overview</strong> - Key metrics, record counts</li>
+  <li><strong>Patients</strong> - Demographics browser</li>
+  <li><strong>Visits</strong> - Encounter timeline</li>
+  <li><strong>Conditions</strong> - Problem list viewer</li>
+  <li><strong>Medications</strong> - Drug exposure table</li>
+  <li><strong>Labs</strong> - Measurement trending</li>
+  <li><strong>Vocabulary</strong> - Concept search</li>
+  <li><strong>Data Quality</strong> - Validation results</li>
+</ol>
+
+<hr />
+
+<h2 id="module-8-excel-reports">Module 8: Excel Reports</h2>
+
+<p>8 comprehensive exports:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Report</th>
+      <th>Contents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Patient Roster</td>
+      <td>Demographics with visit/med/dx counts</td>
+    </tr>
+    <tr>
+      <td>Lab Results</td>
+      <td>Longitudinal results with LOINC</td>
+    </tr>
+    <tr>
+      <td>Medication List</td>
+      <td>Active/historical meds with RxNorm</td>
+    </tr>
+    <tr>
+      <td>Problem List</td>
+      <td>Diagnoses with ICD-10 → SNOMED</td>
+    </tr>
+    <tr>
+      <td>Visit Summary</td>
+      <td>Encounters by type</td>
+    </tr>
+    <tr>
+      <td>OMOP CDM Summary</td>
+      <td>CDM statistics, mapping rates</td>
+    </tr>
+    <tr>
+      <td>Combined Patient Report</td>
+      <td>Multi-sheet per-patient view</td>
+    </tr>
+    <tr>
+      <td>Data Quality Report</td>
+      <td>Validation metrics</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="module-9-synthea-integration">Module 9: Synthea Integration</h2>
+
+<p>To move from proof-of-concept (5 patients) to realistic scale, we integrated <a href="https://github.com/synthetichealth/synthea">Synthea</a>, the open-source synthetic patient generator:</p>
+
+<h3 id="patient-generation">Patient Generation</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Generate 2,500 patients with Massachusetts demographics</span>
+java <span class="nt">-jar</span> synthea-with-dependencies.jar <span class="se">\</span>
+  <span class="nt">-p</span> 2500 <span class="se">\</span>
+  <span class="nt">--exporter</span>.csv.export <span class="nb">true</span> <span class="se">\</span>
+  Massachusetts
+</code></pre></div></div>
+
+<h3 id="scale-comparison">Scale Comparison</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Manual (Module 1)</th>
+      <th>Synthea (Module 9)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Patients</td>
+      <td>5</td>
+      <td>2,411</td>
+    </tr>
+    <tr>
+      <td>Encounters</td>
+      <td>124</td>
+      <td>249,333</td>
+    </tr>
+    <tr>
+      <td>Conditions</td>
+      <td>8</td>
+      <td>150,922</td>
+    </tr>
+    <tr>
+      <td>Medications</td>
+      <td>6</td>
+      <td>207,263</td>
+    </tr>
+    <tr>
+      <td>Measurements</td>
+      <td>209</td>
+      <td>3,534,250</td>
+    </tr>
+    <tr>
+      <td>Procedures</td>
+      <td>-</td>
+      <td>756,599</td>
+    </tr>
+    <tr>
+      <td><strong>Total Records</strong></td>
+      <td>352</td>
+      <td>4,901,189</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="etl-synthea-integration">ETL-Synthea Integration</h3>
+
+<p>We used the <a href="https://github.com/OHDSI/ETL-Synthea">ETL-Synthea</a> R package for CDC-validated Synthea-to-OMOP transformation:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R workflow</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ETLSynthea</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Configure connection</span><span class="w">
+</span><span class="n">cd</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">DatabaseConnector</span><span class="o">::</span><span class="n">createConnectionDetails</span><span class="p">(</span><span class="w">
+  </span><span class="n">dbms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"postgresql"</span><span class="p">,</span><span class="w">
+  </span><span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"localhost/ohdsi_learning"</span><span class="p">,</span><span class="w">
+  </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"ohdsi"</span><span class="p">,</span><span class="w">
+  </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sys.getenv</span><span class="p">(</span><span class="s2">"POSTGRES_PASSWORD"</span><span class="p">)</span><span class="w">
+</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Execute ETL</span><span class="w">
+</span><span class="n">ETLSynthea</span><span class="o">::</span><span class="n">LoadSyntheaFiles</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span><span class="w"> </span><span class="s2">"staging"</span><span class="p">,</span><span class="w"> </span><span class="s2">"/path/to/synthea/csv"</span><span class="p">)</span><span class="w">
+</span><span class="n">ETLSynthea</span><span class="o">::</span><span class="n">LoadEventTables</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span><span class="w"> </span><span class="s2">"cdm"</span><span class="p">,</span><span class="w"> </span><span class="s2">"vocabulary"</span><span class="p">,</span><span class="w"> </span><span class="s2">"staging"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="module-10-achilles-analysis-framework">Module 10: ACHILLES Analysis Framework</h2>
+
+<p><a href="https://github.com/OHDSI/Achilles">ACHILLES</a> (Automated Characterization of Health Information at Large-scale Longitudinal Evidence Systems) provides standardized data profiling:</p>
+
+<h3 id="analysis-categories">Analysis Categories</h3>
+
+<p>ACHILLES runs 85+ pre-built analyses across 7 clinical domains:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>Analysis IDs</th>
+      <th>Key Metrics</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Person</td>
+      <td>1-99</td>
+      <td>Age, gender, race distributions</td>
+    </tr>
+    <tr>
+      <td>Observation Period</td>
+      <td>100-199</td>
+      <td>Coverage duration, gaps</td>
+    </tr>
+    <tr>
+      <td>Visit</td>
+      <td>200-299</td>
+      <td>Utilization by type</td>
+    </tr>
+    <tr>
+      <td>Condition</td>
+      <td>400-499</td>
+      <td>Prevalence, trends</td>
+    </tr>
+    <tr>
+      <td>Drug</td>
+      <td>500-599</td>
+      <td>Prescription patterns</td>
+    </tr>
+    <tr>
+      <td>Procedure</td>
+      <td>600-699</td>
+      <td>Intervention rates</td>
+    </tr>
+    <tr>
+      <td>Measurement</td>
+      <td>700-799</td>
+      <td>Lab/vital coverage</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="data-quality-dimensions-kahn-framework">Data Quality Dimensions (Kahn Framework)</h3>
+
+<p>ACHILLES Heel checks assess four quality dimensions:</p>
+
+<ol>
+  <li><strong>Completeness</strong> - Are required data elements present?</li>
+  <li><strong>Conformance</strong> - Do values conform to expected formats/ranges?</li>
+  <li><strong>Plausibility</strong> - Are values clinically plausible?</li>
+  <li><strong>Temporal Validity</strong> - Are date sequences logical?</li>
+</ol>
+
+<h3 id="analysis-scripts">Analysis Scripts</h3>
+
+<p>We developed 15 SQL scripts with clinical documentation:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scripts/
+├── 01_setup_results_schema.sql
+├── 03_demographics_analysis.sql
+├── 04_visit_analysis.sql
+├── 05_condition_analysis.sql
+├── 06_drug_analysis.sql
+├── 07_measurement_analysis.sql
+├── 09_data_quality_analysis.sql
+├── 10_use_case_feasibility.sql
+└── 14_comprehensive_dashboard.sql
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="module-11-achilles-execution--validation">Module 11: ACHILLES Execution &amp; Validation</h2>
+
+<h3 id="execution-results">Execution Results</h3>
+
+<p>Running ACHILLES on our 2,411-patient Synthea dataset:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Execution Summary:
+─────────────────────────────────────────
+Execution Time:      1.5 seconds
+Analyses Executed:   25
+Result Rows:         16,159
+Persons Analyzed:    2,411
+ACHILLES Heel:       3 findings (minor)
+─────────────────────────────────────────
+</code></pre></div></div>
+
+<h3 id="data-quality-scorecard">Data Quality Scorecard</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dimension</th>
+      <th>Score</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Completeness</strong></td>
+      <td>98%</td>
+      <td>All required fields populated</td>
+    </tr>
+    <tr>
+      <td><strong>Conformance</strong></td>
+      <td>99%</td>
+      <td>Valid concept IDs, proper formats</td>
+    </tr>
+    <tr>
+      <td><strong>Plausibility</strong></td>
+      <td>95%</td>
+      <td>Realistic clinical values</td>
+    </tr>
+    <tr>
+      <td><strong>Temporal</strong></td>
+      <td>97%</td>
+      <td>Consistent date sequences</td>
+    </tr>
+    <tr>
+      <td><strong>Overall</strong></td>
+      <td><strong>97/100</strong></td>
+      <td>Research-ready</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="achilles-heel-findings">ACHILLES Heel Findings</h3>
+
+<p>Only 3 minor issues detected (expected for synthetic data):</p>
+
+<ol>
+  <li><strong>WARNING</strong>: Some concepts have low patient counts (&lt; 5 patients)</li>
+  <li><strong>NOTIFICATION</strong>: Observation periods span future dates (Synthea artifact)</li>
+  <li><strong>NOTIFICATION</strong>: Some measurement values at clinical extremes</li>
+</ol>
+
+<h3 id="domain-specific-metrics">Domain-Specific Metrics</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Domain</th>
+      <th>Records</th>
+      <th>Unique Concepts</th>
+      <th>Mapping Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Person</td>
+      <td>2,411</td>
+      <td>12</td>
+      <td>100%</td>
+    </tr>
+    <tr>
+      <td>Visit</td>
+      <td>249,333</td>
+      <td>3</td>
+      <td>100%</td>
+    </tr>
+    <tr>
+      <td>Condition</td>
+      <td>150,922</td>
+      <td>847</td>
+      <td>99.2%</td>
+    </tr>
+    <tr>
+      <td>Drug</td>
+      <td>207,263</td>
+      <td>1,234</td>
+      <td>98.7%</td>
+    </tr>
+    <tr>
+      <td>Measurement</td>
+      <td>3,534,250</td>
+      <td>156</td>
+      <td>100%</td>
+    </tr>
+    <tr>
+      <td>Procedure</td>
+      <td>756,599</td>
+      <td>423</td>
+      <td>99.5%</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="data-readiness-for-research">Data Readiness for Research</h2>
+
+<p>With ACHILLES complete, we can assess readiness for clinical research studies:</p>
+
+<h3 id="cohort-feasibility-assessment">Cohort Feasibility Assessment</h3>
+
+<p><strong>Example: Type 2 Diabetes Comparative Effectiveness Study</strong></p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Estimate cohort sizes</span>
+<span class="k">SELECT</span>
+  <span class="s1">'Base Population (HTN diagnosis)'</span> <span class="k">as</span> <span class="n">cohort</span><span class="p">,</span>
+  <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">)</span> <span class="k">as</span> <span class="n">patients</span>
+<span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">condition_occurrence</span>
+<span class="k">WHERE</span> <span class="n">condition_concept_id</span> <span class="k">IN</span> <span class="p">(</span>
+  <span class="k">SELECT</span> <span class="n">descendant_concept_id</span>
+  <span class="k">FROM</span> <span class="n">vocabulary</span><span class="p">.</span><span class="n">concept_ancestor</span>
+  <span class="k">WHERE</span> <span class="n">ancestor_concept_id</span> <span class="o">=</span> <span class="mi">320128</span>  <span class="c1">-- Essential hypertension</span>
+<span class="p">);</span>
+
+<span class="c1">-- Results:</span>
+<span class="c1">-- Base Population: 723 patients (30% of population)</span>
+<span class="c1">-- ACE Inhibitors: 342 patients</span>
+<span class="c1">-- ARBs: 156 patients</span>
+<span class="c1">-- CCBs: 187 patients</span>
+</code></pre></div></div>
+
+<h3 id="network-study-readiness">Network Study Readiness</h3>
+
+<p>Our dataset meets OHDSI network study requirements:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Requirement</th>
+      <th>Status</th>
+      <th>Evidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CDM v5.4 compliance</td>
+      <td>✓</td>
+      <td>All tables conform to specification</td>
+    </tr>
+    <tr>
+      <td>Vocabulary currency</td>
+      <td>✓</td>
+      <td>ATHENA 2024 vocabularies</td>
+    </tr>
+    <tr>
+      <td>ACHILLES profiling</td>
+      <td>✓</td>
+      <td>16,159 result rows</td>
+    </tr>
+    <tr>
+      <td>Data quality score</td>
+      <td>✓</td>
+      <td>97/100 overall</td>
+    </tr>
+    <tr>
+      <td>Observation period</td>
+      <td>✓</td>
+      <td>Average 5+ years per patient</td>
+    </tr>
+    <tr>
+      <td>Minimum population</td>
+      <td>✓</td>
+      <td>2,411 patients</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="pre-study-feasibility-queries">Pre-Study Feasibility Queries</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Diabetes study feasibility</span>
+<span class="k">SELECT</span>
+  <span class="s1">'T2DM Patients'</span> <span class="k">as</span> <span class="n">metric</span><span class="p">,</span>
+  <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">)</span> <span class="k">as</span> <span class="k">count</span><span class="p">,</span>
+  <span class="n">ROUND</span><span class="p">(</span><span class="mi">100</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">)</span> <span class="o">/</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">person</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pct</span>
+<span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">condition_occurrence</span> <span class="n">co</span>
+<span class="k">JOIN</span> <span class="n">vocabulary</span><span class="p">.</span><span class="n">concept_ancestor</span> <span class="n">ca</span>
+  <span class="k">ON</span> <span class="n">co</span><span class="p">.</span><span class="n">condition_concept_id</span> <span class="o">=</span> <span class="n">ca</span><span class="p">.</span><span class="n">descendant_concept_id</span>
+<span class="k">WHERE</span> <span class="n">ca</span><span class="p">.</span><span class="n">ancestor_concept_id</span> <span class="o">=</span> <span class="mi">201826</span>  <span class="c1">-- T2DM SNOMED</span>
+
+<span class="k">UNION</span> <span class="k">ALL</span>
+
+<span class="k">SELECT</span> <span class="s1">'Metformin Exposed'</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">),</span>
+  <span class="n">ROUND</span><span class="p">(</span><span class="mi">100</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">)</span> <span class="o">/</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">person</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">drug_exposure</span> <span class="n">de</span>
+<span class="k">JOIN</span> <span class="n">vocabulary</span><span class="p">.</span><span class="n">concept_ancestor</span> <span class="n">ca</span>
+  <span class="k">ON</span> <span class="n">de</span><span class="p">.</span><span class="n">drug_concept_id</span> <span class="o">=</span> <span class="n">ca</span><span class="p">.</span><span class="n">descendant_concept_id</span>
+<span class="k">WHERE</span> <span class="n">ca</span><span class="p">.</span><span class="n">ancestor_concept_id</span> <span class="o">=</span> <span class="mi">1503297</span>  <span class="c1">-- Metformin</span>
+
+<span class="k">UNION</span> <span class="k">ALL</span>
+
+<span class="k">SELECT</span> <span class="s1">'HbA1c Available'</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">),</span>
+  <span class="n">ROUND</span><span class="p">(</span><span class="mi">100</span><span class="p">.</span><span class="mi">0</span> <span class="o">*</span> <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">person_id</span><span class="p">)</span> <span class="o">/</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">person</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">measurement</span> <span class="n">m</span>
+<span class="k">WHERE</span> <span class="n">measurement_concept_id</span> <span class="o">=</span> <span class="mi">3004410</span><span class="p">;</span>  <span class="c1">-- HbA1c LOINC</span>
+</code></pre></div></div>
+
+<p><strong>Feasibility Results:</strong></p>
+<ul>
+  <li>Diabetes patients: ~370 (15% prevalence)</li>
+  <li>Metformin exposed: ~280 (11%)</li>
+  <li>HbA1c available: ~1,200 (50%)</li>
+  <li><strong>Assessment: FEASIBLE</strong> for diabetes-related studies</li>
+</ul>
+
+<hr />
+
+<h2 id="key-lessons-learned">Key Lessons Learned</h2>
+
+<h3 id="1-vocabulary-is-everything">1. Vocabulary is Everything</h3>
+<p>Understanding how ICD-10 maps to SNOMED, how RxNorm normalizes drugs, and how LOINC standardizes labs is fundamental. Without vocabulary mastery, ETL fails.</p>
+
+<h3 id="2-start-simple">2. Start Simple</h3>
+<p>Five patients with realistic data taught more than 5,000 synthetic records would have. Trace individual records through the entire pipeline.</p>
+
+<h3 id="3-validate-continuously">3. Validate Continuously</h3>
+<p>ETL errors compound. Check record counts at each step. Verify concept mappings before loading. Use the data quality queries.</p>
+
+<h3 id="4-document-everything">4. Document Everything</h3>
+<p>Module documentation, SQL comments, Mermaid diagrams - future you will thank present you.</p>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>With our 11-module foundation complete, the journey continues:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Completed</th>
+      <th>Next Phase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>✅ EHR Architecture</td>
+      <td>🔜 <strong>ATLAS</strong> - Interactive cohort building</td>
+    </tr>
+    <tr>
+      <td>✅ Clinical Terminologies</td>
+      <td>🔜 <strong>Patient-Level Prediction</strong> - ML on OMOP</td>
+    </tr>
+    <tr>
+      <td>✅ OMOP CDM v5.4</td>
+      <td>🔜 <strong>Characterization Studies</strong> - Population analysis</td>
+    </tr>
+    <tr>
+      <td>✅ PostgreSQL Infrastructure</td>
+      <td>🔜 <strong>Estimation Studies</strong> - Causal inference</td>
+    </tr>
+    <tr>
+      <td>✅ Python ETL Pipeline</td>
+      <td>🔜 <strong>Network Studies</strong> - Multi-site collaboration</td>
+    </tr>
+    <tr>
+      <td>✅ SQL Query Library</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>✅ Interactive ERD Diagrams</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>✅ Streamlit Dashboards</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>✅ Synthea Integration</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>✅ ACHILLES Analysis</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>✅ Data Quality Validation</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Immediate next steps:</strong></p>
+<ol>
+  <li>Deploy ATLAS for interactive cohort building</li>
+  <li>Build Type 2 Diabetes comparative effectiveness cohort</li>
+  <li>Run Patient-Level Prediction for disease progression</li>
+  <li>Submit to OHDSI network study (after privacy review)</li>
+</ol>
+
+<hr />
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://ohdsi.github.io/TheBookOfOhdsi/">The Book of OHDSI</a> - Comprehensive guide</li>
+  <li><a href="https://athena.ohdsi.org/">ATHENA</a> - Vocabulary browser and downloads</li>
+  <li><a href="https://ohdsi.github.io/CommonDataModel/">OMOP CDM Docs</a> - Table specifications</li>
+  <li><a href="https://forums.ohdsi.org/">OHDSI Forums</a> - Community support</li>
+</ul>
+
+<hr />
+
+<h2 id="project-files">Project Files</h2>
+
+<p>All code, documentation, and artifacts available in the project repository:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01-comprehensive-healthcare-data-workflow/
+├── docs/
+│   ├── module-1-foundations/        # EHR architecture, patient profiles
+│   ├── module-2-terminologies/      # ICD-10, LOINC, RxNorm, SNOMED
+│   ├── module-3-omop-cdm/          # CDM v5.4 architecture
+│   ├── module-4-postgresql/        # Database setup
+│   ├── module-5-ETL-documentation/ # Field mappings, interactive ERDs
+│   ├── module-6-sql-queries/       # 75+ query documentation
+│   ├── module-7-visualizations/    # 50+ diagrams
+│   ├── module-8-reports/           # Excel report specs
+│   ├── module-9-synthea/           # Synthea integration
+│   ├── module-10-achilles/         # ACHILLES analysis scripts
+│   └── module-11-achilles-execution/ # Execution results
+├── code/sql/                # 75+ SQL queries (11 files)
+├── python-etl/             # Python ETL package (17 modules)
+├── visualizations/         # 50+ Mermaid diagrams
+├── dashboards/             # 2 Streamlit apps
+├── reports/                # 4 Excel workbooks
+├── synthea/                # Synthea configuration
+└── etl-synthea/            # R ETL package
+</code></pre></div></div>
+
+<p><strong>Quick Start:</strong></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Launch Clinical Dashboard</span>
+<span class="nb">cd </span>dashboards <span class="o">&amp;&amp;</span> streamlit run streamlit_dashboard.py
+
+<span class="c"># Launch ACHILLES Dashboard</span>
+<span class="nb">cd </span>dashboards <span class="o">&amp;&amp;</span> streamlit run achilles_dashboard.py
+
+<span class="c"># Launch Interactive ERD</span>
+<span class="nb">cd </span>docs/module-5-ETL-documentation
+npx serve interactive-erd/etl-mapping <span class="nt">-l</span> 3003
+</code></pre></div></div>
+
+<hr />
+
+<p><em>Transform your healthcare data. Join the OHDSI community. Generate evidence that matters.</em></p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#omop-cdm" class="tag tag-data">omop-cdm</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#etl" class="tag tag-data">etl</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-terminologies" class="tag tag-data">clinical-terminologies</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare-data" class="tag">healthcare-data</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#python" class="tag tag-python">python</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#postgresql" class="tag">postgresql</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#achilles" class="tag tag-ohdsi">achilles</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#synthea" class="tag">synthea</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#data-quality" class="tag tag-data">data-quality</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#cohort-definitions" class="tag">cohort-definitions</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/ohdsi-introduction-real-world-data-reliable-evidence/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">OHDSI Introduction: From Real-World Data to Rel...</span>
+        </a>
+        
+        
+        <a href="/blog/mastering-atlas-cohort-definitions/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Mastering ATLAS Cohort Definitions: A Clinical ...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Clinical Informatics Resources: A Comprehensive Reference Guide | Clinical AI Insider</title>
+    <meta name="description" content="A curated collection of essential resources for clinical informatics covering OHDSI tools, FHIR/HL7 standards, clinical data management, and healthcare NLP/AI.">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Clinical Informatics Resources: A Comprehensive Reference Guide">
+    <meta property="og:description" content="A curated collection of essential resources for clinical informatics covering OHDSI tools, FHIR/HL7 standards, clinical data management, and healthcare NLP/AI.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/clinical-informatics-resources-reference-guide/">
+    
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Clinical Informatics Resources: A Comprehensive Reference Guide">
+    <meta name="twitter:description" content="A curated collection of essential resources for clinical informatics covering OHDSI tools, FHIR/HL7 standards, clinical data management, and healthcare NLP/AI.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/clinical-informatics-resources-reference-guide/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">Clinical Informatics Resources: A Comprehensive Reference Guide</h1>
+    <div class="post-meta">
+        <time datetime="2025-12-30T00:00:00-05:00">December 30, 2025</time>
+        <span class="meta-separator">·</span>
+        <span>15 min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#ohdsi" class="tag tag-ohdsi">ohdsi</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">fhir</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#omop-cdm" class="tag tag-data">omop-cdm</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <p>This reference guide provides a curated collection of essential resources for clinical informatics professionals, researchers, and developers. Navigate to the section most relevant to your work.</p>
+
+<hr />
+
+<h2 id="ohdsi-resources">OHDSI Resources</h2>
+
+<p>Resources for Observational Health Data Sciences and Informatics (OHDSI) tools, OMOP CDM, and observational research.</p>
+
+<h3 id="official-documentation">Official Documentation</h3>
+<ul>
+  <li><a href="https://ohdsi.org/">OHDSI Website</a> - Official OHDSI community portal</li>
+  <li><a href="https://ohdsi.github.io/TheBookOfOhdsi/">The Book of OHDSI</a> - Comprehensive open-source textbook</li>
+  <li><a href="https://github.com/ohdsi">OHDSI GitHub</a> - Open-source repositories</li>
+  <li><a href="https://ohdsi.github.io/CommonDataModel/">OMOP CDM Documentation</a> - Common Data Model specification</li>
+</ul>
+
+<h3 id="vocabulary-resources">Vocabulary Resources</h3>
+<ul>
+  <li><a href="https://athena.ohdsi.org/">ATHENA</a> - OHDSI vocabulary repository</li>
+  <li><a href="https://github.com/OHDSI/Phoebe">PHOEBE</a> - Vocabulary exploration tool</li>
+  <li><a href="https://github.com/OHDSI/Usagi">USAGI</a> - Source code mapping tool</li>
+</ul>
+
+<h3 id="data-characterization-tools">Data Characterization Tools</h3>
+<ul>
+  <li><a href="https://github.com/OHDSI/Achilles">ACHILLES</a> - Automated database profiling</li>
+  <li><a href="https://github.com/OHDSI/DataQualityDashboard">Data Quality Dashboard</a> - CDM data quality checks</li>
+  <li><a href="https://github.com/OHDSI/Ares">ARES</a> - Analysis results viewer</li>
+</ul>
+
+<h3 id="analysis-tools">Analysis Tools</h3>
+<ul>
+  <li><a href="https://github.com/OHDSI/Atlas">ATLAS</a> - Web-based analysis platform</li>
+  <li><a href="https://github.com/OHDSI/WebAPI">WebAPI</a> - RESTful services for ATLAS</li>
+  <li><a href="https://ohdsi.github.io/Hades/">HADES</a> - Health Analytics Data-to-Evidence Suite</li>
+</ul>
+
+<h3 id="patient-level-prediction">Patient-Level Prediction</h3>
+<ul>
+  <li><a href="https://ohdsi.github.io/PatientLevelPrediction/">PatientLevelPrediction</a> - ML prediction models</li>
+  <li><a href="https://ohdsi.github.io/CohortMethod/">CohortMethod</a> - Comparative effectiveness studies</li>
+  <li><a href="https://ohdsi.github.io/SelfControlledCaseSeries/">SelfControlledCaseSeries</a> - SCCS analysis</li>
+</ul>
+
+<h3 id="etl-tools">ETL Tools</h3>
+<ul>
+  <li><a href="https://github.com/OHDSI/WhiteRabbit">WhiteRabbit</a> - Source data profiling</li>
+  <li><a href="https://github.com/OHDSI/WhiteRabbit">Rabbit-in-a-Hat</a> - ETL design tool</li>
+  <li><a href="https://github.com/OHDSI/ETL-Synthea">ETL-Synthea</a> - Synthea to OMOP ETL</li>
+</ul>
+
+<h3 id="database-connectors">Database Connectors</h3>
+<ul>
+  <li><a href="https://github.com/OHDSI/DatabaseConnector">DatabaseConnector</a> - R database connectivity</li>
+  <li><a href="https://github.com/OHDSI/SqlRender">SqlRender</a> - SQL dialect translation</li>
+  <li><a href="https://github.com/OHDSI/Eunomia">Eunomia</a> - Test CDM database</li>
+</ul>
+
+<h3 id="learning--community">Learning &amp; Community</h3>
+<ul>
+  <li><a href="https://www.ohdsi.org/past-events/">OHDSI Tutorials</a> - Video tutorials from symposiums</li>
+  <li><a href="https://forums.ohdsi.org/">OHDSI Forums</a> - Community discussion</li>
+  <li><a href="https://ohdsi.org/workgroups/">OHDSI Workgroups</a> - Specialized working groups</li>
+  <li><a href="https://academy.ehden.eu/">EHDEN Academy</a> - Free online courses</li>
+</ul>
+
+<hr />
+
+<h2 id="fhir--hl7-resources">FHIR &amp; HL7 Resources</h2>
+
+<p>Resources for healthcare interoperability standards including FHIR, HL7, and clinical terminologies.</p>
+
+<h3 id="fhir-specifications">FHIR Specifications</h3>
+<ul>
+  <li><a href="https://hl7.org/fhir/">FHIR Official Site</a> - HL7 FHIR specification</li>
+  <li><a href="https://hl7.org/fhir/R4/">FHIR R4 (Current)</a> - R4 specification</li>
+  <li><a href="https://hl7.org/fhir/R5/">FHIR R5 (Latest)</a> - R5 specification</li>
+  <li><a href="https://build.fhir.org/ig/HL7/fhir-shorthand/">FHIR Shorthand</a> - FSH for authoring IGs</li>
+</ul>
+
+<h3 id="hl7-standards">HL7 Standards</h3>
+<ul>
+  <li><a href="https://www.hl7.org/">HL7 International</a> - HL7 organization</li>
+  <li><a href="http://www.hl7.eu/HL7v2x/index.html">HL7 v2 Reference</a> - HL7 v2 messages</li>
+  <li><a href="https://www.hl7.org/implement/standards/product_brief.cfm?product_id=7">CDA (C-CDA)</a> - Clinical Document Architecture</li>
+</ul>
+
+<h3 id="clinical-terminologies">Clinical Terminologies</h3>
+<ul>
+  <li><a href="https://loinc.org/">LOINC</a> - Laboratory observations codes</li>
+  <li><a href="https://www.snomed.org/">SNOMED CT</a> - Clinical terminology</li>
+  <li><a href="https://www.nlm.nih.gov/research/umls/rxnorm/">RxNorm</a> - Drug terminology</li>
+  <li><a href="https://www.cms.gov/medicare/coding-billing/icd-10-codes">ICD-10-CM</a> - Diagnosis codes</li>
+  <li><a href="https://www.ama-assn.org/amaone/cpt-current-procedural-terminology">CPT</a> - Procedure codes</li>
+  <li><a href="https://www.nlm.nih.gov/research/umls/">UMLS</a> - Unified Medical Language System</li>
+</ul>
+
+<h3 id="implementation-guides">Implementation Guides</h3>
+<ul>
+  <li><a href="https://hl7.org/fhir/us/core/">US Core IG</a> - US Core profiles</li>
+  <li><a href="https://www.healthit.gov/isa/united-states-core-data-interoperability-uscdi">USCDI</a> - US Core Data for Interoperability</li>
+  <li><a href="https://www.hl7.org/davinci/">Da Vinci Project</a> - Payer-provider exchange</li>
+  <li><a href="https://hl7.org/fhir/uv/bulkdata/">Bulk Data Access</a> - Backend services</li>
+  <li><a href="https://docs.smarthealthit.org/">SMART on FHIR</a> - App authorization</li>
+  <li><a href="https://cds-hooks.org/">CDS Hooks</a> - Clinical decision support</li>
+</ul>
+
+<h3 id="developer-tools">Developer Tools</h3>
+<ul>
+  <li><a href="https://www.hl7.org/fhir/validation.html">FHIR Validator</a> - Resource validation</li>
+  <li><a href="https://inferno.healthit.gov/">Inferno</a> - US Core testing</li>
+  <li><a href="https://touchstone.aegis.net/">Touchstone</a> - FHIR testing platform</li>
+</ul>
+
+<h3 id="fhir-servers">FHIR Servers</h3>
+<ul>
+  <li><a href="https://hapifhir.io/">HAPI FHIR</a> - Open-source Java server</li>
+  <li><a href="https://github.com/microsoft/fhir-server">Microsoft FHIR Server</a> - Azure FHIR</li>
+  <li><a href="https://cloud.google.com/healthcare-api">Google Cloud Healthcare API</a> - GCP FHIR</li>
+</ul>
+
+<h3 id="development-libraries">Development Libraries</h3>
+<ul>
+  <li><a href="https://hapifhir.io/hapi-fhir/docs/">HAPI FHIR (Java)</a> - Java library</li>
+  <li><a href="https://pypi.org/project/fhir.resources/">fhir.resources (Python)</a> - Python models</li>
+  <li><a href="https://github.com/smart-on-fhir/client-py">fhirclient (Python)</a> - SMART client</li>
+</ul>
+
+<h3 id="learning-resources">Learning Resources</h3>
+<ul>
+  <li><a href="https://www.devdays.com/">FHIR DevDays</a> - Annual conference</li>
+  <li><a href="https://www.hl7.org/training/courses.cfm">HL7 FHIR Fundamentals</a> - Official training</li>
+  <li><a href="https://chat.fhir.org/">FHIR Chat (Zulip)</a> - Community chat</li>
+</ul>
+
+<hr />
+
+<h2 id="clinical-data-resources">Clinical Data Resources</h2>
+
+<p>Resources for clinical data management, ETL processes, data quality, and common data models.</p>
+
+<h3 id="common-data-models">Common Data Models</h3>
+<ul>
+  <li><a href="https://ohdsi.github.io/CommonDataModel/">OMOP CDM Specification</a> - Official documentation</li>
+  <li><a href="https://github.com/OHDSI/CommonDataModel/wiki">OMOP CDM Wiki</a> - GitHub wiki</li>
+  <li><a href="https://pcornet.org/data/">PCORnet CDM</a> - PCORnet Common Data Model</li>
+  <li><a href="https://www.i2b2.org/software/">i2b2 Data Model</a> - Informatics for Integrating Biology and the Bedside</li>
+  <li><a href="https://www.sentinelinitiative.org/">Sentinel CDM</a> - FDA Sentinel System</li>
+  <li><a href="https://www.cdisc.org/">CDISC Standards</a> - Clinical trial data standards</li>
+</ul>
+
+<h3 id="etl-platforms">ETL Platforms</h3>
+<ul>
+  <li><a href="https://airflow.apache.org/">Apache Airflow</a> - Workflow orchestration</li>
+  <li><a href="https://www.prefect.io/">Prefect</a> - Modern data orchestration</li>
+  <li><a href="https://www.getdbt.com/">dbt (data build tool)</a> - Data transformation</li>
+  <li><a href="https://greatexpectations.io/">Great Expectations</a> - Data validation</li>
+</ul>
+
+<h3 id="data-quality-frameworks">Data Quality Frameworks</h3>
+<ul>
+  <li><a href="https://github.com/OHDSI/DataQualityDashboard">Data Quality Dashboard</a> - OHDSI DQD</li>
+  <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5051581/">Kahn Framework</a> - DQ dimensions</li>
+  <li><a href="https://www.dama.org/cpages/body-of-knowledge">DAMA DMBOK</a> - Data management body of knowledge</li>
+</ul>
+
+<h3 id="synthetic-data">Synthetic Data</h3>
+<ul>
+  <li><a href="https://synthetichealth.github.io/synthea/">Synthea</a> - Synthetic patient generator</li>
+  <li><a href="https://github.com/OHDSI/Eunomia">Eunomia</a> - OMOP test database</li>
+  <li><a href="https://faker.readthedocs.io/">Faker</a> - General fake data</li>
+</ul>
+
+<h3 id="privacy--de-identification">Privacy &amp; De-identification</h3>
+<ul>
+  <li><a href="https://arx.deidentifier.org/">ARX</a> - Data anonymization</li>
+  <li><a href="https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/">HIPAA Safe Harbor</a> - De-identification standard</li>
+</ul>
+
+<h3 id="databases--tools">Databases &amp; Tools</h3>
+<ul>
+  <li><a href="https://www.postgresql.org/">PostgreSQL</a> - Popular OHDSI backend</li>
+  <li><a href="https://dbeaver.io/">DBeaver</a> - Universal database tool</li>
+  <li><a href="https://www.pgadmin.org/">pgAdmin</a> - PostgreSQL admin</li>
+</ul>
+
+<hr />
+
+<h2 id="healthcare-nlp--ai-resources">Healthcare NLP &amp; AI Resources</h2>
+
+<p>Resources for clinical natural language processing, machine learning, and healthcare AI.</p>
+
+<h3 id="pre-trained-clinical-models">Pre-trained Clinical Models</h3>
+<ul>
+  <li><a href="https://github.com/dmis-lab/biobert">BioBERT</a> - Biomedical BERT</li>
+  <li><a href="https://github.com/EmilyAlsentzer/clinicalBERT">ClinicalBERT</a> - Clinical notes BERT</li>
+  <li><a href="https://huggingface.co/microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract-fulltext">PubMedBERT</a> - PubMed pre-trained</li>
+  <li><a href="https://github.com/allenai/scibert">SciBERT</a> - Scientific text BERT</li>
+  <li><a href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/clara/models/gatortron_og">GatorTron</a> - Large clinical LLM</li>
+</ul>
+
+<h3 id="clinical-nlp-tools">Clinical NLP Tools</h3>
+<ul>
+  <li><a href="https://github.com/medspacy/medspacy">MedSpaCy</a> - Clinical NLP with spaCy</li>
+  <li><a href="https://allenai.github.io/scispacy/">scispaCy</a> - Scientific/biomedical spaCy</li>
+  <li><a href="https://ctakes.apache.org/">cTAKES</a> - Apache clinical NLP</li>
+  <li><a href="https://github.com/CogStack/MedCAT">MedCAT</a> - Medical concept annotation</li>
+  <li><a href="https://github.com/Georgetown-IR-Lab/QuickUMLS">QuickUMLS</a> - Fast UMLS matching</li>
+  <li><a href="https://metamap.nlm.nih.gov/">MetaMap</a> - NLM concept extraction</li>
+</ul>
+
+<h3 id="general-nlp-libraries">General NLP Libraries</h3>
+<ul>
+  <li><a href="https://huggingface.co/transformers/">Hugging Face Transformers</a> - Transformer models</li>
+  <li><a href="https://spacy.io/">spaCy</a> - Industrial NLP</li>
+  <li><a href="https://www.nltk.org/">NLTK</a> - NLP toolkit</li>
+</ul>
+
+<h3 id="clinical-datasets">Clinical Datasets</h3>
+<ul>
+  <li><a href="https://mimic.mit.edu/">MIMIC-III/IV</a> - ICU clinical notes</li>
+  <li><a href="https://www.i2b2.org/NLP/DataSets/">i2b2 NLP Challenges</a> - Annotated clinical text</li>
+  <li><a href="https://n2c2.dbmi.hms.harvard.edu/">n2c2 (formerly i2b2)</a> - NLP challenges</li>
+  <li><a href="https://pubmed.ncbi.nlm.nih.gov/">PubMed</a> - Biomedical literature</li>
+</ul>
+
+<h3 id="ml-frameworks--tools">ML Frameworks &amp; Tools</h3>
+<ul>
+  <li><a href="https://scikit-learn.org/">scikit-learn</a> - General ML</li>
+  <li><a href="https://pytorch.org/">PyTorch</a> - Deep learning</li>
+  <li><a href="https://mlflow.org/">MLflow</a> - ML lifecycle</li>
+  <li><a href="https://wandb.ai/">Weights &amp; Biases</a> - Experiment tracking</li>
+</ul>
+
+<h3 id="model-interpretability">Model Interpretability</h3>
+<ul>
+  <li><a href="https://github.com/slundberg/shap">SHAP</a> - Feature importance</li>
+  <li><a href="https://github.com/marcotcr/lime">LIME</a> - Local explanations</li>
+  <li><a href="https://interpret.ml/">InterpretML</a> - Microsoft interpretability</li>
+</ul>
+
+<h3 id="research-venues">Research Venues</h3>
+<ul>
+  <li><a href="https://academic.oup.com/jamia">JAMIA</a> - Journal of AMIA</li>
+  <li><a href="https://www.nature.com/npjdigitalmed/">npj Digital Medicine</a> - Nature</li>
+  <li><a href="https://paperswithcode.com/area/medical">Papers With Code - Medical</a> - Medical ML papers</li>
+</ul>
+
+<h3 id="learning-resources-1">Learning Resources</h3>
+<ul>
+  <li><a href="https://huggingface.co/course/">Hugging Face Course</a> - Transformers course</li>
+  <li><a href="https://www.fast.ai/">Fast.ai</a> - Practical Deep Learning</li>
+  <li><a href="https://github.com/medspacy/medspacy/tree/master/notebooks">MedSpaCy Tutorials</a> - Clinical NLP</li>
+</ul>
+
+<hr />
+
+<h2 id="related-posts-on-this-blog">Related Posts on This Blog</h2>
+
+<h3 id="ohdsi">OHDSI</h3>
+<ul>
+  <li><a href="/blog/ohdsi-introduction-real-world-data-reliable-evidence/">OHDSI Introduction: From Real-World Data to Reliable Evidence</a></li>
+  <li><a href="/blog/ohdsi-learning-journey/">From EHR Chaos to Research-Ready Data: A Complete OHDSI Learning Journey</a></li>
+  <li><a href="/blog/mastering-atlas-cohort-definitions/">Mastering ATLAS Cohort Definitions</a></li>
+  <li><a href="/blog/predicting-gi-hemorrhage-ohdsi-plp/">Predicting GI Hemorrhage with OHDSI PLP</a></li>
+</ul>
+
+<h3 id="fhir--interoperability">FHIR &amp; Interoperability</h3>
+<ul>
+  <li><a href="/blog/HL7-FHIR-Clinical-Lab-Interoperability/">From HL7 Pipes to FHIR APIs: Clinical Laboratory Interoperability</a></li>
+  <li><a href="/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/">Healthcare Interoperability: FHIR, HL7, LOINC, SNOMED-CT</a></li>
+</ul>
+
+<hr />
+
+<p><em>This resource page is regularly updated. Last updated: December 30, 2025.</em></p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#ohdsi" class="tag tag-ohdsi">ohdsi</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">fhir</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#omop-cdm" class="tag tag-data">omop-cdm</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#nlp" class="tag tag-nlp">nlp</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare-ai" class="tag tag-nlp">healthcare-ai</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#resources" class="tag">resources</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#tutorial" class="tag tag-tutorial">tutorial</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/predicting-gi-hemorrhage-ohdsi-plp/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Predicting GI Hemorrhage with OHDSI: A Clinical...</span>
+        </a>
+        
+        
+        <a href="/blog/building-production-ready-medical-ner-pipeline/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Medical NER Pipeline Part 2: Building a Product...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

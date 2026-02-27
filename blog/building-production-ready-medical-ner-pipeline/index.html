@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT | Clinical AI Insider</title>
+    <meta name="description" content="A comprehensive technical guide to building a hybrid medical NER system combining BioBERT models with 57,476 curated templates for 95%+ accuracy on clinical ...">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT">
+    <meta property="og:description" content="A comprehensive technical guide to building a hybrid medical NER system combining BioBERT models with 57,476 curated templates for 95%+ accuracy on clinical ...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/building-production-ready-medical-ner-pipeline/">
+    <meta property="og:image" content="https://clinicalaiinsider.github.io/assets/images/medical-ner-pipeline.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT">
+    <meta name="twitter:description" content="A comprehensive technical guide to building a hybrid medical NER system combining BioBERT models with 57,476 curated templates for 95%+ accuracy on clinical ...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/building-production-ready-medical-ner-pipeline/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">Medical NER Pipeline Part 2: Building a Production-Ready System with BioBERT</h1>
+    <div class="post-meta">
+        <time datetime="2026-01-04T00:00:00-05:00">January 04, 2026</time>
+        <span class="meta-separator">·</span>
+        <span>20 min min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#ner" class="tag tag-nlp">ner</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#biobert" class="tag tag-nlp">biobert</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-nlp" class="tag tag-nlp">clinical-nlp</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <div class="audio-player-card">
+  <div class="audio-player-header">
+    <div class="audio-player-icon">🎧</div>
+    <div class="audio-player-title">
+      <h4>Listen to This Article</h4>
+      <p>9 minute audio companion • Two-host conversational format</p>
+    </div>
+  </div>
+  <div class="audio-player-controls">
+    <audio controls="" preload="metadata">
+      <source src="/assets/audio/medical-ner-podcast.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+  <div class="audio-player-footer">
+    <a href="/assets/audio/medical-ner-podcast.mp3" download="">📥 Download MP3</a>
+    <span class="audio-player-badge">Perfect for commutes</span>
+  </div>
+</div>
+
+<hr />
+
+<h1 id="part-2-building-a-production-ready-medical-ner-pipeline">Part 2: Building a Production-Ready Medical NER Pipeline</h1>
+
+<p><em>How I built a hybrid NER system that achieves 95%+ accuracy on clinical text by combining BioBERT models with 57,476 curated medical templates</em></p>
+
+<hr />
+
+<blockquote>
+  <p><strong>This is Part 2 of a two-part series on Medical Named Entity Recognition</strong></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Part</th>
+        <th>Focus</th>
+        <th>Audience</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/blog/medical-ner-clinical-insights/">Part 1: Clinical Insights</a></td>
+        <td>Clinical use cases, patient care impact, business value</td>
+        <td>Clinical Researchers, Product Owners, Delivery Managers</td>
+      </tr>
+      <tr>
+        <td><strong>Part 2</strong> (You are here)</td>
+        <td>Architecture, algorithms, code implementation</td>
+        <td>Developers, ML Engineers, Data Scientists</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><em>New to Medical NER? Start with <a href="/blog/medical-ner-clinical-insights/">Part 1</a> for the clinical context and use cases.</em></p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Clinical notes contain a wealth of information locked in unstructured text. A patient’s electronic health record might read:</p>
+
+<blockquote>
+  <p>“Patient denies chest pain but reports shortness of breath. History of diabetes mellitus type 2, currently on metformin. Mother has breast cancer.”</p>
+</blockquote>
+
+<p>To a clinician, this single paragraph conveys critical information: the patient is NOT experiencing chest pain (negated), IS experiencing shortness of breath (confirmed), HAS a history of diabetes (historical), and has a family history of cancer (family). But to a computer? It’s just a string of characters.</p>
+
+<p>This blog post documents my journey building a <strong>production-ready Medical Named Entity Recognition (NER) pipeline</strong> that extracts and classifies these clinical insights with high accuracy.</p>
+
+<h2 id="the-problem-space">The Problem Space</h2>
+
+<h3 id="why-clinical-nlp-is-hard">Why Clinical NLP is Hard</h3>
+
+<p>Standard NLP tools struggle with medical text for several reasons:</p>
+
+<ol>
+  <li><strong>Domain-specific vocabulary</strong>: Medical terms like “dyspnea,” “myocardial infarction,” and “KIF5A” aren’t in general-purpose NLP models</li>
+  <li><strong>Context matters enormously</strong>: “No fever” vs “has fever” - one word changes everything</li>
+  <li><strong>Complex negation patterns</strong>: “Patient denies fever but reports cough” requires understanding scope reversal</li>
+  <li><strong>Abbreviations and variations</strong>: “DM2,” “T2DM,” “diabetes mellitus type 2” all mean the same thing</li>
+</ol>
+
+<h3 id="the-stakes">The Stakes</h3>
+
+<p>Misclassifying a medical entity isn’t just an academic problem. Marking “chest pain” as “present” when it was actually “denied” could have serious implications for clinical decision support systems, research cohort identification, and automated coding.</p>
+
+<h2 id="architecture-overview">Architecture Overview</h2>
+
+<p>I designed a <strong>5-stage hybrid processing pipeline</strong> that combines the power of transformer-based models with the precision of curated medical templates.</p>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph Input
+        A[Clinical Text]
+    end
+
+    subgraph "Stage 1: Base NLP"
+        B[Tokenization]
+        C[Sentence Segmentation]
+        D[POS Tagging]
+    end
+
+    subgraph "Stage 2: Entity Extraction"
+        E[BioBERT Disease]
+        F[BioBERT Chemical]
+        G[BioBERT Gene]
+        H[Template Matching&lt;br/&gt;57,476 terms]
+    end
+
+    subgraph "Stage 3: Context Classification"
+        I[Confirmed&lt;br/&gt;138 patterns]
+        J[Negated&lt;br/&gt;99 patterns]
+        K[Uncertain&lt;br/&gt;48 patterns]
+        L[Historical&lt;br/&gt;82 patterns]
+        M[Family&lt;br/&gt;79 patterns]
+    end
+
+    subgraph "Stage 4: Section Detection"
+        N[20+ Clinical Sections]
+    end
+
+    subgraph "Stage 5: Output"
+        O[15-Column Excel]
+        P[Streamlit UI]
+        Q[JSON Export]
+    end
+
+    A --&gt; B --&gt; C --&gt; D
+    D --&gt; E &amp; F &amp; G &amp; H
+    E &amp; F &amp; G &amp; H --&gt; I &amp; J &amp; K &amp; L &amp; M
+    I &amp; J &amp; K &amp; L &amp; M --&gt; N
+    N --&gt; O &amp; P &amp; Q
+</code></pre>
+
+<h3 id="why-hybrid">Why Hybrid?</h3>
+
+<p>Pure machine learning approaches have limitations in specialized domains:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Approach</th>
+      <th>Pros</th>
+      <th>Cons</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>BioBERT Only</strong></td>
+      <td>High accuracy on common entities</td>
+      <td>Misses rare diseases, custom terms</td>
+    </tr>
+    <tr>
+      <td><strong>Rules Only</strong></td>
+      <td>Complete control, no training needed</td>
+      <td>Brittle, hard to maintain</td>
+    </tr>
+    <tr>
+      <td><strong>Hybrid (This Project)</strong></td>
+      <td>Best of both worlds</td>
+      <td>More complex to implement</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The hybrid approach lets BioBERT handle common patterns while curated templates catch domain-specific edge cases.</p>
+
+<h2 id="key-innovation-1-scope-reversal-detection">Key Innovation #1: Scope Reversal Detection</h2>
+
+<h3 id="the-but-problem">The “But” Problem</h3>
+
+<p>Consider this sentence:</p>
+
+<blockquote>
+  <p>“Patient denies fever but reports cough and fatigue”</p>
+</blockquote>
+
+<p>A naive negation detector would see “denies” and mark everything after it as negated. But that’s wrong! The word “but” reverses the scope:</p>
+
+<ul>
+  <li><strong>fever</strong> → NEGATED (before “but”)</li>
+  <li><strong>cough</strong> → CONFIRMED (after “but”)</li>
+  <li><strong>fatigue</strong> → CONFIRMED (after “but”)</li>
+</ul>
+
+<h3 id="103-reversal-patterns">103 Reversal Patterns</h3>
+
+<p>I implemented a comprehensive scope reversal engine with 103 patterns covering:</p>
+
+<p><strong>Adversative Conjunctions</strong> (Confidence: 90-95%):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sh">"</span><span class="s">denies X but reports Y</span><span class="sh">"</span>
+<span class="sh">"</span><span class="s">no X however shows Y</span><span class="sh">"</span>
+<span class="sh">"</span><span class="s">not X yet has Y</span><span class="sh">"</span>
+<span class="sh">"</span><span class="s">without X but demonstrates Y</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<p><strong>Temporal Transitions</strong> (Confidence: 85-92%):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sh">"</span><span class="s">denies X but now reports Y</span><span class="sh">"</span>
+<span class="sh">"</span><span class="s">no X but currently shows Y</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<p><strong>Exception Patterns</strong> (Confidence: 80-90%):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sh">"</span><span class="s">denies all X except Y</span><span class="sh">"</span>
+<span class="sh">"</span><span class="s">no X save for Y</span><span class="sh">"</span>
+<span class="sh">"</span><span class="s">not X apart from Y</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<h3 id="implementation">Implementation</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scope_reversal_patterns</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">negation_to_confirmation_adversative</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">pattern</span><span class="sh">'</span><span class="p">:</span> <span class="sa">r</span><span class="sh">'</span><span class="s">(denies?|no|not|without|absent)\s+([^.!?]*?)\s+(but|however|yet)\s+(reports?|shows?|has|demonstrates?)</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">scope_before</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">NEGATED</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">scope_after</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">CONFIRMED</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">confidence</span><span class="sh">'</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">priority</span><span class="sh">'</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="c1"># ... 102 more patterns
+</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">detect_scope_reversal</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Detect conjunction and assign appropriate context to entities
+    based on their position relative to the reversal point.
+    </span><span class="sh">"""</span>
+    <span class="k">for</span> <span class="n">pattern_name</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">scope_reversal_patterns</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">pattern</span><span class="sh">'</span><span class="p">],</span> <span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">conjunction_pos</span> <span class="o">=</span> <span class="k">match</span><span class="p">.</span><span class="nf">start</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Position of "but/however/yet"
+</span>
+            <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entity</span><span class="p">[</span><span class="sh">'</span><span class="s">end</span><span class="sh">'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">conjunction_pos</span><span class="p">:</span>
+                    <span class="n">entity</span><span class="p">[</span><span class="sh">'</span><span class="s">context</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">scope_before</span><span class="sh">'</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">entity</span><span class="p">[</span><span class="sh">'</span><span class="s">context</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">scope_after</span><span class="sh">'</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">entities</span>
+</code></pre></div></div>
+
+<h3 id="results">Results</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Without Scope Reversal</th>
+      <th>With Scope Reversal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Context Accuracy</td>
+      <td>85%</td>
+      <td>93%</td>
+    </tr>
+    <tr>
+      <td>False Positives</td>
+      <td>8%</td>
+      <td>3%</td>
+    </tr>
+    <tr>
+      <td>False Negatives</td>
+      <td>10%</td>
+      <td>5%</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="key-innovation-2-template-priority-mode">Key Innovation #2: Template-Priority Mode</h2>
+
+<h3 id="the-template-system">The Template System</h3>
+
+<p>The heart of precision in this pipeline is a curated template system with <strong>57,476 medical terms</strong>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Template File</th>
+      <th>Pattern Count</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">target_rules_template.xlsx</code></td>
+      <td>57,476</td>
+      <td>Medical terms (diseases, genes, drugs)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">confirmed_rules_template.xlsx</code></td>
+      <td>138</td>
+      <td>Confirmation patterns</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">negated_rules_template.xlsx</code></td>
+      <td>99</td>
+      <td>Negation patterns</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uncertainty_rules_template.xlsx</code></td>
+      <td>48</td>
+      <td>Uncertainty patterns</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">historical_rules_template.xlsx</code></td>
+      <td>82</td>
+      <td>Historical context patterns</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">family_rules_template.xlsx</code></td>
+      <td>79</td>
+      <td>Family history patterns</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="template-priority-vs-confidence-based">Template-Priority vs Confidence-Based</h3>
+
+<p>I implemented two override strategies:</p>
+
+<p><strong>Confidence-Based</strong> (Original):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">template_confidence</span> <span class="o">&gt;</span> <span class="n">biobert_confidence</span><span class="p">:</span>
+    <span class="nf">use_template_detection</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nf">use_biobert_detection</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>Template-Priority</strong> (Default in v2.3.0):</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">template_match</span><span class="p">:</span>
+    <span class="nf">use_template_detection</span><span class="p">()</span>  <span class="c1"># ALWAYS override
+</span></code></pre></div></div>
+
+<p>Template-priority mode is crucial for:</p>
+<ul>
+  <li>Rare diseases not in BioBERT’s training data</li>
+  <li>Institution-specific terminology</li>
+  <li>Custom clinical vocabularies</li>
+  <li>Quality control over entity boundaries</li>
+</ul>
+
+<h3 id="python-api-example">Python API Example</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">src.enhanced_medical_ner_predictor</span> <span class="kn">import</span> <span class="n">MedicalNERPredictor</span>
+
+<span class="c1"># Initialize with template-priority (default)
+</span><span class="n">predictor</span> <span class="o">=</span> <span class="nc">MedicalNERPredictor</span><span class="p">(</span><span class="n">template_priority</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># Process clinical text
+</span><span class="n">text</span> <span class="o">=</span> <span class="sh">"""</span><span class="s">
+Patient is a 65-year-old male presenting with chest pain.
+Denies fever, chills, or night sweats but reports fatigue.
+Past medical history significant for Type 2 diabetes mellitus,
+hypertension, and coronary artery disease.
+Mother has history of breast cancer.
+Possible pneumonia on chest X-ray.
+</span><span class="sh">"""</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">predictor</span><span class="p">.</span><span class="nf">process_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># Access structured results
+</span><span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Confirmed entities:</span><span class="sh">"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">confirmed_entities</span><span class="sh">'</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Negated entities:</span><span class="sh">"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">negated_entities</span><span class="sh">'</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Historical entities:</span><span class="sh">"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">historical_entities</span><span class="sh">'</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Family history:</span><span class="sh">"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">family_entities</span><span class="sh">'</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Uncertain entities:</span><span class="sh">"</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="sh">'</span><span class="s">uncertain_entities</span><span class="sh">'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p><strong>Output:</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Confirmed</span> <span class="n">entities</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">chest pain</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">fatigue</span><span class="sh">'</span><span class="p">]</span>
+<span class="n">Negated</span> <span class="n">entities</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">fever</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">chills</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">night sweats</span><span class="sh">'</span><span class="p">]</span>
+<span class="n">Historical</span> <span class="n">entities</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">Type 2 diabetes mellitus</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">hypertension</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">coronary artery disease</span><span class="sh">'</span><span class="p">]</span>
+<span class="n">Family</span> <span class="n">history</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">breast cancer</span><span class="sh">'</span><span class="p">]</span>
+<span class="n">Uncertain</span> <span class="n">entities</span><span class="p">:</span> <span class="p">[</span><span class="sh">'</span><span class="s">pneumonia</span><span class="sh">'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="key-innovation-3-rich-context-classification">Key Innovation #3: Rich Context Classification</h2>
+
+<h3 id="five-context-types">Five Context Types</h3>
+
+<p>Every detected entity is classified into exactly one context category:</p>
+
+<pre><code class="language-mermaid">flowchart TB
+    subgraph Input[" "]
+        E[("🔍 Medical Entity&lt;br/&gt;in Clinical Text")]
+    end
+
+    E --&gt; C &amp; N &amp; H &amp; F &amp; U
+
+    subgraph C["✅ CONFIRMED"]
+        C1["diagnosed with"]
+        C2["presents with"]
+        C3["positive for"]
+        C4["exhibits"]
+        C5["&lt;i&gt;138 patterns&lt;/i&gt;"]
+    end
+
+    subgraph N["❌ NEGATED"]
+        N1["denies"]
+        N2["no evidence of"]
+        N3["negative for"]
+        N4["absence of"]
+        N5["&lt;i&gt;99 patterns&lt;/i&gt;"]
+    end
+
+    subgraph H["📅 HISTORICAL"]
+        H1["history of"]
+        H2["previous"]
+        H3["prior"]
+        H4["past medical"]
+        H5["&lt;i&gt;82 patterns&lt;/i&gt;"]
+    end
+
+    subgraph F["👨‍👩‍👧 FAMILY"]
+        F1["family history"]
+        F2["mother has"]
+        F3["father with"]
+        F4["hereditary"]
+        F5["&lt;i&gt;79 patterns&lt;/i&gt;"]
+    end
+
+    subgraph U["❓ UNCERTAIN"]
+        U1["possible"]
+        U2["suspected"]
+        U3["rule out"]
+        U4["cannot exclude"]
+        U5["&lt;i&gt;48 patterns&lt;/i&gt;"]
+    end
+
+    style E fill:#6366F1,color:#fff,stroke:#4F46E5,stroke-width:3px
+    style C fill:#ECFDF5,stroke:#10B981,stroke-width:2px
+    style N fill:#FEF2F2,stroke:#EF4444,stroke-width:2px
+    style H fill:#F5F3FF,stroke:#8B5CF6,stroke-width:2px
+    style F fill:#FDF2F8,stroke:#EC4899,stroke-width:2px
+    style U fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px
+</code></pre>
+
+<h3 id="priority-hierarchy">Priority Hierarchy</h3>
+
+<p>When multiple contexts could apply, I use a strict priority hierarchy:</p>
+
+<ol>
+  <li><strong>NEGATED</strong> (highest) - Absence is most important clinically</li>
+  <li><strong>FAMILY</strong> - Family history is distinct from patient history</li>
+  <li><strong>HISTORICAL</strong> - Past conditions differ from current</li>
+  <li><strong>UNCERTAIN</strong> - Speculative findings need flagging</li>
+  <li><strong>CONFIRMED</strong> (default) - Present/active conditions</li>
+</ol>
+
+<h3 id="confidence-scoring-algorithm">Confidence Scoring Algorithm</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">calculate_confidence</span><span class="p">(</span><span class="n">pattern_match</span><span class="p">,</span> <span class="n">entity_position</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Multi-factor confidence scoring (0-100%).
+
+    Total = Strength Points + Proximity Points + Structure Points
+    </span><span class="sh">"""</span>
+    <span class="c1"># Strength Points (max 40)
+</span>    <span class="n">strength_map</span> <span class="o">=</span> <span class="p">{</span><span class="sh">'</span><span class="s">strong</span><span class="sh">'</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="sh">'</span><span class="s">moderate</span><span class="sh">'</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="sh">'</span><span class="s">weak</span><span class="sh">'</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
+    <span class="n">strength_points</span> <span class="o">=</span> <span class="n">strength_map</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">pattern_match</span><span class="p">.</span><span class="n">strength</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># Proximity Points (max 40)
+</span>    <span class="n">distance</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">pattern_match</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">entity_position</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">proximity_points</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="k">elif</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">proximity_points</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="k">elif</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="n">proximity_points</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="k">elif</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="mi">35</span><span class="p">:</span>
+        <span class="n">proximity_points</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">proximity_points</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="c1"># Structure Points (max 20)
+</span>    <span class="n">structure_points</span> <span class="o">=</span> <span class="mi">20</span> <span class="k">if</span> <span class="n">pattern_match</span><span class="p">.</span><span class="n">same_sentence</span> <span class="k">else</span> <span class="mi">10</span>
+
+    <span class="k">return</span> <span class="n">strength_points</span> <span class="o">+</span> <span class="n">proximity_points</span> <span class="o">+</span> <span class="n">structure_points</span>
+</code></pre></div></div>
+
+<h2 id="the-processing-pipeline">The Processing Pipeline</h2>
+
+<h3 id="stage-1-base-nlp-processing">Stage 1: Base NLP Processing</h3>
+
+<p>Using spaCy for foundational NLP:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">spacy</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="sh">"</span><span class="s">en_core_web_sm</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">base_nlp_processing</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="nf">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">tokens</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="n">token</span><span class="p">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">],</span>
+        <span class="sh">'</span><span class="s">sentences</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="n">sent</span><span class="p">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">.</span><span class="n">sents</span><span class="p">],</span>
+        <span class="sh">'</span><span class="s">pos_tags</span><span class="sh">'</span><span class="p">:</span> <span class="p">[(</span><span class="n">token</span><span class="p">.</span><span class="n">text</span><span class="p">,</span> <span class="n">token</span><span class="p">.</span><span class="n">pos_</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">],</span>
+        <span class="sh">'</span><span class="s">dependencies</span><span class="sh">'</span><span class="p">:</span> <span class="p">[(</span><span class="n">token</span><span class="p">.</span><span class="n">text</span><span class="p">,</span> <span class="n">token</span><span class="p">.</span><span class="n">dep_</span><span class="p">,</span> <span class="n">token</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="stage-2-hybrid-entity-extraction">Stage 2: Hybrid Entity Extraction</h3>
+
+<p>Three BioBERT models run in parallel:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForTokenClassification</span>
+<span class="kn">import</span> <span class="n">torch</span>
+
+<span class="k">class</span> <span class="nc">BioBERTExtractor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">models</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">disease</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_model</span><span class="p">(</span><span class="sh">'</span><span class="s">models/pretrained/Disease</span><span class="sh">'</span><span class="p">),</span>
+            <span class="sh">'</span><span class="s">chemical</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_model</span><span class="p">(</span><span class="sh">'</span><span class="s">models/pretrained/Chemical</span><span class="sh">'</span><span class="p">),</span>
+            <span class="sh">'</span><span class="s">gene</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_model</span><span class="p">(</span><span class="sh">'</span><span class="s">models/pretrained/Gene</span><span class="sh">'</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_load_model</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="p">.</span><span class="nf">from_pretrained</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForTokenClassification</span><span class="p">.</span><span class="nf">from_pretrained</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">'</span><span class="s">tokenizer</span><span class="sh">'</span><span class="p">:</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="sh">'</span><span class="s">model</span><span class="sh">'</span><span class="p">:</span> <span class="n">model</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">extract_entities</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">all_entities</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">entity_type</span><span class="p">,</span> <span class="n">model_dict</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_run_inference</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">model_dict</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">)</span>
+            <span class="n">all_entities</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span>
+
+        <span class="c1"># Apply template boosting
+</span>        <span class="n">template_entities</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">template_matcher</span><span class="p">.</span><span class="nf">find_matches</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">all_entities</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_merge_entities</span><span class="p">(</span><span class="n">all_entities</span><span class="p">,</span> <span class="n">template_entities</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_entities</span>
+</code></pre></div></div>
+
+<h3 id="stage-3-context-classification">Stage 3: Context Classification</h3>
+
+<p>For each entity, analyze ±200 character window:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">classify_context</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">context_window</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Classify entity context using pattern matching and confidence scoring.
+    </span><span class="sh">"""</span>
+    <span class="c1"># Extract context window
+</span>    <span class="n">start</span> <span class="o">=</span> <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">entity</span><span class="p">[</span><span class="sh">'</span><span class="s">start</span><span class="sh">'</span><span class="p">]</span> <span class="o">-</span> <span class="n">context_window</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">entity</span><span class="p">[</span><span class="sh">'</span><span class="s">end</span><span class="sh">'</span><span class="p">]</span> <span class="o">+</span> <span class="n">context_window</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+
+    <span class="c1"># Check each context type in priority order
+</span>    <span class="n">context_scores</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">context_type</span> <span class="ow">in</span> <span class="p">[</span><span class="sh">'</span><span class="s">negated</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">family</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">historical</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">uncertain</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">confirmed</span><span class="sh">'</span><span class="p">]:</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="nf">load_patterns</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="si">{</span><span class="n">context_type</span><span class="si">}</span><span class="s">_rules_template.xlsx</span><span class="sh">'</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="sh">'</span><span class="s">regex</span><span class="sh">'</span><span class="p">],</span> <span class="n">context</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">confidence</span> <span class="o">=</span> <span class="nf">calculate_confidence</span><span class="p">(</span><span class="n">match</span><span class="p">,</span> <span class="n">entity</span><span class="p">[</span><span class="sh">'</span><span class="s">start</span><span class="sh">'</span><span class="p">]</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">confidence</span> <span class="o">&gt;</span> <span class="n">context_scores</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">context_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">context_scores</span><span class="p">[</span><span class="n">context_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">confidence</span>
+
+    <span class="c1"># Apply scope reversal detection
+</span>    <span class="n">context_scores</span> <span class="o">=</span> <span class="nf">apply_scope_reversal</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">context_scores</span><span class="p">)</span>
+
+    <span class="c1"># Return highest priority context above threshold
+</span>    <span class="k">for</span> <span class="n">context_type</span> <span class="ow">in</span> <span class="p">[</span><span class="sh">'</span><span class="s">negated</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">family</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">historical</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">uncertain</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">confirmed</span><span class="sh">'</span><span class="p">]:</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="n">THRESHOLDS</span><span class="p">[</span><span class="n">context_type</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">context_scores</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">context_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">context_type</span><span class="p">,</span> <span class="n">context_scores</span><span class="p">[</span><span class="n">context_type</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="sh">'</span><span class="s">confirmed</span><span class="sh">'</span><span class="p">,</span> <span class="mi">60</span>  <span class="c1"># Default
+</span></code></pre></div></div>
+
+<h3 id="stage-4-section-detection">Stage 4: Section Detection</h3>
+
+<p>Detect clinical note sections:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SECTION_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">Chief Complaint</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="sa">r</span><span class="sh">'</span><span class="s">\bchief complaint\b</span><span class="sh">'</span><span class="p">,</span> <span class="sa">r</span><span class="sh">'</span><span class="s">\bcc\b:</span><span class="sh">'</span><span class="p">],</span>
+    <span class="sh">'</span><span class="s">HPI</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="sa">r</span><span class="sh">'</span><span class="s">\bhistory of present illness\b</span><span class="sh">'</span><span class="p">,</span> <span class="sa">r</span><span class="sh">'</span><span class="s">\bhpi\b:</span><span class="sh">'</span><span class="p">],</span>
+    <span class="sh">'</span><span class="s">Assessment</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="sa">r</span><span class="sh">'</span><span class="s">\bassessment\b:</span><span class="sh">'</span><span class="p">,</span> <span class="sa">r</span><span class="sh">'</span><span class="s">\bimpression\b:</span><span class="sh">'</span><span class="p">],</span>
+    <span class="sh">'</span><span class="s">Plan</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span><span class="sa">r</span><span class="sh">'</span><span class="s">\bplan\b:</span><span class="sh">'</span><span class="p">,</span> <span class="sa">r</span><span class="sh">'</span><span class="s">\brecommendations\b:</span><span class="sh">'</span><span class="p">],</span>
+    <span class="c1"># ... 20+ section types
+</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">detect_sections</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">patterns</span> <span class="ow">in</span> <span class="n">SECTION_PATTERNS</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="p">.</span><span class="n">IGNORECASE</span><span class="p">):</span>
+                <span class="n">sections</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">section_name</span><span class="p">)</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">sections</span>
+</code></pre></div></div>
+
+<h3 id="stage-5-output-generation">Stage 5: Output Generation</h3>
+
+<p>Generate comprehensive 15-column Excel output:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Column</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Text Visualization</td>
+      <td>HTML with color-coded entities</td>
+    </tr>
+    <tr>
+      <td>detected_diseases</td>
+      <td>Disease entities found</td>
+    </tr>
+    <tr>
+      <td>total_diseases_count</td>
+      <td>Count of diseases</td>
+    </tr>
+    <tr>
+      <td>detected_genes</td>
+      <td>Gene/protein entities</td>
+    </tr>
+    <tr>
+      <td>total_gene_count</td>
+      <td>Count of genes</td>
+    </tr>
+    <tr>
+      <td>negated_entities</td>
+      <td>Conditions explicitly denied</td>
+    </tr>
+    <tr>
+      <td>negated_entities_count</td>
+      <td>Count</td>
+    </tr>
+    <tr>
+      <td>historical_entities</td>
+      <td>Past medical history</td>
+    </tr>
+    <tr>
+      <td>historical_entities_count</td>
+      <td>Count</td>
+    </tr>
+    <tr>
+      <td>uncertain_entities</td>
+      <td>Possible/suspected conditions</td>
+    </tr>
+    <tr>
+      <td>uncertain_entities_count</td>
+      <td>Count</td>
+    </tr>
+    <tr>
+      <td>family_entities</td>
+      <td>Family medical history</td>
+    </tr>
+    <tr>
+      <td>family_entities_count</td>
+      <td>Count</td>
+    </tr>
+    <tr>
+      <td>section_categories</td>
+      <td>Clinical sections detected</td>
+    </tr>
+    <tr>
+      <td>all_entities_json</td>
+      <td>Complete structured JSON</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="performance-results">Performance Results</h2>
+
+<h3 id="accuracy-metrics">Accuracy Metrics</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>BioBERT Only</th>
+      <th>+ Templates</th>
+      <th>+ Scope Reversal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Entity Detection</td>
+      <td>92%</td>
+      <td>96%</td>
+      <td>96%</td>
+    </tr>
+    <tr>
+      <td>Context Classification</td>
+      <td>85%</td>
+      <td>88%</td>
+      <td>93%</td>
+    </tr>
+    <tr>
+      <td>False Positive Rate</td>
+      <td>8%</td>
+      <td>4%</td>
+      <td>3%</td>
+    </tr>
+    <tr>
+      <td>False Negative Rate</td>
+      <td>10%</td>
+      <td>6%</td>
+      <td>5%</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="processing-speed">Processing Speed</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input Size</th>
+      <th>Processing Time</th>
+      <th>Throughput</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10 rows</td>
+      <td>15 seconds</td>
+      <td>0.67 rows/sec</td>
+    </tr>
+    <tr>
+      <td>100 rows</td>
+      <td>2 minutes</td>
+      <td>0.83 rows/sec</td>
+    </tr>
+    <tr>
+      <td>1000 rows</td>
+      <td>18 minutes</td>
+      <td>0.93 rows/sec</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Memory usage stays around ~2GB for typical workloads.</p>
+
+<h2 id="interactive-demo">Interactive Demo</h2>
+
+<p>The pipeline includes a Streamlit web application for interactive use:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Launch the Streamlit app</span>
+./run_app.sh
+
+<span class="c"># Opens at http://localhost:8501</span>
+</code></pre></div></div>
+
+<p><strong>Features:</strong></p>
+<ul>
+  <li>File upload (Excel, CSV, TXT)</li>
+  <li>Manual text input</li>
+  <li>Real-time processing</li>
+  <li>Color-coded entity visualization</li>
+  <li>Export to Excel/JSON</li>
+  <li>Configurable detection options</li>
+</ul>
+
+<h3 id="streamlit-app-interface">Streamlit App Interface</h3>
+
+<p><img src="/assets/images/medical-ner/streamlit-main-ui.png" alt="Medical NER Main UI" />
+<em>The Enhanced Bio-NER Entity Visualizer with configuration panel and text input</em></p>
+
+<h3 id="entity-visualization-with-context">Entity Visualization with Context</h3>
+
+<p><img src="/assets/images/medical-ner/entity-visualization.png" alt="Entity Visualization" />
+<em>Color-coded entity highlighting showing Disease (red), Drug (blue) with context icons: ❌ Negated, 📅 Historical, 👨‍👩‍👧 Family</em></p>
+
+<h3 id="context-classification-details">Context Classification Details</h3>
+
+<p><img src="/assets/images/medical-ner/context-classification.png" alt="Context Classification" />
+<em>Detailed context classification showing predictor patterns (DENIES, NO, NO EVIDENCE OF, HISTORY OF, MOTHER) that triggered each classification</em></p>
+
+<h2 id="technology-stack">Technology Stack</h2>
+
+<pre><code class="language-mermaid">mindmap
+  root((Medical NER&lt;br/&gt;Technology Stack))
+    NLP Foundation
+      spaCy 3.7+
+      scispaCy
+      negspacy
+    Deep Learning
+      PyTorch 2.0+
+      Hugging Face Transformers
+      BioBERT NER Models
+    User Interface
+      Streamlit 1.28+
+    Data Processing
+      Pandas
+      OpenPyXL
+      JSON
+</code></pre>
+
+<h2 id="lessons-learned">Lessons Learned</h2>
+
+<h3 id="1-medical-nlp-is-hard">1. Medical NLP is Hard</h3>
+<p>Standard NLP tools fail spectacularly on clinical text. Domain-specific vocabulary, complex negation, and abbreviations require specialized handling.</p>
+
+<h3 id="2-hybrid--pure-ml-for-specialized-domains">2. Hybrid &gt; Pure ML for Specialized Domains</h3>
+<p>Combining transformer models with curated templates yields better results than either approach alone. BioBERT provides broad coverage; templates ensure precision.</p>
+
+<h3 id="3-template-curation-is-underrated">3. Template Curation is Underrated</h3>
+<p>The 57,476 curated medical terms took significant effort to compile, but they’re essential for catching rare diseases and domain-specific terminology that ML models miss.</p>
+
+<h3 id="4-context-is-everything">4. Context is Everything</h3>
+<p>Entity extraction is only half the battle. Correctly classifying whether an entity is confirmed, negated, historical, or uncertain is equally important for clinical applications.</p>
+
+<h3 id="5-scope-reversal-is-non-negotiable">5. Scope Reversal is Non-Negotiable</h3>
+<p>The “but” problem affects real clinical notes frequently. Implementing proper scope reversal detection improved context accuracy by 8 percentage points.</p>
+
+<h2 id="future-roadmap">Future Roadmap</h2>
+
+<ul>
+  <li><strong>Additional entity types</strong>: Symptoms, procedures, lab values</li>
+  <li><strong>Multi-language support</strong>: Spanish, French clinical notes</li>
+  <li><strong>FHIR integration</strong>: Export to standard healthcare formats</li>
+  <li><strong>Active learning</strong>: Improve templates based on user corrections</li>
+  <li><strong>GPU optimization</strong>: Faster inference for large-scale processing</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Building a production-ready medical NER pipeline requires more than just throwing a transformer model at the problem. The hybrid approach - combining BioBERT’s contextual understanding with curated templates and sophisticated context classification - achieves the accuracy needed for real clinical applications.</p>
+
+<p><strong>Key Takeaways:</strong></p>
+<ol>
+  <li>Use domain-specific models (BioBERT, not general BERT)</li>
+  <li>Augment ML with curated templates for edge cases</li>
+  <li>Implement proper scope reversal detection</li>
+  <li>Classify context, not just entities</li>
+  <li>Validate extensively with clinical experts</li>
+</ol>
+
+<hr />
+
+<h2 id="series-navigation">Series Navigation</h2>
+
+<blockquote>
+  <p><strong>This was Part 2 of the Medical NER Pipeline series.</strong></p>
+
+  <h3 id="missed-part-1">Missed Part 1?</h3>
+
+  <p><strong><a href="/blog/medical-ner-clinical-insights/">Part 1: Unlocking Hidden Insights in Clinical Notes</a></strong> covers:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Topic</th>
+        <th>What You’ll Learn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Patient Care Use Cases</strong></td>
+        <td>How the system improves research cohort identification and care gaps</td>
+      </tr>
+      <tr>
+        <td><strong>Clinical Context</strong></td>
+        <td>Why “denies chest pain” vs “has chest pain” matters clinically</td>
+      </tr>
+      <tr>
+        <td><strong>Real-World Results</strong></td>
+        <td>Demo findings from 100 rare disease patient records</td>
+      </tr>
+      <tr>
+        <td><strong>Implementation Planning</strong></td>
+        <td>Guidance for product owners and delivery managers</td>
+      </tr>
+      <tr>
+        <td><strong>Business Value</strong></td>
+        <td>From weeks to minutes for cohort identification</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><em>Part 1 is written for clinical researchers, product owners, and delivery managers.</em></p>
+
+  <p><strong><a href="/blog/medical-ner-clinical-insights/">← Read Part 1: Clinical Insights</a></strong></p>
+</blockquote>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/abs/1901.08746">BioBERT: A pre-trained biomedical language representation model</a></li>
+  <li><a href="https://spacy.io/">spaCy Industrial-Strength NLP</a></li>
+  <li><a href="https://huggingface.co/docs/transformers">Hugging Face Transformers</a></li>
+  <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5001746/">Clinical NLP Challenges and Solutions</a></li>
+</ul>
+
+<hr />
+
+<p><em>Have questions about this implementation? Check out the <a href="https://github.com/datagodzilla/medical-nlp-lean">GitHub repository</a> for the complete code.</em></p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#ner" class="tag tag-nlp">ner</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#biobert" class="tag tag-nlp">biobert</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-nlp" class="tag tag-nlp">clinical-nlp</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#spacy" class="tag">spacy</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#transformers" class="tag">transformers</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#streamlit" class="tag tag-python">streamlit</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare" class="tag">healthcare</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#python" class="tag tag-python">python</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#medical-ai" class="tag">medical-ai</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/clinical-informatics-resources-reference-guide/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Clinical Informatics Resources: A Comprehensive...</span>
+        </a>
+        
+        
+        <a href="/blog/medical-ner-clinical-insights/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Medical NER Pipeline Part 1: Unlocking Hidden I...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

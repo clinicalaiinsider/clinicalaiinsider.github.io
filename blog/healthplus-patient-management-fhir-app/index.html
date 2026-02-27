@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application | Clinical AI Insider</title>
+    <meta name="description" content="A deep dive into building a browser-based Patient Management Application with vanilla HTML/CSS/JavaScript against HAPI FHIR R4 REST APIs -- covering architec...">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application">
+    <meta property="og:description" content="A deep dive into building a browser-based Patient Management Application with vanilla HTML/CSS/JavaScript against HAPI FHIR R4 REST APIs -- covering architec...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/healthplus-patient-management-fhir-app/">
+    <meta property="og:image" content="https://clinicalaiinsider.github.io/assets/images/posts/fhir-patient-management/screenshot.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application">
+    <meta name="twitter:description" content="A deep dive into building a browser-based Patient Management Application with vanilla HTML/CSS/JavaScript against HAPI FHIR R4 REST APIs -- covering architec...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/healthplus-patient-management-fhir-app/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application</h1>
+    <div class="post-meta">
+        <time datetime="2026-02-26T00:00:00-05:00">February 26, 2026</time>
+        <span class="meta-separator">·</span>
+        <span>18 min min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">FHIR</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#hl7" class="tag tag-fhir">HL7</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#interoperability" class="tag tag-fhir">Interoperability</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <h1 id="building-a-fhir-powered-clinical-portal-the-healthplus-patient-management-application">Building a FHIR-Powered Clinical Portal: The HealthPlus Patient Management Application</h1>
+
+<blockquote>
+  <p><em>“The best way to understand FHIR is to build something real with it. Not a toy example, not a specification walkthrough – a working clinical tool that creates, reads, updates, and deletes patient data on a live server.”</em></p>
+</blockquote>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Picture walking into a small clinic called <strong>HealthPlus</strong>. The front desk staff needs to look up a patient, register a new walk-in, update a phone number, and check visit history – all in under two minutes. Behind the scenes, every one of those actions is a RESTful API call to a FHIR server, translating clinical workflows into standardized, interoperable data exchange.</p>
+
+<p>The <strong>HealthPlus Patient Management Application</strong> is a browser-based clinical portal built entirely with vanilla HTML, CSS, and JavaScript – no frameworks, no build tools, no dependencies. It connects directly to a <strong>HAPI FHIR R4</strong> server using the HL7 FHIR RESTful API protocol, performing full CRUD (Create, Read, Update, Delete) operations on Patient resources and fetching related Encounter and Appointment data.</p>
+
+<p>This post walks through how and why the application was built, the architecture decisions that shaped it, and the lessons learned from connecting a browser-based frontend to a live FHIR server.</p>
+
+<p><img src="/assets/images/posts/fhir-patient-management/screenshot.png" alt="Patient Management App - Core Requirements" />
+<em>The four core requirements that drove the application design.</em></p>
+
+<h3 id="what-this-application-demonstrates">What This Application Demonstrates</h3>
+
+<ul>
+  <li><strong>FHIR R4 REST API fluency</strong>: Every interaction maps to a standard FHIR operation</li>
+  <li><strong>Zero-dependency web development</strong>: Proof that clinical tools don’t require heavy frameworks</li>
+  <li><strong>Real-world error handling</strong>: CORS issues, referential integrity conflicts, pagination edge cases</li>
+  <li><strong>Clinical workflow alignment</strong>: The UI mirrors how clinic staff actually work with patient data</li>
+</ul>
+
+<hr />
+
+<h2 id="requirements">Requirements</h2>
+
+<h3 id="core-mandatory-requirements">Core Mandatory Requirements</h3>
+
+<p>The application was built to satisfy four fundamental requirements for a clinic-facing patient management system:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Requirement</th>
+      <th>FHIR Operation</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>List patients displaying name, gender, and date of birth</td>
+      <td><code class="language-plaintext highlighter-rouge">GET /Patient</code> with search parameters</td>
+      <td>Implemented</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Create patients via validated form (name, gender, DOB, phone)</td>
+      <td><code class="language-plaintext highlighter-rouge">POST /Patient</code> with JSON body</td>
+      <td>Implemented</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Update existing patients using the same form</td>
+      <td><code class="language-plaintext highlighter-rouge">GET /Patient/{id}</code> then <code class="language-plaintext highlighter-rouge">PUT /Patient/{id}</code></td>
+      <td>Implemented</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Search patients by name or phone number</td>
+      <td><code class="language-plaintext highlighter-rouge">GET /Patient?name=</code> or <code class="language-plaintext highlighter-rouge">GET /Patient?phone=</code></td>
+      <td>Implemented</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="extended-requirements">Extended Requirements</h3>
+
+<p>Beyond the core four, the application implements several additional features needed for a production-ready clinical tool:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Pagination</strong></td>
+      <td>Configurable page sizes (10, 50, 100) with page navigation controls</td>
+    </tr>
+    <tr>
+      <td><strong>Bulk Operations</strong></td>
+      <td>Checkbox selection for batch update or delete with confirmation modal</td>
+    </tr>
+    <tr>
+      <td><strong>Visit History</strong></td>
+      <td>Read-only table of past Encounters for each patient</td>
+    </tr>
+    <tr>
+      <td><strong>Appointment Calendar</strong></td>
+      <td>Visual calendar highlighting previous visit dates</td>
+    </tr>
+    <tr>
+      <td><strong>Reason for Visit</strong></td>
+      <td>Most recent Encounter reason displayed in patient table</td>
+    </tr>
+    <tr>
+      <td><strong>Next Appointment</strong></td>
+      <td>Upcoming Appointment date/time or “No Appointment” indicator</td>
+    </tr>
+    <tr>
+      <td><strong>Form Validation</strong></td>
+      <td>Client-side validation for all fields (name, DOB, phone, ZIP)</td>
+    </tr>
+    <tr>
+      <td><strong>Error Recovery</strong></td>
+      <td>Pagination error handling, cascade delete for referential integrity</td>
+    </tr>
+    <tr>
+      <td><strong>Responsive Design</strong></td>
+      <td>Adapts to desktop, tablet, and mobile viewports</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="tools-used">Tools Used</h2>
+
+<h3 id="hapi-fhir-server">HAPI FHIR Server</h3>
+
+<p><strong>HAPI FHIR</strong> (Health API for FHIR) is the most widely used open-source FHIR server implementation, built in Java by Smile CDR.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Detail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Public Endpoint</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">http://hapi.fhir.org/baseR4</code></td>
+    </tr>
+    <tr>
+      <td><strong>FHIR Version</strong></td>
+      <td>R4 (4.0.1)</td>
+    </tr>
+    <tr>
+      <td><strong>Authentication</strong></td>
+      <td>None required (public test server)</td>
+    </tr>
+    <tr>
+      <td><strong>Data Availability</strong></td>
+      <td>Pre-populated with thousands of synthetic Patient, Encounter, Observation, and Appointment resources</td>
+    </tr>
+    <tr>
+      <td><strong>Source Code</strong></td>
+      <td><a href="https://github.com/hapifhir/hapi-fhir">github.com/hapifhir/hapi-fhir</a></td>
+    </tr>
+    <tr>
+      <td><strong>License</strong></td>
+      <td>Apache 2.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The HAPI FHIR public server is an invaluable resource for learning and prototyping. It accepts all standard FHIR REST operations without authentication, making it ideal for building and testing client applications. The server exposes a <strong>CapabilityStatement</strong> at <code class="language-plaintext highlighter-rouge">/metadata</code> that describes every resource type and search parameter it supports.</p>
+
+<blockquote>
+  <p><strong>Note</strong>: The public server is shared by developers worldwide. Data may be modified or deleted by other users at any time. For production use, you would deploy a private HAPI FHIR instance or use a commercial FHIR server.</p>
+</blockquote>
+
+<h3 id="fhir-r4-specification">FHIR R4 Specification</h3>
+
+<p>The <strong>HL7 FHIR (Fast Healthcare Interoperability Resources)</strong> standard defines how healthcare data is structured, stored, and exchanged. FHIR R4 (Release 4) is the current normative version, widely adopted by EHR vendors (Epic, Cerner, Allscripts), government mandates (ONC, CMS), and health information exchanges.</p>
+
+<p>Key FHIR concepts used in this application:</p>
+
+<ul>
+  <li><strong>Resources</strong>: The atomic units of FHIR data (Patient, Encounter, Appointment)</li>
+  <li><strong>References</strong>: How resources link to each other (<code class="language-plaintext highlighter-rouge">Encounter.subject</code> references <code class="language-plaintext highlighter-rouge">Patient/{id}</code>)</li>
+  <li><strong>Bundles</strong>: Search result containers holding multiple resources with pagination links</li>
+  <li><strong>OperationOutcome</strong>: Error response format with diagnostic messages</li>
+</ul>
+
+<h3 id="restful-api">RESTful API</h3>
+
+<p>The application communicates with the FHIR server exclusively through HTTP REST calls:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>HTTP Method</th>
+      <th>FHIR Operation</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">GET</code></td>
+      <td>Read / Search</td>
+      <td><code class="language-plaintext highlighter-rouge">GET /Patient/123</code> or <code class="language-plaintext highlighter-rouge">GET /Patient?name=Garcia</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">POST</code></td>
+      <td>Create</td>
+      <td><code class="language-plaintext highlighter-rouge">POST /Patient</code> with JSON body</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PUT</code></td>
+      <td>Update</td>
+      <td><code class="language-plaintext highlighter-rouge">PUT /Patient/123</code> with full resource JSON</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">DELETE</code></td>
+      <td>Delete</td>
+      <td><code class="language-plaintext highlighter-rouge">DELETE /Patient/123</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>All requests use the header <code class="language-plaintext highlighter-rouge">Accept: application/fhir+json</code> and <code class="language-plaintext highlighter-rouge">Content-Type: application/fhir+json</code> to indicate FHIR JSON format.</p>
+
+<h3 id="programming-tools-and-languages">Programming Tools and Languages</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>HTML5</strong></td>
+      <td>Semantic markup for clinical data display (tables, forms, navigation)</td>
+    </tr>
+    <tr>
+      <td><strong>CSS3</strong></td>
+      <td>Responsive design with CSS custom properties (Verdigris color theme)</td>
+    </tr>
+    <tr>
+      <td><strong>JavaScript ES6+</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">fetch()</code> API, async/await, template literals, destructuring</td>
+    </tr>
+    <tr>
+      <td><strong>Browser DevTools</strong></td>
+      <td>Network tab for inspecting FHIR requests/responses</td>
+    </tr>
+    <tr>
+      <td><strong>Python HTTP Server</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">python3 -m http.server</code> for local testing (avoids CORS issues from <code class="language-plaintext highlighter-rouge">file://</code> protocol)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="architecture-concepts">Architecture Concepts</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Concept</th>
+      <th>Implementation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Single Page Application (SPA)</strong></td>
+      <td>Three views toggled via CSS <code class="language-plaintext highlighter-rouge">display: none/block</code></td>
+    </tr>
+    <tr>
+      <td><strong>Centralized State Management</strong></td>
+      <td>Single <code class="language-plaintext highlighter-rouge">STATE</code> object tracking all application state</td>
+    </tr>
+    <tr>
+      <td><strong>Lazy Loading</strong></td>
+      <td>Encounter/Appointment data fetched after table renders</td>
+    </tr>
+    <tr>
+      <td><strong>Throttled Concurrency</strong></td>
+      <td>Maximum 6 parallel API calls to avoid overwhelming the server</td>
+    </tr>
+    <tr>
+      <td><strong>In-Memory Caching</strong></td>
+      <td>Encounter and Appointment results cached to avoid re-fetching</td>
+    </tr>
+    <tr>
+      <td><strong>Progressive Validation</strong></td>
+      <td>Fields validated on blur; full validation on submit</td>
+    </tr>
+    <tr>
+      <td><strong>Error Recovery</strong></td>
+      <td>Pagination preserves controls on error; cascade delete retries on 409</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="patient-data-on-the-hapi-fhir-server">Patient Data on the HAPI FHIR Server</h2>
+
+<h3 id="the-fhir-patient-resource">The FHIR Patient Resource</h3>
+
+<p>In FHIR, a <strong>Patient</strong> is a resource that represents a person receiving healthcare services. It contains demographics, contact information, and identifiers. The Patient resource is the most fundamental resource in any clinical system – nearly every other resource references it.</p>
+
+<p>Here is how the HealthPlus application constructs a Patient resource from the registration form:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">buildPatientResource</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">resource</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">resourceType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Patient</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">name</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="na">use</span><span class="p">:</span> <span class="dl">'</span><span class="s1">official</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">family</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">lastName</span><span class="p">.</span><span class="nf">trim</span><span class="p">(),</span>
+      <span class="na">given</span><span class="p">:</span> <span class="p">[</span><span class="nx">d</span><span class="p">.</span><span class="nx">firstName</span><span class="p">.</span><span class="nf">trim</span><span class="p">()]</span>
+    <span class="p">}],</span>
+    <span class="na">gender</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">gender</span><span class="p">,</span>
+    <span class="na">birthDate</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">birthDate</span><span class="p">,</span>
+    <span class="na">telecom</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="na">system</span><span class="p">:</span> <span class="dl">'</span><span class="s1">phone</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">value</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">phone</span><span class="p">.</span><span class="nf">trim</span><span class="p">(),</span>
+      <span class="na">use</span><span class="p">:</span> <span class="dl">'</span><span class="s1">home</span><span class="dl">'</span>
+    <span class="p">}],</span>
+  <span class="p">};</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">street</span> <span class="o">||</span> <span class="nx">d</span><span class="p">.</span><span class="nx">city</span> <span class="o">||</span> <span class="nx">d</span><span class="p">.</span><span class="nx">state</span> <span class="o">||</span> <span class="nx">d</span><span class="p">.</span><span class="nx">zip</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">resource</span><span class="p">.</span><span class="nx">address</span> <span class="o">=</span> <span class="p">[{</span>
+      <span class="na">use</span><span class="p">:</span> <span class="dl">'</span><span class="s1">home</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">line</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">street</span> <span class="p">?</span> <span class="p">[</span><span class="nx">d</span><span class="p">.</span><span class="nx">street</span><span class="p">.</span><span class="nf">trim</span><span class="p">()]</span> <span class="p">:</span> <span class="p">[],</span>
+      <span class="na">city</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">city</span><span class="p">?.</span><span class="nf">trim</span><span class="p">()</span> <span class="o">||</span> <span class="kc">undefined</span><span class="p">,</span>
+      <span class="na">state</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">state</span> <span class="o">||</span> <span class="kc">undefined</span><span class="p">,</span>
+      <span class="na">postalCode</span><span class="p">:</span> <span class="nx">d</span><span class="p">.</span><span class="nx">zip</span><span class="p">?.</span><span class="nf">trim</span><span class="p">()</span> <span class="o">||</span> <span class="kc">undefined</span><span class="p">,</span>
+      <span class="na">country</span><span class="p">:</span> <span class="dl">'</span><span class="s1">US</span><span class="dl">'</span>
+    <span class="p">}];</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">resource</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="key-data-fields">Key Data Fields</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>FHIR Element</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">name[].family</code></td>
+      <td>string</td>
+      <td>Last name</td>
+      <td><code class="language-plaintext highlighter-rouge">"Garcia"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">name[].given[]</code></td>
+      <td>string[]</td>
+      <td>First name(s)</td>
+      <td><code class="language-plaintext highlighter-rouge">["Maria"]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">gender</code></td>
+      <td>code</td>
+      <td>Administrative gender</td>
+      <td><code class="language-plaintext highlighter-rouge">"female"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">birthDate</code></td>
+      <td>date</td>
+      <td>Date of birth (ISO 8601)</td>
+      <td><code class="language-plaintext highlighter-rouge">"1985-03-15"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">telecom[].value</code></td>
+      <td>string</td>
+      <td>Phone number</td>
+      <td><code class="language-plaintext highlighter-rouge">"555-0142"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">telecom[].system</code></td>
+      <td>code</td>
+      <td>Contact system type</td>
+      <td><code class="language-plaintext highlighter-rouge">"phone"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">address[].line[]</code></td>
+      <td>string[]</td>
+      <td>Street address</td>
+      <td><code class="language-plaintext highlighter-rouge">["123 Main St"]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">address[].city</code></td>
+      <td>string</td>
+      <td>City</td>
+      <td><code class="language-plaintext highlighter-rouge">"Springfield"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">address[].state</code></td>
+      <td>string</td>
+      <td>State code</td>
+      <td><code class="language-plaintext highlighter-rouge">"IL"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">address[].postalCode</code></td>
+      <td>string</td>
+      <td>ZIP code</td>
+      <td><code class="language-plaintext highlighter-rouge">"62704"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">meta.lastUpdated</code></td>
+      <td>instant</td>
+      <td>Server-assigned timestamp</td>
+      <td><code class="language-plaintext highlighter-rouge">"2026-02-26T14:30:00Z"</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="related-resources">Related Resources</h3>
+
+<p>The application also fetches two related resource types for each patient:</p>
+
+<p><strong>Encounter</strong> (Visit History):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /Encounter?subject=Patient/{id}&amp;_sort=-date&amp;_count=1
+</code></pre></div></div>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">reasonCode[].coding[].display</code> – Reason for the visit</li>
+  <li><code class="language-plaintext highlighter-rouge">period.start</code> – Visit date and time</li>
+  <li><code class="language-plaintext highlighter-rouge">status</code> – Visit status (planned, in-progress, finished)</li>
+  <li><code class="language-plaintext highlighter-rouge">class.code</code> – Visit type (ambulatory, emergency, inpatient)</li>
+</ul>
+
+<p><strong>Appointment</strong> (Next Scheduled Visit):</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /Appointment?patient=Patient/{id}&amp;status=proposed,booked&amp;_sort=date&amp;_count=1
+</code></pre></div></div>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">start</code> – Appointment date/time</li>
+  <li><code class="language-plaintext highlighter-rouge">status</code> – Appointment status (proposed, booked)</li>
+</ul>
+
+<h3 id="fhir-vs-traditional-database-representation">FHIR vs. Traditional Database Representation</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>Traditional Database</th>
+      <th>FHIR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name storage</td>
+      <td><code class="language-plaintext highlighter-rouge">first_name VARCHAR</code>, <code class="language-plaintext highlighter-rouge">last_name VARCHAR</code></td>
+      <td><code class="language-plaintext highlighter-rouge">HumanName</code> datatype with <code class="language-plaintext highlighter-rouge">given[]</code>, <code class="language-plaintext highlighter-rouge">family</code>, <code class="language-plaintext highlighter-rouge">use</code></td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td><code class="language-plaintext highlighter-rouge">phone VARCHAR</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ContactPoint</code> with <code class="language-plaintext highlighter-rouge">system</code>, <code class="language-plaintext highlighter-rouge">value</code>, <code class="language-plaintext highlighter-rouge">use</code></td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td><code class="language-plaintext highlighter-rouge">gender CHAR(1)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">code</code> from valueset (male, female, other, unknown)</td>
+    </tr>
+    <tr>
+      <td>Dates</td>
+      <td><code class="language-plaintext highlighter-rouge">DATETIME</code> column</td>
+      <td>ISO 8601 strings (<code class="language-plaintext highlighter-rouge">YYYY-MM-DD</code>, <code class="language-plaintext highlighter-rouge">YYYY-MM-DDThh:mm:ssZ</code>)</td>
+    </tr>
+    <tr>
+      <td>Relationships</td>
+      <td>Foreign keys</td>
+      <td><code class="language-plaintext highlighter-rouge">Reference</code> elements (<code class="language-plaintext highlighter-rouge">Patient/{id}</code>)</td>
+    </tr>
+    <tr>
+      <td>Visit reason</td>
+      <td><code class="language-plaintext highlighter-rouge">reason TEXT</code></td>
+      <td><code class="language-plaintext highlighter-rouge">CodeableConcept</code> with <code class="language-plaintext highlighter-rouge">coding[].system</code>, <code class="language-plaintext highlighter-rouge">coding[].code</code>, <code class="language-plaintext highlighter-rouge">coding[].display</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The FHIR representation is richer – a single phone number carries metadata about its type (phone vs. fax vs. email) and context (home, work, mobile). A visit reason isn’t just free text; it’s a <code class="language-plaintext highlighter-rouge">CodeableConcept</code> that can carry coded values from SNOMED CT, ICD-10, or other terminology systems alongside human-readable text.</p>
+
+<hr />
+
+<h2 id="application-architecture">Application Architecture</h2>
+
+<h3 id="high-level-architecture">High-Level Architecture</h3>
+
+<p>The HealthPlus application follows a <strong>single-file SPA architecture</strong> where the browser communicates directly with the HAPI FHIR server via RESTful API calls. There is no backend server, no database, and no middleware – the browser is the only client.</p>
+
+<pre><code class="language-mermaid">graph TB
+    subgraph Browser["Browser - Single HTML File, 1658 Lines"]
+        UI["UI Layer\nHTML/CSS Views\nHome, Patient List, Form"]
+        JS["JavaScript SPA Engine\nSTATE Object\nCentralized State Management"]
+        FC["fhirFetch Client\nREST Wrapper\nError Handling, Headers"]
+    end
+    subgraph HAPI["HAPI FHIR R4 Server - hapi.fhir.org/baseR4"]
+        RE["REST Endpoint\nFHIR R4 API"]
+        PR["Patient\nResource Store"]
+        ER["Encounter\nResource Store"]
+        AR["Appointment\nResource Store"]
+    end
+    UI --&gt;|"User Actions\nclick, submit, search"| JS
+    JS --&gt;|"API Call Dispatch"| FC
+    FC --&gt;|"HTTP GET/POST/PUT/DELETE\nAccept: application/fhir+json"| RE
+    RE --&gt;|"JSON Bundle/Resource\nOperationOutcome on Error"| FC
+    RE --- PR
+    RE --- ER
+    RE --- AR
+
+    style UI fill:#fff,stroke:#43B3AE
+    style JS fill:#fff,stroke:#43B3AE
+    style FC fill:#fff,stroke:#43B3AE
+    style RE fill:#fff,stroke:#E65100
+    style PR fill:#fff,stroke:#E65100
+    style ER fill:#fff,stroke:#E65100
+    style AR fill:#fff,stroke:#E65100
+</code></pre>
+
+<h3 id="fhir-resource-relationships">FHIR Resource Relationships</h3>
+
+<p>The application works with three interconnected FHIR resource types. Understanding these relationships is key to understanding the data model:</p>
+
+<pre><code class="language-mermaid">erDiagram
+    Patient ||--o{ Encounter : "subject"
+    Patient ||--o{ Appointment : "participant"
+    Encounter ||--o| Condition : "diagnosis"
+    Patient {
+        string id PK
+        string name
+        code gender
+        date birthDate
+        string telecom
+        string address
+        string meta
+    }
+    Encounter {
+        string id PK
+        code status
+        code classCode
+        string reasonCode
+        string period
+        string subject FK
+    }
+    Appointment {
+        string id PK
+        code status
+        string start
+        string participant FK
+    }
+    Condition {
+        string id PK
+        string code
+        string subject FK
+    }
+</code></pre>
+
+<h3 id="crud-operations---sequence-diagram">CRUD Operations - Sequence Diagram</h3>
+
+<p>Every user action in the application maps to one or more FHIR REST operations. This sequence diagram traces the complete lifecycle of a patient record:</p>
+
+<pre><code class="language-mermaid">sequenceDiagram
+    actor User as Clinic Staff
+    participant App as HealthPlus SPA
+    participant HAPI as HAPI FHIR R4
+
+    Note over User,HAPI: CREATE - New Patient Registration
+    User-&gt;&gt;App: Fill form + Click Create Patient
+    App-&gt;&gt;App: validateForm - Client-side checks
+    App-&gt;&gt;App: buildPatientResource - Form to FHIR JSON
+    App-&gt;&gt;HAPI: POST /Patient with JSON body
+    HAPI--&gt;&gt;App: 201 Created + Patient resource
+    App--&gt;&gt;User: Toast Patient created + Refresh list
+
+    Note over User,HAPI: READ / SEARCH - Finding Patients
+    User-&gt;&gt;App: Click Browse All or Enter search term
+    App-&gt;&gt;App: detectSearchType - Name vs Phone
+    App-&gt;&gt;HAPI: GET /Patient?_count=50&amp;_offset=0&amp;_sort=-_lastUpdated
+    HAPI--&gt;&gt;App: Bundle with entries + total count
+    App--&gt;&gt;User: Render table + pagination controls
+    App-&gt;&gt;HAPI: GET /Encounter?subject=Patient/id&amp;_sort=-date
+    App-&gt;&gt;HAPI: GET /Appointment?patient=Patient/id&amp;status=booked
+    HAPI--&gt;&gt;App: Encounter + Appointment data lazy-loaded
+    App--&gt;&gt;User: Update Reason for Visit and Next Appointment cells
+
+    Note over User,HAPI: UPDATE - Modifying Patient Records
+    User-&gt;&gt;App: Select patient + Click Update
+    App-&gt;&gt;HAPI: GET /Patient/id
+    HAPI--&gt;&gt;App: Full Patient resource
+    App--&gt;&gt;User: Pre-filled form with current data
+    User-&gt;&gt;App: Edit fields + Click Update Patient
+    App-&gt;&gt;App: validateForm + buildPatientResource
+    App-&gt;&gt;HAPI: PUT /Patient/id - complete resource
+    HAPI--&gt;&gt;App: 200 OK + Updated resource
+    App--&gt;&gt;User: Toast Patient updated + Refresh list
+
+    Note over User,HAPI: DELETE - Removing Patient Records
+    User-&gt;&gt;App: Select patients + Click Delete Selected
+    App--&gt;&gt;User: Confirmation modal
+    User-&gt;&gt;App: Confirm deletion
+    App-&gt;&gt;HAPI: DELETE /Patient/id
+    alt 409 Conflict - referential integrity
+        HAPI--&gt;&gt;App: 409 + OperationOutcome
+        App-&gt;&gt;HAPI: DELETE /Patient/id?_cascade=delete
+        HAPI--&gt;&gt;App: 204 No Content
+    else Direct success
+        HAPI--&gt;&gt;App: 204 No Content
+    end
+    App--&gt;&gt;User: Toast Deleted + Refresh list
+</code></pre>
+
+<h3 id="the-fhirfetch-rest-client">The fhirFetch() REST Client</h3>
+
+<p>The entire application’s communication with the FHIR server flows through a single wrapper function that handles headers, error parsing, and response processing:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">FHIR_BASE</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">http://hapi.fhir.org/baseR4</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">FHIR_HEADERS</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/fhir+json</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">Accept</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/fhir+json</span><span class="dl">'</span>
+<span class="p">};</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nf">fhirFetch</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">startsWith</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">)</span> <span class="p">?</span> <span class="nx">path</span> <span class="p">:</span> <span class="s2">`</span><span class="p">${</span><span class="nx">FHIR_BASE</span><span class="p">}</span><span class="s2">/</span><span class="p">${</span><span class="nx">path</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nf">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+    <span class="p">...</span><span class="nx">options</span><span class="p">,</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="p">...</span><span class="nx">FHIR_HEADERS</span><span class="p">,</span> <span class="p">...</span><span class="nx">options</span><span class="p">.</span><span class="nx">headers</span> <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">204</span><span class="p">)</span> <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>  <span class="c1">// DELETE returns no content</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">resp</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">resp</span><span class="p">.</span><span class="nf">json</span><span class="p">().</span><span class="k">catch</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">diag</span> <span class="o">=</span> <span class="nx">body</span><span class="p">?.</span><span class="nx">issue</span><span class="p">?.[</span><span class="mi">0</span><span class="p">]?.</span><span class="nx">diagnostics</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">`HTTP </span><span class="p">${</span><span class="nx">resp</span><span class="p">.</span><span class="nx">status</span><span class="p">}${</span><span class="nx">diag</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">diag</span> <span class="p">:</span> <span class="dl">''</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">resp</span><span class="p">.</span><span class="nf">json</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This design ensures:</p>
+<ul>
+  <li><strong>Consistent headers</strong> on every request (FHIR JSON content negotiation)</li>
+  <li><strong>OperationOutcome parsing</strong> on errors (FHIR’s standard error format)</li>
+  <li><strong>HTTP status code propagation</strong> for upstream error handling (e.g., 409 detection for cascade delete)</li>
+</ul>
+
+<h3 id="lazy-loading-for-encounter-and-appointment-data">Lazy Loading for Encounter and Appointment Data</h3>
+
+<p>The patient table displays 50 rows at a time, but each row needs two additional API calls (one for Encounter, one for Appointment). Loading all 100 requests synchronously would block the UI. Instead, the application uses <strong>throttled lazy loading</strong>:</p>
+
+<pre><code class="language-mermaid">graph LR
+    A["Table Renders\n50 Patient Rows"] --&gt; B["Placeholder Cells\nLoading..."]
+    B --&gt; C{"Throttled Worker Queue\n6 Concurrent Max"}
+    C --&gt; D1["GET /Encounter?\nsubject=Patient/1"]
+    C --&gt; D2["GET /Encounter?\nsubject=Patient/2"]
+    C --&gt; D3["GET /Encounter?\nsubject=Patient/3"]
+    C --&gt; D4["... up to Patient/50"]
+    D1 --&gt; E["encounterCache\nappointmentCache"]
+    D2 --&gt; E
+    D3 --&gt; E
+    D4 --&gt; E
+    E --&gt; F["Update Table Cells\nwith Actual Data"]
+
+    style A fill:#E8F5F4,stroke:#43B3AE
+    style C fill:#FFF3E0,stroke:#E65100
+    style E fill:#E8F5F4,stroke:#43B3AE
+    style F fill:#E8F5F4,stroke:#43B3AE
+</code></pre>
+
+<p>The implementation uses a <strong>worker pool pattern</strong>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nf">batchLoadExtras</span><span class="p">(</span><span class="nx">patients</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">queue</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">patients</span><span class="p">];</span>
+  <span class="kd">const</span> <span class="nx">concurrency</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">workers</span> <span class="o">=</span> <span class="nc">Array</span><span class="p">(</span><span class="nx">concurrency</span><span class="p">).</span><span class="nf">fill</span><span class="p">(</span><span class="kc">null</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="k">async </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">while </span><span class="p">(</span><span class="nx">queue</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">queue</span><span class="p">.</span><span class="nf">shift</span><span class="p">();</span>
+      <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nf">allSettled</span><span class="p">([</span>
+        <span class="nf">loadEncounter</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">id</span><span class="p">),</span>
+        <span class="nf">loadAppointment</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+      <span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nf">allSettled</span><span class="p">(</span><span class="nx">workers</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Results are cached in <code class="language-plaintext highlighter-rouge">STATE.encounterCache</code> and <code class="language-plaintext highlighter-rouge">STATE.appointmentCache</code> so navigating back to a previously viewed page doesn’t trigger redundant API calls.</p>
+
+<h3 id="cascade-delete-pattern">Cascade Delete Pattern</h3>
+
+<p>When a Patient has linked Encounter or Observation resources, the FHIR server enforces <strong>referential integrity</strong> and returns HTTP 409 Conflict. The application handles this gracefully:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="kd">function</span> <span class="nf">deletePatientById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nf">fhirFetch</span><span class="p">(</span><span class="s2">`Patient/</span><span class="p">${</span><span class="nx">id</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span> <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">DELETE</span><span class="dl">'</span> <span class="p">});</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// If 409 Conflict (referential integrity), retry with cascade</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nf">includes</span><span class="p">(</span><span class="dl">'</span><span class="s1">409</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span>
+        <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nf">toLowerCase</span><span class="p">().</span><span class="nf">includes</span><span class="p">(</span><span class="dl">'</span><span class="s1">conflict</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nf">fhirFetch</span><span class="p">(</span><span class="s2">`Patient/</span><span class="p">${</span><span class="nx">id</span><span class="p">}</span><span class="s2">?_cascade=delete`</span><span class="p">,</span>
+                       <span class="p">{</span> <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">DELETE</span><span class="dl">'</span> <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This two-step pattern (try simple delete, fall back to cascade) is a common real-world pattern when working with FHIR servers that enforce referential integrity.</p>
+
+<h3 id="spa-view-architecture">SPA View Architecture</h3>
+
+<p>The application manages three primary views, toggled via CSS <code class="language-plaintext highlighter-rouge">display</code> properties and coordinated through a centralized state object:</p>
+
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Home
+    Home --&gt; PatientList : Browse All / Search
+    Home --&gt; CreateForm : Create New Patient
+    PatientList --&gt; UpdateForm : Select + Update
+    PatientList --&gt; DeleteModal : Select + Delete
+    CreateForm --&gt; Home : Back / Save Success
+    UpdateForm --&gt; Home : Back / Save Success
+    DeleteModal --&gt; PatientList : Confirm / Cancel
+
+    state Home {
+        [*] --&gt; HeroBanner
+        HeroBanner --&gt; MetricCards
+        MetricCards --&gt; ActionButtons
+        ActionButtons --&gt; SearchBar
+    }
+
+    state UpdateForm {
+        [*] --&gt; FormFields
+        FormFields --&gt; AppointmentCalendar
+        AppointmentCalendar --&gt; VisitHistoryTable
+    }
+</code></pre>
+
+<h3 id="centralized-state-management">Centralized State Management</h3>
+
+<p>All application state lives in a single JavaScript object, making it easy to reason about what the application knows at any point:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">STATE</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">currentView</span><span class="p">:</span> <span class="dl">'</span><span class="s1">home</span><span class="dl">'</span><span class="p">,</span>        <span class="c1">// Which view is visible</span>
+  <span class="na">patients</span><span class="p">:</span> <span class="p">[],</span>                <span class="c1">// Current page of Patient resources</span>
+  <span class="na">totalPatients</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>            <span class="c1">// Server-reported total count</span>
+  <span class="na">pageSize</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>                <span class="c1">// Rows per page (10, 50, or 100)</span>
+  <span class="na">currentPage</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>              <span class="c1">// Active page number</span>
+  <span class="na">totalPages</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>               <span class="c1">// Calculated total pages</span>
+  <span class="na">searchTerm</span><span class="p">:</span> <span class="dl">''</span><span class="p">,</span>              <span class="c1">// Active search query</span>
+  <span class="na">searchType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">name</span><span class="dl">'</span><span class="p">,</span>          <span class="c1">// 'name' or 'phone'</span>
+  <span class="na">selectedIds</span><span class="p">:</span> <span class="k">new</span> <span class="nc">Set</span><span class="p">(),</span>      <span class="c1">// Checked patient IDs for bulk ops</span>
+  <span class="na">encounterCache</span><span class="p">:</span> <span class="p">{},</span>          <span class="c1">// {patientId: {reason: '...'}}</span>
+  <span class="na">appointmentCache</span><span class="p">:</span> <span class="p">{},</span>        <span class="c1">// {patientId: {next: '...'}}</span>
+  <span class="na">formMode</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>              <span class="c1">// 'create' or 'update'</span>
+  <span class="na">editingPatientId</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>      <span class="c1">// ID of patient being edited</span>
+  <span class="na">editingPatient</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>        <span class="c1">// Full Patient resource being edited</span>
+  <span class="na">isLoading</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>            <span class="c1">// Loading spinner state</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="usage-example-maria-garcia-visits-healthplus">Usage Example: Maria Garcia Visits HealthPlus</h2>
+
+<p>Let’s walk through a real-world scenario to see how every layer of the application works together.</p>
+
+<h3 id="scenario">Scenario</h3>
+
+<p><strong>Maria Garcia</strong>, age 40, walks into HealthPlus clinic for the first time with a sore throat. The receptionist needs to check if she’s already in the system, register her if not, and later update her record when she returns for a follow-up.</p>
+
+<h3 id="step-1-search-for-the-patient">Step 1: Search for the Patient</h3>
+
+<p>The receptionist types “Garcia” into the search bar and clicks <strong>Search</strong>.</p>
+
+<p><strong>What the user sees</strong>: The search bar accepts the query and the patient table updates.</p>
+
+<p><strong>What happens behind the scenes</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Auto-detect: "Garcia" contains no 7+ digit sequence -&gt; searchType = "name"
+
+HTTP Request:
+GET http://hapi.fhir.org/baseR4/Patient?name=Garcia&amp;_count=50&amp;_offset=0&amp;_sort=-_lastUpdated&amp;_total=accurate
+
+Response: Bundle with total: 0 (or no matching entries for this clinic)
+</code></pre></div></div>
+
+<p>The table shows “No patients found” with a prompt to create a new patient.</p>
+
+<h3 id="step-2-register-new-patient">Step 2: Register New Patient</h3>
+
+<p>The receptionist clicks <strong>Create New Patient</strong> and fills the form:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>First Name</td>
+      <td>Maria</td>
+    </tr>
+    <tr>
+      <td>Last Name</td>
+      <td>Garcia</td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td>Female</td>
+    </tr>
+    <tr>
+      <td>Date of Birth</td>
+      <td>1985-03-15</td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td>555-0142</td>
+    </tr>
+    <tr>
+      <td>Street</td>
+      <td>742 Evergreen Terrace</td>
+    </tr>
+    <tr>
+      <td>City</td>
+      <td>Springfield</td>
+    </tr>
+    <tr>
+      <td>State</td>
+      <td>IL</td>
+    </tr>
+    <tr>
+      <td>ZIP</td>
+      <td>62704</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Client-side validation</strong> runs on each field as the receptionist tabs through:</p>
+<ul>
+  <li>Names: Letters, spaces, hyphens, apostrophes only (max 50 chars)</li>
+  <li>Gender: Must select from dropdown</li>
+  <li>DOB: Cannot be in the future, must be after 1900</li>
+  <li>Phone: 7-20 characters, digits with standard formatting</li>
+  <li>ZIP: 5 digits or 5+4 format</li>
+</ul>
+
+<p><strong>What happens on Submit</strong>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nl">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"official"</span><span class="p">,</span><span class="w"> </span><span class="nl">"family"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Garcia"</span><span class="p">,</span><span class="w"> </span><span class="nl">"given"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Maria"</span><span class="p">]}],</span><span class="w">
+  </span><span class="nl">"gender"</span><span class="p">:</span><span class="w"> </span><span class="s2">"female"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1985-03-15"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"telecom"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"phone"</span><span class="p">,</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"555-0142"</span><span class="p">,</span><span class="w"> </span><span class="nl">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"home"</span><span class="p">}],</span><span class="w">
+  </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="nl">"use"</span><span class="p">:</span><span class="w"> </span><span class="s2">"home"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"742 Evergreen Terrace"</span><span class="p">],</span><span class="w">
+    </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Springfield"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IL"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"postalCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62704"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US"</span><span class="w">
+  </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP Request:
+POST http://hapi.fhir.org/baseR4/Patient
+Content-Type: application/fhir+json
+
+Response: 201 Created
+{
+  "resourceType": "Patient",
+  "id": "4829571",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2026-02-26T10:15:30.000+00:00"
+  }
+}
+</code></pre></div></div>
+
+<p>A success toast appears: <em>“Patient created successfully.”</em> The patient list refreshes and Maria Garcia now appears at the top (sorted by <code class="language-plaintext highlighter-rouge">_lastUpdated</code> descending).</p>
+
+<h3 id="step-3-return-visit---update-record">Step 3: Return Visit - Update Record</h3>
+
+<p>One week later, Maria returns. The receptionist searches “Garcia”, finds her, selects her checkbox, and clicks <strong>Update Selected</strong>.</p>
+
+<p><strong>What happens</strong>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://hapi.fhir.org/baseR4/Patient/4829571
+Response: Full Patient resource (pre-fills the form)
+</code></pre></div></div>
+
+<p>The form opens with Maria’s data pre-populated. The receptionist updates her phone number to <code class="language-plaintext highlighter-rouge">555-0199</code> and clicks <strong>Update Patient</strong>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUT http://hapi.fhir.org/baseR4/Patient/4829571
+Content-Type: application/fhir+json
+Body: (full Patient resource with updated phone)
+
+Response: 200 OK (Patient resource with versionId: "2")
+</code></pre></div></div>
+
+<h3 id="step-4-view-visit-history-and-calendar">Step 4: View Visit History and Calendar</h3>
+
+<p>While in the Update form, the application automatically loads Maria’s visit history:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://hapi.fhir.org/baseR4/Encounter?subject=Patient/4829571&amp;_sort=-date&amp;_count=50
+</code></pre></div></div>
+
+<p>The <strong>Appointment Calendar</strong> renders with salmon pink circles highlighting dates of previous visits. Below it, a <strong>Visit History Table</strong> shows each Encounter with date, reason, status, and class.</p>
+
+<h3 id="data-flow-summary">Data Flow Summary</h3>
+
+<pre><code class="language-mermaid">sequenceDiagram
+    actor Receptionist
+    participant App as HealthPlus
+    participant HAPI as HAPI FHIR R4
+
+    Note over Receptionist,HAPI: Day 1 - New Patient
+    Receptionist-&gt;&gt;App: Search Garcia
+    App-&gt;&gt;HAPI: GET /Patient?name=Garcia&amp;_count=50
+    HAPI--&gt;&gt;App: Bundle - total 0
+    App--&gt;&gt;Receptionist: No patients found
+
+    Receptionist-&gt;&gt;App: Create Maria Garcia
+    App-&gt;&gt;HAPI: POST /Patient JSON
+    HAPI--&gt;&gt;App: 201 Created - id 4829571
+    App--&gt;&gt;Receptionist: Success toast + list refresh
+
+    Note over Receptionist,HAPI: Day 8 - Return Visit
+    Receptionist-&gt;&gt;App: Search Garcia
+    App-&gt;&gt;HAPI: GET /Patient?name=Garcia&amp;_count=50
+    HAPI--&gt;&gt;App: Bundle - total 1, Maria Garcia
+    App--&gt;&gt;Receptionist: Maria in table
+
+    Receptionist-&gt;&gt;App: Update phone number
+    App-&gt;&gt;HAPI: GET /Patient/4829571
+    HAPI--&gt;&gt;App: Full resource
+    App-&gt;&gt;HAPI: PUT /Patient/4829571
+    HAPI--&gt;&gt;App: 200 OK
+
+    App-&gt;&gt;HAPI: GET /Encounter?subject=Patient/4829571
+    HAPI--&gt;&gt;App: Visit history
+    App--&gt;&gt;Receptionist: Calendar + History table
+</code></pre>
+
+<hr />
+
+<h2 id="lessons-learned">Lessons Learned</h2>
+
+<h3 id="what-was-achieved">What Was Achieved</h3>
+
+<p>The HealthPlus Patient Management Application demonstrates that a <strong>fully functional clinical tool</strong> can be built with nothing more than a text editor, a browser, and a public FHIR server. No npm, no webpack, no React, no backend – just HTML, CSS, and JavaScript talking directly to a FHIR API.</p>
+
+<p>This matters because it proves:</p>
+<ul>
+  <li><strong>FHIR’s REST API is genuinely developer-friendly</strong> – the learning curve is about understanding resource structures, not fighting obscure protocols</li>
+  <li><strong>Modern browsers are powerful enough</strong> to serve as clinical application platforms without heavy framework overhead</li>
+  <li><strong>Interoperability standards work</strong> – the same application could point to any FHIR R4 server (Epic, Cerner, HAPI) by changing a single URL constant</li>
+</ul>
+
+<h3 id="technical-lessons">Technical Lessons</h3>
+
+<ol>
+  <li>
+    <p><strong>FHIR’s <code class="language-plaintext highlighter-rouge">HumanName</code> datatype is richer than you expect.</strong> A name isn’t just first + last. It has <code class="language-plaintext highlighter-rouge">use</code> (official, nickname, maiden), <code class="language-plaintext highlighter-rouge">prefix</code>, <code class="language-plaintext highlighter-rouge">suffix</code>, <code class="language-plaintext highlighter-rouge">period</code>, and <code class="language-plaintext highlighter-rouge">text</code>. Parsing <code class="language-plaintext highlighter-rouge">name[0].given.join(' ') + ' ' + name[0].family</code> handles the common case, but production code must handle missing elements gracefully.</p>
+  </li>
+  <li>
+    <p><strong>Pagination error recovery is non-trivial.</strong> When a FHIR search fails mid-pagination, you must preserve the pagination controls (don’t clear the DOM), revert the page counter to the previous working page, and provide a retry mechanism. Clearing the pagination bar on error leaves the user stranded.</p>
+  </li>
+  <li>
+    <p><strong>Referential integrity is enforced by real FHIR servers.</strong> You cannot delete a Patient that has linked Encounters or Observations. The server returns HTTP 409 Conflict with an OperationOutcome. The solution: catch the 409 and retry with <code class="language-plaintext highlighter-rouge">?_cascade=delete</code> to remove dependent resources first.</p>
+  </li>
+  <li>
+    <p><strong>Lazy loading with throttling is essential.</strong> Each patient row in the table needs two additional API calls (Encounter + Appointment). For a page of 50 patients, that’s 100 additional requests. Without throttling (our limit: 6 concurrent), you’d overwhelm the server. Without caching, you’d re-fetch on every page navigation.</p>
+  </li>
+  <li>
+    <p><strong>CORS from <code class="language-plaintext highlighter-rouge">file://</code> protocol is unreliable.</strong> Opening the HTML file directly in a browser sends requests with <code class="language-plaintext highlighter-rouge">Origin: null</code>, which FHIR servers may intermittently reject. Solution: serve via <code class="language-plaintext highlighter-rouge">python3 -m http.server 8080</code> for reliable <code class="language-plaintext highlighter-rouge">localhost</code> origin.</p>
+  </li>
+  <li>
+    <p><strong>Client-side validation is mandatory.</strong> FHIR servers accept any valid JSON, even clinically nonsensical data. The application must enforce business rules (no future DOB, valid phone format, required fields) before sending the request.</p>
+  </li>
+  <li>
+    <p><strong>The <code class="language-plaintext highlighter-rouge">_total=accurate</code> parameter is expensive but necessary.</strong> Without it, HAPI FHIR may return an estimated count or no count at all, making pagination unreliable. With it, the server must count all matches, which is slower on large datasets but gives accurate page totals.</p>
+  </li>
+</ol>
+
+<h3 id="architecture-lessons">Architecture Lessons</h3>
+
+<ol>
+  <li>
+    <p><strong>Single-file SPA is viable for clinical tools</strong> when the scope is bounded. At 1,658 lines, the application is still readable and maintainable. Beyond ~2,500 lines, splitting into modules with ES6 imports would be advisable.</p>
+  </li>
+  <li>
+    <p><strong>A centralized STATE object replaces the need for a state management library.</strong> For applications of this size, a single plain JavaScript object with direct property access is simpler and faster than Redux, MobX, or signals.</p>
+  </li>
+  <li>
+    <p><strong>The FHIR search API maps naturally to UI patterns.</strong> Pagination (<code class="language-plaintext highlighter-rouge">_count</code>, <code class="language-plaintext highlighter-rouge">_offset</code>), sorting (<code class="language-plaintext highlighter-rouge">_sort</code>), and searching (<code class="language-plaintext highlighter-rouge">name</code>, <code class="language-plaintext highlighter-rouge">phone</code>) translate directly into URL parameters – no ORM or query builder needed.</p>
+  </li>
+</ol>
+
+<h3 id="clinical-workflow-lessons">Clinical Workflow Lessons</h3>
+
+<ol>
+  <li>
+    <p><strong>The Patient resource is the anchor of the clinical data model.</strong> Every other resource (Encounter, Appointment, Observation, Condition) references back to Patient. Understanding this hub-and-spoke pattern is the key to navigating FHIR data.</p>
+  </li>
+  <li>
+    <p><strong>Visit history enriches the patient record.</strong> Displaying past Encounters with dates, reasons, and status transforms the application from a simple contact list into a clinical tool that provides context for care decisions.</p>
+  </li>
+  <li>
+    <p><strong>The gap between “FHIR specification” and “working application” is smaller than it looks.</strong> The spec can feel overwhelming at 2,000+ pages, but a functional patient management system uses fewer than 10 resource types and a handful of search parameters.</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="further-reading">Further Reading</h2>
+
+<ul>
+  <li><a href="https://hl7.org/fhir/R4/patient.html">HL7 FHIR R4 Specification - Patient Resource</a></li>
+  <li><a href="https://hapifhir.io/hapi-fhir/docs/">HAPI FHIR Server Documentation</a></li>
+  <li><a href="https://hl7.org/fhir/R4/http.html">FHIR RESTful API</a></li>
+  <li><a href="https://hl7.org/fhir/R4/search.html">FHIR Search Parameters</a></li>
+  <li><a href="https://hl7.org/fhir/us/core/">US Core Implementation Guide</a></li>
+  <li><a href="https://docs.smarthealthit.org/">SMART on FHIR</a></li>
+  <li><a href="https://github.com/datagodzilla/FHIR-Projects/tree/main/1_Patient_Management_Application">Source Code on GitHub</a></li>
+</ul>
+
+<hr />
+
+<p><em>The next time you open a patient chart in an EHR, remember: behind that polished interface, there’s a cascade of FHIR resources linked by references, served over REST, and rendered by code not so different from what we built here. The HealthPlus application is a window into that machinery – small enough to understand completely, real enough to demonstrate the patterns that power healthcare interoperability at scale.</em></p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">FHIR</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#hl7" class="tag tag-fhir">HL7</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#interoperability" class="tag tag-fhir">Interoperability</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#rest-api" class="tag">REST-API</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#javascript" class="tag">JavaScript</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#hapi-fhir" class="tag">HAPI-FHIR</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#patient-management" class="tag">Patient-Management</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#crud" class="tag">CRUD</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare-it" class="tag">Healthcare-IT</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#tutorial" class="tag tag-tutorial">Tutorial</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/medical-ner-clinical-insights/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Medical NER Pipeline Part 1: Unlocking Hidden I...</span>
+        </a>
+        
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

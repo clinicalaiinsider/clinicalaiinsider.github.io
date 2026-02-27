@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained | Clinical AI Insider</title>
+    <meta name="description" content="A comprehensive guide to healthcare data exchange standards - understand how FHIR, HL7, LOINC, and SNOMED CT work together to enable seamless clinical data s...">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained">
+    <meta property="og:description" content="A comprehensive guide to healthcare data exchange standards - understand how FHIR, HL7, LOINC, and SNOMED CT work together to enable seamless clinical data s...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/">
+    
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained">
+    <meta name="twitter:description" content="A comprehensive guide to healthcare data exchange standards - understand how FHIR, HL7, LOINC, and SNOMED CT work together to enable seamless clinical data s...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">Healthcare Interoperability: FHIR, HL7, LOINC & SNOMED CT Explained</h1>
+    <div class="post-meta">
+        <time datetime="2025-12-01T07:00:00-05:00">December 01, 2025</time>
+        <span class="meta-separator">·</span>
+        <span>9 min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">fhir</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#hl7" class="tag tag-fhir">hl7</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#loinc" class="tag tag-fhir">loinc</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <p>Every day, millions of lab orders, clinical results, and patient records need to flow seamlessly between Electronic Health Records (EHRs), Laboratory Information Systems (LIS), and clinical decision support tools. Yet healthcare data exchange remains one of the most critical challenges in modern medicine.</p>
+
+<p><strong>In this comprehensive guide, you’ll discover:</strong></p>
+<ul>
+  <li>How the four pillars of healthcare interoperability work together</li>
+  <li>Practical examples of HL7 messages and FHIR resources</li>
+  <li>A complete lab order workflow from order to results</li>
+  <li>Best practices for implementing healthcare integrations</li>
+</ul>
+
+<h2 id="why-healthcare-interoperability-matters">Why Healthcare Interoperability Matters</h2>
+
+<p>Imagine a patient visiting three different healthcare providers in a month. Without interoperability, each provider might order duplicate tests, miss critical allergies, or lack access to recent lab results. This isn’t just inefficient—it’s potentially dangerous.</p>
+
+<p>The foundation of healthcare data exchange rests on four interconnected standards: <strong>HL7, FHIR, LOINC, and SNOMED CT</strong>. Understanding how these standards work together is essential for anyone involved in healthcare IT, clinical informatics, or health data integration.</p>
+
+<h2 id="the-four-pillars-overview">The Four Pillars Overview</h2>
+
+<div class="mermaid">
+flowchart TB
+    subgraph Messaging["Messaging Standards"]
+        hl7["HL7 v2.x<br />Legacy Systems"]
+        fhir["FHIR R4<br />Modern APIs"]
+    end
+
+    subgraph Terminology["Terminology Standards"]
+        loinc["LOINC<br />Test Codes"]
+        snomed["SNOMED CT<br />Clinical Terms"]
+    end
+
+    Messaging --&gt; Terminology
+    hl7 --&gt; loinc
+    fhir --&gt; loinc
+    fhir --&gt; snomed
+
+    style hl7 fill:#e3f2fd,stroke:#1976d2
+    style fhir fill:#e3f2fd,stroke:#1976d2
+    style loinc fill:#f3e5f5,stroke:#7b1fa2
+    style snomed fill:#f3e5f5,stroke:#7b1fa2
+</div>
+
+<details>
+<summary>ASCII Version (click to expand)</summary>
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    HEALTHCARE DATA EXCHANGE                      │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │              MESSAGING STANDARDS                         │   │
+│  │  ┌─────────────────────┐  ┌─────────────────────────┐  │   │
+│  │  │      HL7 v2.x       │  │        FHIR R4          │  │   │
+│  │  │   (Legacy Systems)  │  │   (Modern APIs)         │  │   │
+│  │  └─────────────────────┘  └─────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                              │                                   │
+│                              ▼                                   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │              TERMINOLOGY STANDARDS                       │   │
+│  │  ┌─────────────────────┐  ┌─────────────────────────┐  │   │
+│  │  │       LOINC         │  │      SNOMED CT          │  │   │
+│  │  │   (Test Codes)      │  │   (Clinical Terms)      │  │   │
+│  │  └─────────────────────┘  └─────────────────────────┘  │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+</details>
+
+<p><img src="/assets/images/standards_stack.svg" alt="Standards Stack Diagram" /></p>
+
+<h2 id="hl7-health-level-seven-the-legacy-standard">HL7 (Health Level Seven): The Legacy Standard</h2>
+
+<p>HL7 has been the backbone of healthcare messaging since the 1980s. The most widely used version, <strong>HL7 v2.x</strong>, defines message formats for clinical events like patient admissions, lab orders, and results reporting.</p>
+
+<h3 id="key-message-types">Key Message Types</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th>Name</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ADT</strong></td>
+      <td>Admit/Discharge/Transfer</td>
+      <td>Patient movement tracking</td>
+    </tr>
+    <tr>
+      <td><strong>ORM</strong></td>
+      <td>Order Message</td>
+      <td>Lab and procedure orders</td>
+    </tr>
+    <tr>
+      <td><strong>ORU</strong></td>
+      <td>Observation Result</td>
+      <td>Lab results and clinical observations</td>
+    </tr>
+    <tr>
+      <td><strong>SIU</strong></td>
+      <td>Scheduling Information</td>
+      <td>Appointment management</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="example-hl7-v2-message">Example HL7 v2 Message</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSH|^~\&amp;|EHR|HOSPITAL|LIS|LAB|20241201120000||ORM^O01|12345|P|2.5
+PID|1||MRN123456||DOE^JOHN||19800115|M
+ORC|NW|ORD001||||||20241201
+OBR|1|ORD001||85025^CBC^LN|||20241201120000
+</code></pre></div></div>
+
+<p><strong>Pro Tip</strong>: The pipe character (<code class="language-plaintext highlighter-rouge">|</code>) is the field separator, and the caret (<code class="language-plaintext highlighter-rouge">^</code>) separates components within a field.</p>
+
+<h2 id="fhir-fast-healthcare-interoperability-resources-the-modern-approach">FHIR (Fast Healthcare Interoperability Resources): The Modern Approach</h2>
+
+<p>FHIR represents the modern evolution of healthcare data exchange. Built on <strong>RESTful APIs</strong> and <strong>JSON/XML</strong> formats, FHIR makes healthcare data more accessible to developers and integrates easily with web and mobile applications.</p>
+
+<h3 id="core-fhir-resources-for-lab-integration">Core FHIR Resources for Lab Integration</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>Purpose</th>
+      <th>Replaces (HL7)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>ServiceRequest</strong></td>
+      <td>Lab and procedure orders</td>
+      <td>ORM message</td>
+    </tr>
+    <tr>
+      <td><strong>Observation</strong></td>
+      <td>Lab results and vital signs</td>
+      <td>ORU message</td>
+    </tr>
+    <tr>
+      <td><strong>DiagnosticReport</strong></td>
+      <td>Comprehensive result reports</td>
+      <td>ORU with panels</td>
+    </tr>
+    <tr>
+      <td><strong>Specimen</strong></td>
+      <td>Sample tracking information</td>
+      <td>SPM segment</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="example-fhir-servicerequest">Example FHIR ServiceRequest</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ServiceRequest"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"active"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"intent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://loinc.org"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"85025-9"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Complete blood count"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/12345"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"authoredOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-12-01T12:00:00Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="loinc-universal-test-codes">LOINC: Universal Test Codes</h2>
+
+<p>LOINC (Logical Observation Identifiers Names and Codes) provides <strong>universal codes for laboratory tests and clinical observations</strong>. Without LOINC, a “CBC” at one hospital might be coded completely differently than at another, making data comparison impossible.</p>
+
+<h3 id="loinc-code-structure">LOINC Code Structure</h3>
+
+<p>Each LOINC code describes six axes:</p>
+<ol>
+  <li><strong>Component</strong> - What is measured (e.g., Hemoglobin)</li>
+  <li><strong>Property</strong> - Characteristic (e.g., Mass concentration)</li>
+  <li><strong>Time</strong> - Point in time vs. over time</li>
+  <li><strong>System</strong> - Specimen type (e.g., Blood)</li>
+  <li><strong>Scale</strong> - Quantitative, qualitative, ordinal</li>
+  <li><strong>Method</strong> - How measured (if relevant)</li>
+</ol>
+
+<h3 id="common-loinc-codes">Common LOINC Codes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">85025-9</code></td>
+      <td>Complete Blood Count (CBC)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">2339-0</code></td>
+      <td>Glucose [Mass/volume] in Blood</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">718-7</code></td>
+      <td>Hemoglobin [Mass/volume] in Blood</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">4544-3</code></td>
+      <td>Hematocrit [Volume Fraction] of Blood</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="snomed-ct-clinical-terminology">SNOMED CT: Clinical Terminology</h2>
+
+<p>While LOINC codes <strong>what was tested</strong>, SNOMED CT codes <strong>what was found</strong>. It’s a comprehensive clinical terminology covering diagnoses, procedures, findings, and anatomical structures.</p>
+
+<h3 id="snomed-ct-hierarchy">SNOMED CT Hierarchy</h3>
+
+<ul>
+  <li><strong>Clinical findings</strong> (diagnoses, symptoms)</li>
+  <li><strong>Procedures</strong> (surgeries, interventions)</li>
+  <li><strong>Observable entities</strong> (what can be measured)</li>
+  <li><strong>Body structures</strong> (anatomy)</li>
+  <li><strong>Substances</strong> (medications, chemicals)</li>
+</ul>
+
+<h3 id="example-snomed-codes">Example SNOMED Codes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">271737000</code></td>
+      <td>Anemia</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">166705000</code></td>
+      <td>Hemoglobin low</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">165746003</code></td>
+      <td>Packed cell volume low</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="how-they-work-together-lab-order-workflow">How They Work Together: Lab Order Workflow</h2>
+
+<p>The true power of these standards emerges when they work together in clinical workflows.</p>
+
+<div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant EHR as EHR System
+    participant IE as Integration Engine
+    participant LIS as LIS System
+    participant CDS as CDS Engine
+
+    EHR-&gt;&gt;IE: ORM^O01 / ServiceRequest<br />LOINC: 85025-9 (CBC)
+    IE-&gt;&gt;LIS: Forward Order
+    LIS-&gt;&gt;LIS: Process Sample
+    LIS-&gt;&gt;IE: ORU^R01 / Observation<br />Results + SNOMED CT
+    IE-&gt;&gt;EHR: Return Results
+    EHR-&gt;&gt;CDS: Evaluate Results
+    CDS--&gt;&gt;EHR: Alerts / Recommendations
+</div>
+
+<details>
+<summary>ASCII Workflow (click to expand)</summary>
+
+```
+START: Physician Orders Lab Test
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      EHR SYSTEM                              │
+│  Order Created: LOINC 85025-9 (CBC)                         │
+└─────────────────────────────────────────────────────────────┘
+         │
+         │ ORM^O01 (HL7) or ServiceRequest (FHIR)
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  INTEGRATION ENGINE                          │
+│  Transform &amp; Route Messages                                  │
+└─────────────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      LIS SYSTEM                              │
+│  Receive → Process Sample → Generate Results                 │
+└─────────────────────────────────────────────────────────────┘
+         │
+         │ ORU^R01 (HL7) or Observation (FHIR)
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      EHR SYSTEM                              │
+│  Display Results → CDS Engine → Alerts                       │
+└─────────────────────────────────────────────────────────────┘
+         │
+         ▼
+END: Physician Reviews Results
+```
+
+</details>
+
+<p><img src="/assets/images/lab_workflow.svg" alt="Lab Workflow Diagram" /></p>
+
+<h2 id="the-integration-architecture">The Integration Architecture</h2>
+
+<p>Modern healthcare integration typically involves an <strong>integration engine</strong> that bridges legacy HL7 v2 systems with modern FHIR APIs.</p>
+
+<div class="mermaid">
+flowchart TB
+    subgraph EHR["EHR System"]
+        orders["Orders Module"]
+        results["Results Viewer"]
+        cds["CDS Engine"]
+    end
+
+    subgraph Integration["Integration Engine"]
+        hl7_adapter["HL7 Adapter"]
+        fhir_api["FHIR API Gateway"]
+        term_server["Terminology Server"]
+    end
+
+    subgraph LIS["LIS System"]
+        lis_orders["Order Management"]
+        lis_analyzer["Analyzer Interface"]
+        lis_results["Results Processing"]
+    end
+
+    subgraph Terminology["Terminology Standards"]
+        loinc["LOINC Codes"]
+        snomed["SNOMED CT Concepts"]
+    end
+
+    orders --&gt;|ORM^O01| hl7_adapter
+    hl7_adapter --&gt;|Transform| fhir_api
+    fhir_api --&gt;|ServiceRequest| lis_orders
+
+    lis_analyzer --&gt; lis_results
+    lis_results --&gt;|Observation| fhir_api
+    fhir_api --&gt;|Transform| hl7_adapter
+    hl7_adapter --&gt;|ORU^R01| results
+    results --&gt;|Trigger| cds
+
+    fhir_api --&gt; term_server
+    term_server --&gt; loinc
+    term_server --&gt; snomed
+
+    style EHR fill:#e3f2fd,stroke:#1976d2
+    style Integration fill:#fff3e0,stroke:#f57c00
+    style LIS fill:#e8f5e9,stroke:#388e3c
+    style Terminology fill:#f3e5f5,stroke:#7b1fa2
+</div>
+
+<p><img src="/assets/images/integration_architecture.svg" alt="Integration Architecture" /></p>
+
+<h3 id="key-components">Key Components</h3>
+
+<ol>
+  <li><strong>HL7 Adapter</strong>: Parses and generates HL7 v2 messages</li>
+  <li><strong>FHIR API Gateway</strong>: Handles RESTful FHIR requests</li>
+  <li><strong>Terminology Server</strong>: Validates and maps LOINC/SNOMED codes</li>
+  <li><strong>Message Queue</strong>: Ensures reliable delivery</li>
+</ol>
+
+<h2 id="hl7-to-fhir-mapping">HL7 to FHIR Mapping</h2>
+
+<p>Many organizations need to support both HL7 v2 (for legacy systems) and FHIR (for modern applications). Understanding the mapping between them is crucial.</p>
+
+<div class="mermaid">
+flowchart LR
+    subgraph HL7["HL7 v2.x Messages"]
+        orm["ORM^O01<br />Order Message"]
+        oru["ORU^R01<br />Result Message"]
+        adt["ADT^A01<br />Admit Message"]
+        pid["PID Segment<br />Patient Info"]
+    end
+
+    subgraph FHIR["FHIR Resources"]
+        sr["ServiceRequest"]
+        obs["Observation"]
+        enc["Encounter"]
+        pat["Patient"]
+    end
+
+    orm --&gt;|maps to| sr
+    oru --&gt;|maps to| obs
+    adt --&gt;|maps to| enc
+    pid --&gt;|maps to| pat
+
+    style HL7 fill:#e3f2fd,stroke:#1976d2
+    style FHIR fill:#e8f5e9,stroke:#388e3c
+</div>
+
+<details>
+<summary>ASCII Mapping Table (click to expand)</summary>
+
+```
+HL7 v2.x MESSAGE                         FHIR RESOURCE
+═══════════════════                      ═══════════════
+
+┌─────────────────┐                     ┌─────────────────┐
+│    ORM^O01      │ ──────────────────► │ ServiceRequest  │
+│  (Order Msg)    │                     │                 │
+└─────────────────┘                     └─────────────────┘
+
+┌─────────────────┐                     ┌─────────────────┐
+│    ORU^R01      │ ──────────────────► │  Observation    │
+│  (Result Msg)   │                     │                 │
+└─────────────────┘                     └─────────────────┘
+
+┌─────────────────┐                     ┌─────────────────┐
+│    ADT^A01      │ ──────────────────► │   Encounter     │
+│   (Admit)       │                     │                 │
+└─────────────────┘                     └─────────────────┘
+
+SEGMENT MAPPING:
+├── MSH ──────────► MessageHeader
+├── PID ──────────► Patient
+├── PV1 ──────────► Encounter
+├── ORC ──────────► ServiceRequest
+├── OBR ──────────► DiagnosticReport
+└── OBX ──────────► Observation
+```
+
+</details>
+
+<p><img src="/assets/images/hl7_fhir_mapping.svg" alt="HL7 to FHIR Mapping" /></p>
+
+<h2 id="common-integration-challenges">Common Integration Challenges</h2>
+
+<h3 id="challenge-1-code-mapping">Challenge 1: Code Mapping</h3>
+
+<p>Different systems may use different coding systems. A terminology server helps map between local codes and standard LOINC/SNOMED codes.</p>
+
+<h3 id="challenge-2-version-compatibility">Challenge 2: Version Compatibility</h3>
+
+<p>HL7 v2.3 messages may need transformation to work with v2.5 systems. FHIR R4 and R5 have different resource structures.</p>
+
+<h3 id="challenge-3-vocabulary-alignment">Challenge 3: Vocabulary Alignment</h3>
+
+<p>Ensuring consistent use of value sets and code systems across all integrated systems requires governance and validation.</p>
+
+<h2 id="best-practices-for-implementation">Best Practices for Implementation</h2>
+
+<ol>
+  <li><strong>Start with FHIR for new implementations</strong> - It’s more developer-friendly and future-proof</li>
+  <li><strong>Maintain HL7 v2 adapters</strong> - Many legacy systems still require v2 messaging</li>
+  <li><strong>Implement a terminology service</strong> - Central management of LOINC and SNOMED codes</li>
+  <li><strong>Use standard profiles</strong> - US Core, IHE profiles define expected data elements</li>
+  <li><strong>Plan for both batch and real-time</strong> - Different use cases require different patterns</li>
+</ol>
+
+<h2 id="common-questions">Common Questions</h2>
+
+<p><strong>Q: Can I use FHIR without supporting HL7 v2?</strong>
+A: For greenfield implementations, yes. However, most healthcare environments have legacy systems that require HL7 v2 support for the foreseeable future.</p>
+
+<p><strong>Q: How do I get started with LOINC codes?</strong>
+A: Register at <a href="https://loinc.org">loinc.org</a> for free access to the LOINC database. Many EHR and LIS vendors include LOINC mappings.</p>
+
+<p><strong>Q: Is SNOMED CT required for compliance?</strong>
+A: Requirements vary by region. In the US, SNOMED CT is required for certain Meaningful Use/Promoting Interoperability measures.</p>
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+
+<ol>
+  <li><strong>HL7 v2</strong> remains essential for legacy system integration but is being supplemented by FHIR</li>
+  <li><strong>FHIR</strong> provides modern REST APIs that integrate easily with contemporary applications</li>
+  <li><strong>LOINC</strong> standardizes what tests are ordered and performed</li>
+  <li><strong>SNOMED CT</strong> standardizes clinical findings and diagnoses</li>
+  <li><strong>Together</strong>, these standards enable true semantic interoperability in healthcare</li>
+</ol>
+
+<h2 id="whats-next">What’s Next?</h2>
+
+<p>Healthcare interoperability is complex, but understanding these four standards provides a solid foundation. As the industry continues its digital transformation, mastery of FHIR, HL7, LOINC, and SNOMED CT becomes increasingly valuable.</p>
+
+<p><strong>Ready to dive deeper?</strong> Consider exploring:</p>
+<ul>
+  <li><a href="https://hl7.org/fhir/implementationguide.html">HL7 FHIR Implementation Guides</a></li>
+  <li><a href="https://www.hl7.org/fhir/us/core/">US Core FHIR Profiles</a></li>
+  <li><a href="https://loinc.org/search/">LOINC Search</a></li>
+  <li><a href="https://browser.ihtsdotools.org/">SNOMED CT Browser</a></li>
+</ul>
+
+<hr />
+
+<h2 id="further-reading">Further Reading</h2>
+
+<p><strong>Official Resources</strong>:</p>
+<ul>
+  <li><a href="https://www.hl7.org/">HL7 International</a></li>
+  <li><a href="https://hl7.org/fhir/">FHIR Specification</a></li>
+  <li><a href="https://loinc.org/">LOINC from Regenstrief</a></li>
+  <li><a href="https://www.snomed.org/">SNOMED International</a></li>
+</ul>
+
+<hr />
+
+<p><em>Disclaimer: This content is intended for educational purposes. Healthcare implementations should always involve qualified informatics professionals and follow organizational compliance requirements.</em></p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">fhir</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#hl7" class="tag tag-fhir">hl7</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#loinc" class="tag tag-fhir">loinc</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#snomed-ct" class="tag tag-fhir">snomed-ct</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#interoperability" class="tag tag-fhir">interoperability</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare-data" class="tag">healthcare-data</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-workflow" class="tag">clinical-workflow</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/HL7-FHIR-Clinical-Lab-Interoperability/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">From HL7 Pipes to FHIR APIs: A Deep Dive into C...</span>
+        </a>
+        
+        
+        <a href="/blog/ohdsi-introduction-real-world-data-reliable-evidence/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">OHDSI Introduction: From Real-World Data to Rel...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

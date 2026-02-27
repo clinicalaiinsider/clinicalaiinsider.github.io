@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide | Clinical AI Insider</title>
+    <meta name="description" content="Learn how to build reproducible patient cohorts in OHDSI ATLAS with a hands-on Type 2 Diabetes use case, backend table explanations, and lessons learned from...">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide">
+    <meta property="og:description" content="Learn how to build reproducible patient cohorts in OHDSI ATLAS with a hands-on Type 2 Diabetes use case, backend table explanations, and lessons learned from...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/mastering-atlas-cohort-definitions/">
+    
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide">
+    <meta name="twitter:description" content="Learn how to build reproducible patient cohorts in OHDSI ATLAS with a hands-on Type 2 Diabetes use case, backend table explanations, and lessons learned from...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/mastering-atlas-cohort-definitions/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide</h1>
+    <div class="post-meta">
+        <time datetime="2025-12-28T00:00:00-05:00">December 28, 2025</time>
+        <span class="meta-separator">·</span>
+        <span>18 min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#ohdsi" class="tag tag-ohdsi">ohdsi</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#atlas" class="tag tag-ohdsi">atlas</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#webapi" class="tag tag-ohdsi">webapi</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <h2 id="the-journey-so-far">The Journey So Far</h2>
+
+<p>Building on our exploration of the OMOP Common Data Model, standardized vocabularies like SNOMED CT, RxNorm, and LOINC, ETL fundamentals, and data quality assessment with Achilles, we’ve reached a pivotal milestone: <strong>defining patient cohorts in OHDSI ATLAS</strong>.</p>
+
+<p>Everything we’ve built so far—the PostgreSQL databases, the vocabulary mappings, the synthetic patient data from Synthea, the data quality reports—exists for one purpose: to answer clinical questions about real-world patient populations. And in observational health research, every question begins with a cohort.</p>
+
+<p>As the <em>Book of OHDSI</em> puts it:</p>
+
+<blockquote>
+  <p><strong>“A cohort is not just a list of patients—it’s the operationalization of a clinical question.”</strong></p>
+</blockquote>
+
+<p>This post documents our experience connecting ATLAS to our own database, building a Type 2 Diabetes cohort from scratch, understanding what happens in the backend tables, and navigating the WebAPI schema compatibility challenges we encountered along the way.</p>
+
+<hr />
+
+<h2 id="why-atlas-and-ohdsi-matter-global-impact-at-scale">Why ATLAS and OHDSI Matter: Global Impact at Scale</h2>
+
+<p>Before diving into cohort building, let’s understand why OHDSI’s tooling has become essential for healthcare research worldwide.</p>
+
+<h3 id="the-ohdsi-network-by-the-numbers">The OHDSI Network by the Numbers</h3>
+
+<p>OHDSI (Observational Health Data Sciences and Informatics) has grown into one of the largest international collaboratives in healthcare data science:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Scale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Collaborators</strong></td>
+      <td>4,200+ across 83 countries</td>
+    </tr>
+    <tr>
+      <td><strong>Patient Records</strong></td>
+      <td>~810 million (~12% of world population)</td>
+    </tr>
+    <tr>
+      <td><strong>Data Partners</strong></td>
+      <td>453+ organizations (EHRs, claims, registries)</td>
+    </tr>
+    <tr>
+      <td><strong>ATLAS GitHub</strong></td>
+      <td>294 stars, 50+ contributors</td>
+    </tr>
+    <tr>
+      <td><strong>EHDEN Network</strong></td>
+      <td>100+ data partners across Europe</td>
+    </tr>
+    <tr>
+      <td><strong>Publications</strong></td>
+      <td>150+ peer-reviewed papers</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Major regulatory bodies including the <strong>FDA</strong> (United States), <strong>EMA</strong> via <strong>DARWIN EU</strong> (European Union), and <strong>Korea HIRA</strong> use OHDSI tools for drug safety surveillance and real-world evidence studies. The <strong>EHDEN</strong> project alone has standardized 500+ million European patient records to the OMOP CDM format.</p>
+
+<h3 id="what-is-atlas">What is ATLAS?</h3>
+
+<p>ATLAS is the flagship web application of the OHDSI ecosystem. It provides a graphical interface for:</p>
+
+<ul>
+  <li><strong>Vocabulary exploration</strong> - Search millions of standardized medical concepts</li>
+  <li><strong>Cohort definition</strong> - Define patient populations using clinical criteria</li>
+  <li><strong>Characterization</strong> - Compare baseline characteristics across cohorts</li>
+  <li><strong>Population-level estimation</strong> - Causal inference studies</li>
+  <li><strong>Patient-level prediction</strong> - Machine learning models for outcomes</li>
+  <li><strong>Pathway analysis</strong> - Treatment sequences and care patterns</li>
+</ul>
+
+<p><img src="/assets/images/posts/blog-atlas-home.png" alt="ATLAS Home Screen" />
+<em>The ATLAS home screen provides navigation to all OHDSI analytical tools</em></p>
+
+<p>When researchers say they’re “using OHDSI,” they typically mean they’re using ATLAS to design studies that can be executed across the global network of OMOP-standardized databases.</p>
+
+<hr />
+
+<h2 id="why-cohorts-are-the-foundation-of-clinical-research">Why Cohorts Are the Foundation of Clinical Research</h2>
+
+<h3 id="what-is-a-cohort">What is a Cohort?</h3>
+
+<p>In clinical research, a <strong>cohort</strong> is a defined group of patients who share specific characteristics. Unlike ad-hoc database queries, cohorts are:</p>
+
+<ol>
+  <li><strong>Reproducible</strong> - The same definition produces the same patients every time</li>
+  <li><strong>Shareable</strong> - Definitions can be exchanged between institutions</li>
+  <li><strong>Standardized</strong> - Built on common data models and vocabularies</li>
+  <li><strong>Versioned</strong> - Changes are tracked over time</li>
+  <li><strong>Portable</strong> - Write once, run anywhere across 450+ OMOP databases</li>
+</ol>
+
+<p>Everything in observational research starts with the question: <strong>“Which patients?”</strong> The validity of any study depends on precisely defining the population. A poorly specified cohort undermines all downstream analyses, no matter how sophisticated the statistical methods.</p>
+
+<h3 id="the-clinical-question-behind-every-cohort">The Clinical Question Behind Every Cohort</h3>
+
+<p>Consider this scenario:</p>
+
+<blockquote>
+  <p><strong>Dr. Sarah Chen</strong>, an endocrinologist at a large academic medical center, wants to study cardiovascular outcomes in Type 2 Diabetes patients initiating metformin therapy. She needs to identify patients who:</p>
+
+  <ul>
+    <li>Have a confirmed T2DM diagnosis</li>
+    <li>Are starting metformin for the first time</li>
+    <li>Have sufficient medical history to assess baseline characteristics</li>
+    <li>Don’t have Type 1 diabetes or gestational diabetes (different populations)</li>
+  </ul>
+</blockquote>
+
+<p>Without standardized cohort definitions, every institution would interpret “Type 2 Diabetes patients on metformin” differently. Some might include anyone who ever took metformin. Others might miss patients coded with specific T2DM subtypes. ATLAS solves this by providing a visual cohort builder that generates portable JSON definitions.</p>
+
+<h3 id="mapping-clinical-criteria-to-omop-concepts">Mapping Clinical Criteria to OMOP Concepts</h3>
+
+<p>Dr. Chen’s clinical requirements translate to specific OMOP vocabulary concepts:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Clinical Criterion</th>
+      <th>OMOP Domain</th>
+      <th>Vocabulary</th>
+      <th>Concept ID</th>
+      <th>Concept Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>T2DM Diagnosis</td>
+      <td>Condition</td>
+      <td>SNOMED CT</td>
+      <td>201826</td>
+      <td>Type 2 diabetes mellitus</td>
+    </tr>
+    <tr>
+      <td>Metformin</td>
+      <td>Drug</td>
+      <td>RxNorm</td>
+      <td>6809</td>
+      <td>metformin</td>
+    </tr>
+    <tr>
+      <td>T1DM (exclude)</td>
+      <td>Condition</td>
+      <td>SNOMED CT</td>
+      <td>201254</td>
+      <td>Type 1 diabetes mellitus</td>
+    </tr>
+    <tr>
+      <td>Gestational DM (exclude)</td>
+      <td>Condition</td>
+      <td>SNOMED CT</td>
+      <td>4024659</td>
+      <td>Gestational diabetes mellitus</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This mapping table is the bridge between clinical thinking and database queries. Every cohort starts here.</p>
+
+<hr />
+
+<h2 id="our-database-setup">Our Database Setup</h2>
+
+<h3 id="what-we-had-built">What We Had Built</h3>
+
+<p>After extensive preparation across previous work, our PostgreSQL database contained:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Database: ohdsi_learning
+├── cdm (OMOP CDM 5.4)
+│   ├── person (2,411 synthetic patients)
+│   ├── condition_occurrence (diagnoses)
+│   ├── drug_exposure (medications)
+│   ├── procedure_occurrence (procedures)
+│   ├── measurement (lab results, vitals)
+│   └── observation (other clinical findings)
+├── vocabulary (OMOP Standardized Vocabularies)
+│   ├── concept (~6 million concepts)
+│   ├── concept_relationship (hierarchies)
+│   └── concept_ancestor (ancestry)
+├── results (Analysis outputs)
+│   ├── achilles_results (data characterization)
+│   └── cohort (generated patient lists)
+└── webapi (ATLAS configuration)
+    ├── source (data source registration)
+    └── source_daimon (schema mappings)
+</code></pre></div></div>
+
+<p>We deployed OHDSI Broadsea using Docker Compose, configured our external database as a data source, and launched ATLAS.</p>
+
+<h3 id="first-success-data-sources-dashboard">First Success: Data Sources Dashboard</h3>
+
+<p>The Data Sources dashboard confirmed our setup was working. ATLAS correctly displayed our 2,411 synthetic patients with demographic breakdowns:</p>
+
+<p><img src="/assets/images/posts/blog-data-sources-dashboard.png" alt="Data Sources Dashboard" />
+<em>The CDM Summary shows 2,411 patients with gender distribution from our Synthea data</em></p>
+
+<p>This visualization is powered by <strong>Achilles</strong>, OHDSI’s data characterization package. When you click “Data Sources” in ATLAS, you’re seeing pre-computed statistics stored in the <code class="language-plaintext highlighter-rouge">achilles_results</code> table.</p>
+
+<hr />
+
+<h2 id="building-the-type-2-diabetes-cohort-step-by-step">Building the Type 2 Diabetes Cohort: Step by Step</h2>
+
+<p>Let’s walk through creating Dr. Chen’s cohort for Type 2 Diabetes Mellitus—one of the most common chronic conditions affecting over 400 million people worldwide.</p>
+
+<h3 id="step-1-vocabulary-search">Step 1: Vocabulary Search</h3>
+
+<p>Every cohort starts with finding the right clinical concepts. In ATLAS, navigate to <strong>Search</strong> and enter “type 2 diabetes”:</p>
+
+<p><img src="/assets/images/posts/blog-vocabulary-search-t2dm.png" alt="Vocabulary Search for Type 2 Diabetes" />
+<em>Searching for “type 2 diabetes” returns 299 concepts across multiple vocabularies</em></p>
+
+<p>The search returns concepts from multiple standardized vocabularies:</p>
+<ul>
+  <li><strong>SNOMED CT</strong> - The primary clinical terminology (concept 201826 for T2DM)</li>
+  <li><strong>ICD-10-CM</strong> - Billing/administrative codes (E11.x family)</li>
+  <li><strong>Read</strong> - UK primary care codes</li>
+  <li><strong>MedDRA</strong> - Adverse event terminology</li>
+</ul>
+
+<p>Notice the “RC” (Record Count) and “DRC” (Descendant Record Count) columns—these show how many records in your database match each concept.</p>
+
+<h3 id="step-2-understanding-the-concept-hierarchy">Step 2: Understanding the Concept Hierarchy</h3>
+
+<p>SNOMED concept <strong>201826</strong> (“Type 2 diabetes mellitus”) is a clinical finding in the Condition domain. When you build a cohort using this concept, ATLAS can automatically include all <strong>descendant concepts</strong>—more specific subtypes like:</p>
+
+<ul>
+  <li>Type 2 diabetes mellitus with diabetic nephropathy</li>
+  <li>Type 2 diabetes mellitus with peripheral neuropathy</li>
+  <li>Type 2 diabetes mellitus with retinopathy</li>
+  <li>Type 2 diabetes mellitus without complication</li>
+</ul>
+
+<p>This hierarchical inclusion is crucial for capturing all relevant patients. Without descendants, you might miss patients whose diagnosis was coded more specifically.</p>
+
+<h3 id="step-3-building-the-cohort-definition">Step 3: Building the Cohort Definition</h3>
+
+<p>Navigate to <strong>Cohort Definitions</strong> → <strong>New Cohort Definition</strong>. Here’s what a Type 2 Diabetes cohort looks like in ATLAS:</p>
+
+<p><img src="/assets/images/posts/blog-cohort-builder-t2dm.png" alt="Cohort Builder for Type 2 Diabetes" />
+<em>The cohort builder showing entry events, inclusion criteria, and exit settings</em></p>
+
+<p>The definition has four key sections:</p>
+
+<h4 id="cohort-entry-events">Cohort Entry Events</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a condition occurrence of [Type 2 Diabetes Mellitus]
+for the first time in the person's history
+with continuous observation of at least 365 days before
+</code></pre></div></div>
+
+<p>This ensures we’re capturing <strong>incident</strong> (new) cases, not prevalent cases. The 365-day lookback confirms patients were observable before their first diagnosis—essential for establishing baseline characteristics.</p>
+
+<h4 id="inclusion-criteria">Inclusion Criteria</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Age at least 18 at index
+2. No prior diagnosis of Type 1 diabetes mellitus
+3. No prior diagnosis of gestational diabetes
+</code></pre></div></div>
+
+<p>These rules refine the population. Each criterion is evaluated against the initial event population, and ATLAS tracks how many patients pass each rule.</p>
+
+<h4 id="cohort-exit">Cohort Exit</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Event will persist until: fixed duration relative to initial event
+Event date to offset from: end date
+Number of days offset: 0
+</code></pre></div></div>
+
+<p>This determines how long each patient “stays” in the cohort. Different research questions require different exit strategies—some studies follow patients until they leave the database, others for fixed time windows.</p>
+
+<h3 id="step-4-generating-the-cohort">Step 4: Generating the Cohort</h3>
+
+<p>After saving the definition, navigate to the <strong>Generation</strong> tab and click “Generate” for your data source:</p>
+
+<p><img src="/assets/images/posts/blog-cohort-generation-status.png" alt="Cohort Generation Status" />
+<em>Generation completed successfully—but notice the “…” in People and Records columns</em></p>
+
+<p>Here we encounter our first sign of trouble. The generation status shows <strong>COMPLETE</strong>, but the People and Records columns display “…” instead of actual counts.</p>
+
+<hr />
+
+<h2 id="whats-really-happening-the-backend-cohort-tables">What’s Really Happening: The Backend Cohort Tables</h2>
+
+<p>To understand ATLAS fully, you need to know what’s happening in the database when cohorts are generated.</p>
+
+<h3 id="the-data-model-for-cohorts">The Data Model for Cohorts</h3>
+
+<div class="diagram-container">
+<pre class="mermaid">
+erDiagram
+    COHORT_DEFINITION ||--o{ COHORT : generates
+    COHORT_DEFINITION ||--o{ COHORT_INCLUSION : has
+    COHORT }o--|| PERSON : identifies
+    PERSON ||--o{ DRUG_EXPOSURE : has
+    PERSON ||--o{ CONDITION_OCCURRENCE : has
+    PERSON ||--o{ OBSERVATION_PERIOD : has
+
+    COHORT_DEFINITION {
+        int id PK
+        varchar name
+        text expression
+        timestamp created_date
+    }
+
+    COHORT {
+        int cohort_definition_id FK
+        bigint subject_id FK
+        date cohort_start_date
+        date cohort_end_date
+    }
+
+    COHORT_INCLUSION {
+        int cohort_definition_id FK
+        int rule_sequence
+        varchar name
+        int design_hash
+    }
+
+    PERSON {
+        bigint person_id PK
+        int gender_concept_id
+        int year_of_birth
+    }
+</pre>
+</div>
+
+<h3 id="the-cohort-generation-pipeline">The Cohort Generation Pipeline</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──────────────────────────────────────────────────────────────────┐
+│                    Cohort Generation Pipeline                     │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
+│  │ ATLAS UI        │───▶│ WebAPI          │───▶│ PostgreSQL   │ │
+│  │ (Browser)       │    │ (Java/Tomcat)   │    │ (Database)   │ │
+│  └─────────────────┘    └─────────────────┘    └──────────────┘ │
+│          │                      │                      │         │
+│          ▼                      ▼                      ▼         │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
+│  │ JSON Definition │───▶│ CIRCE Compiler  │───▶│ SQL Execution│ │
+│  │ {expression}    │    │ (SQL Generator) │    │ INSERT INTO  │ │
+│  └─────────────────┘    └─────────────────┘    │ results.cohort│ │
+│                                                 └──────────────┘ │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+</code></pre></div></div>
+
+<p>When you click “Generate” in ATLAS:</p>
+
+<ol>
+  <li><strong>ATLAS UI</strong> sends the cohort definition JSON to <strong>WebAPI</strong></li>
+  <li><strong>CIRCE</strong> (the cohort SQL compiler) translates JSON to database-specific SQL</li>
+  <li><strong>SqlRender</strong> adapts the SQL for PostgreSQL syntax</li>
+  <li>The SQL <strong>executes</strong> against your CDM data tables</li>
+  <li>Results are <strong>inserted</strong> into the <code class="language-plaintext highlighter-rouge">results.cohort</code> table</li>
+</ol>
+
+<h3 id="simplified-generated-sql">Simplified Generated SQL</h3>
+
+<p>Here’s a simplified version of what CIRCE generates for our T2DM cohort:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort</span> <span class="p">(</span><span class="n">cohort_definition_id</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">,</span> <span class="n">cohort_start_date</span><span class="p">,</span> <span class="n">cohort_end_date</span><span class="p">)</span>
+<span class="k">SELECT</span>
+    <span class="o">@</span><span class="n">cohort_id</span> <span class="k">AS</span> <span class="n">cohort_definition_id</span><span class="p">,</span>
+    <span class="n">p</span><span class="p">.</span><span class="n">person_id</span> <span class="k">AS</span> <span class="n">subject_id</span><span class="p">,</span>
+    <span class="n">co</span><span class="p">.</span><span class="n">condition_start_date</span> <span class="k">AS</span> <span class="n">cohort_start_date</span><span class="p">,</span>
+    <span class="n">op</span><span class="p">.</span><span class="n">observation_period_end_date</span> <span class="k">AS</span> <span class="n">cohort_end_date</span>
+<span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">condition_occurrence</span> <span class="n">co</span>
+<span class="k">JOIN</span> <span class="n">cdm</span><span class="p">.</span><span class="n">person</span> <span class="n">p</span> <span class="k">ON</span> <span class="n">co</span><span class="p">.</span><span class="n">person_id</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">person_id</span>
+<span class="k">JOIN</span> <span class="n">cdm</span><span class="p">.</span><span class="n">observation_period</span> <span class="n">op</span> <span class="k">ON</span> <span class="n">p</span><span class="p">.</span><span class="n">person_id</span> <span class="o">=</span> <span class="n">op</span><span class="p">.</span><span class="n">person_id</span>
+<span class="k">WHERE</span> <span class="n">co</span><span class="p">.</span><span class="n">condition_concept_id</span> <span class="k">IN</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="n">descendant_concept_id</span>
+    <span class="k">FROM</span> <span class="n">vocabulary</span><span class="p">.</span><span class="n">concept_ancestor</span>
+    <span class="k">WHERE</span> <span class="n">ancestor_concept_id</span> <span class="o">=</span> <span class="mi">201826</span>  <span class="c1">-- T2DM</span>
+<span class="p">)</span>
+<span class="k">AND</span> <span class="n">co</span><span class="p">.</span><span class="n">condition_start_date</span> <span class="o">&gt;=</span> <span class="n">DATE_ADD</span><span class="p">(</span><span class="n">op</span><span class="p">.</span><span class="n">observation_period_start_date</span><span class="p">,</span> <span class="n">INTERVAL</span> <span class="mi">365</span> <span class="k">DAY</span><span class="p">)</span>
+<span class="k">AND</span> <span class="nb">YEAR</span><span class="p">(</span><span class="n">co</span><span class="p">.</span><span class="n">condition_start_date</span><span class="p">)</span> <span class="o">-</span> <span class="n">p</span><span class="p">.</span><span class="n">year_of_birth</span> <span class="o">&gt;=</span> <span class="mi">18</span>
+<span class="k">AND</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">cdm</span><span class="p">.</span><span class="n">condition_occurrence</span> <span class="n">co2</span>
+    <span class="k">WHERE</span> <span class="n">co2</span><span class="p">.</span><span class="n">person_id</span> <span class="o">=</span> <span class="n">p</span><span class="p">.</span><span class="n">person_id</span>
+    <span class="k">AND</span> <span class="n">co2</span><span class="p">.</span><span class="n">condition_concept_id</span> <span class="k">IN</span> <span class="p">(</span>
+        <span class="k">SELECT</span> <span class="n">descendant_concept_id</span>
+        <span class="k">FROM</span> <span class="n">vocabulary</span><span class="p">.</span><span class="n">concept_ancestor</span>
+        <span class="k">WHERE</span> <span class="n">ancestor_concept_id</span> <span class="o">=</span> <span class="mi">201254</span>  <span class="c1">-- T1DM</span>
+    <span class="p">)</span>
+    <span class="k">AND</span> <span class="n">co2</span><span class="p">.</span><span class="n">condition_start_date</span> <span class="o">&lt;</span> <span class="n">co</span><span class="p">.</span><span class="n">condition_start_date</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="the-key-backend-tables">The Key Backend Tables</h3>
+
+<h4 id="resultscohort---the-patient-list"><code class="language-plaintext highlighter-rouge">results.cohort</code> - The Patient List</h4>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">cohort_definition_id</span><span class="p">,</span> <span class="n">subject_id</span><span class="p">,</span> <span class="n">cohort_start_date</span><span class="p">,</span> <span class="n">cohort_end_date</span>
+<span class="k">FROM</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort</span>
+<span class="k">WHERE</span> <span class="n">cohort_definition_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>  <span class="c1">-- Type 2 Diabetes cohort</span>
+
+<span class="c1">-- Result:</span>
+<span class="c1">-- cohort_definition_id | subject_id | cohort_start_date | cohort_end_date</span>
+<span class="c1">-- 2                    | 1001       | 2015-03-15        | 2023-06-30</span>
+<span class="c1">-- 2                    | 1042       | 2018-07-22        | 2023-12-01</span>
+<span class="c1">-- 2                    | 1156       | 2020-01-10        | 2023-08-15</span>
+<span class="c1">-- ... (220 rows total)</span>
+</code></pre></div></div>
+
+<h4 id="resultscohort_inclusion---the-rules"><code class="language-plaintext highlighter-rouge">results.cohort_inclusion</code> - The Rules</h4>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">cohort_definition_id</span><span class="p">,</span> <span class="n">rule_sequence</span><span class="p">,</span> <span class="n">name</span>
+<span class="k">FROM</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_inclusion</span>
+<span class="k">WHERE</span> <span class="n">cohort_definition_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="c1">-- Result:</span>
+<span class="c1">-- cohort_definition_id | rule_sequence | name</span>
+<span class="c1">-- 2                    | 0             | Age at least 18 at index</span>
+<span class="c1">-- 2                    | 1             | No prior Type 1 diabetes</span>
+</code></pre></div></div>
+
+<h3 id="direct-database-verification">Direct Database Verification</h3>
+
+<p>When ATLAS shows unexpected results, <strong>always check the database directly</strong>:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Count patients in each cohort</span>
+<span class="k">SELECT</span> <span class="n">cd</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="k">c</span><span class="p">.</span><span class="n">subject_id</span><span class="p">)</span> <span class="k">AS</span> <span class="n">persons</span>
+<span class="k">FROM</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort</span> <span class="k">c</span>
+<span class="k">JOIN</span> <span class="n">webapi</span><span class="p">.</span><span class="n">cohort_definition</span> <span class="n">cd</span> <span class="k">ON</span> <span class="k">c</span><span class="p">.</span><span class="n">cohort_definition_id</span> <span class="o">=</span> <span class="n">cd</span><span class="p">.</span><span class="n">id</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">cd</span><span class="p">.</span><span class="n">name</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">persons</span> <span class="k">DESC</span><span class="p">;</span>
+
+<span class="c1">-- Result:</span>
+<span class="c1">-- name                   | persons</span>
+<span class="c1">-- Type 2 Diabetes Cohort | 220</span>
+<span class="c1">-- New Statin Users       | 162</span>
+<span class="c1">-- Multiple Chronic       | 123</span>
+<span class="c1">-- Metformin Users        | 76</span>
+</code></pre></div></div>
+
+<p>This query confirmed our cohorts were generated correctly—<strong>the data is right, even when the UI shows “…“</strong></p>
+
+<hr />
+
+<h2 id="the-schema-compatibility-problem">The Schema Compatibility Problem</h2>
+
+<h3 id="what-went-wrong">What Went Wrong</h3>
+
+<p>After successfully generating cohorts, we attempted to run <strong>Cohort Characterization</strong>—a feature that compares baseline demographics, conditions, and medications across cohorts.</p>
+
+<p>That’s when the errors started:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR: schema "temp" does not exist
+ERROR: column "design_hash" of relation "cohort_inclusion" does not exist
+ERROR: relation "results.cohort_cache" does not exist
+ERROR: relation "results.cohort_censor_stats_cache" does not exist
+ERROR: column "mode_id" does not exist
+</code></pre></div></div>
+
+<h3 id="the-root-cause">The Root Cause</h3>
+
+<p><strong>WebAPI 2.x has evolved significantly beyond the base OMOP CDM specification.</strong></p>
+
+<p>The OMOP CDM defines clinical tables (<code class="language-plaintext highlighter-rouge">person</code>, <code class="language-plaintext highlighter-rouge">condition_occurrence</code>, etc.) and basic results tables. But WebAPI has added:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Purpose</th>
+      <th>OMOP CDM</th>
+      <th>WebAPI 2.x</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">temp</code> schema</td>
+      <td>Working space for analytics</td>
+      <td>No</td>
+      <td>Required</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">design_hash</code> column</td>
+      <td>Cache invalidation</td>
+      <td>No</td>
+      <td>Required</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">*_cache</code> tables</td>
+      <td>Performance optimization</td>
+      <td>No</td>
+      <td>Required</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mode_id</code> column</td>
+      <td>Generation mode tracking</td>
+      <td>No</td>
+      <td>Required</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These additions are managed by <strong>Flyway database migrations</strong> in WebAPI. When WebAPI starts with its built-in database, these migrations run automatically. But when you connect an external database, <strong>they don’t run</strong>.</p>
+
+<hr />
+
+<h2 id="common-pitfalls-in-cohort-design">Common Pitfalls in Cohort Design</h2>
+
+<p>Based on our experience and insights from the OHDSI community (particularly the <a href="https://forums.ohdsi.org/t/phenotype-phebruary-day-1-type-2-diabetes-mellitus/15764">Phenotype Phebruary</a> discussions on the forums), here are the most common mistakes:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pitfall</th>
+      <th>Why It Happens</th>
+      <th>Solution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Overly specific concept sets</strong></td>
+      <td>Using only one concept code, missing subtypes</td>
+      <td>Include descendants in concept sets</td>
+    </tr>
+    <tr>
+      <td><strong>No prior observation requirement</strong></td>
+      <td>Assuming all patients have complete history</td>
+      <td>Require minimum 365 days prior observation</td>
+    </tr>
+    <tr>
+      <td><strong>Ignoring drug eras</strong></td>
+      <td>Fragmented prescription records</td>
+      <td>Use persistence windows or drug eras</td>
+    </tr>
+    <tr>
+      <td><strong>Including prevalent users</strong></td>
+      <td>Not specifying first occurrence</td>
+      <td>Require “for the first time in history”</td>
+    </tr>
+    <tr>
+      <td><strong>Missing exclusion criteria</strong></td>
+      <td>Not filtering out related conditions</td>
+      <td>Add explicit exclusion rules (T1DM, gestational DM)</td>
+    </tr>
+    <tr>
+      <td><strong>Wrong exit strategy</strong></td>
+      <td>Patients exiting cohort too early or never</td>
+      <td>Match exit criteria to research question</td>
+    </tr>
+    <tr>
+      <td><strong>Not validating with characterization</strong></td>
+      <td>Trusting counts without inspection</td>
+      <td>Always run characterization before analysis</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="community-insights-from-ohdsi-forums">Community Insights from OHDSI Forums</h3>
+
+<p>The <a href="https://forums.ohdsi.org/">OHDSI Forums</a> are invaluable for cohort design. Key threads to review:</p>
+
+<ul>
+  <li><strong><a href="https://forums.ohdsi.org/t/phenotype-phebruary-day-1-type-2-diabetes-mellitus/15764">Phenotype Phebruary: Type 2 Diabetes Mellitus</a></strong> - Community-validated T2DM phenotype with discussion of edge cases</li>
+  <li><strong>Best Practices for Cohort Design</strong> - Consensus recommendations from experienced implementers</li>
+  <li><strong>Troubleshooting WebAPI Issues</strong> - Solutions to common deployment problems</li>
+</ul>
+
+<p>The community has learned that <strong>concept set design is 80% of cohort quality</strong>. Invest time in building comprehensive, validated concept sets before worrying about complex inclusion logic.</p>
+
+<hr />
+
+<h2 id="three-paths-forward-for-external-databases">Three Paths Forward for External Databases</h2>
+
+<h3 id="option-1-manual-schema-patching">Option 1: Manual Schema Patching</h3>
+
+<p>Create missing tables and columns reactively as errors appear:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Create temp schema</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="k">temp</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="k">SCHEMA</span> <span class="k">temp</span> <span class="k">TO</span> <span class="k">PUBLIC</span><span class="p">;</span>
+
+<span class="c1">-- Add missing columns</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_inclusion</span>
+  <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">design_hash</span> <span class="nb">INT</span><span class="p">;</span>
+
+<span class="c1">-- Create cache tables</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_cache</span> <span class="p">(...);</span>
+</code></pre></div></div>
+
+<p><strong>Pros:</strong> Works for core features; good for learning
+<strong>Cons:</strong> Incomplete; may break with WebAPI updates; tedious</p>
+
+<h3 id="option-2-run-webapi-flyway-migrations">Option 2: Run WebAPI Flyway Migrations</h3>
+
+<p>Apply the official DDL scripts from the WebAPI repository:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/OHDSI/WebAPI.git
+<span class="nb">cd </span>WebAPI/src/main/resources/db/migration/postgresql
+<span class="c"># Apply migrations manually or configure Flyway</span>
+</code></pre></div></div>
+
+<p><strong>Pros:</strong> Complete and version-matched
+<strong>Cons:</strong> Complex setup; requires Flyway knowledge</p>
+
+<h3 id="option-3-use-broadseas-built-in-database-recommended">Option 3: Use Broadsea’s Built-in Database (Recommended)</h3>
+
+<p>Start Broadsea with its default configuration, then migrate your data into the pre-configured database:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Start Broadsea (includes broadsea-atlasdb container)</span>
+docker-compose up <span class="nt">-d</span>
+
+<span class="c"># Export your CDM data from external database</span>
+pg_dump <span class="nt">-h</span> localhost <span class="nt">-U</span> postgres <span class="nt">-d</span> ohdsi_learning <span class="se">\</span>
+  <span class="nt">--schema</span><span class="o">=</span>cdm <span class="nt">--schema</span><span class="o">=</span>vocabulary <span class="nt">--data-only</span> <span class="nt">-f</span> cdm_export.sql
+
+<span class="c"># Import into Broadsea's database</span>
+docker <span class="nb">exec</span> <span class="nt">-i</span> broadsea-atlasdb psql <span class="nt">-U</span> postgres &lt; cdm_export.sql
+</code></pre></div></div>
+
+<p><strong>Pros:</strong> Zero schema errors; all features work; easiest maintenance
+<strong>Cons:</strong> Requires data migration; additional container</p>
+
+<hr />
+
+<h2 id="resolving-the-schema-issues-dr-sarah-chens-success">Resolving the Schema Issues: Dr. Sarah Chen’s Success</h2>
+
+<p>After understanding the root cause, Dr. Chen chose <strong>Option 1: Manual Schema Patching</strong> to continue her research quickly. She applied the minimal fixes needed to enable cohort generation and characterization.</p>
+
+<h3 id="the-fifteen-minute-fix">The Fifteen-Minute Fix</h3>
+
+<p>The complete schema patch took just 15 minutes to apply:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Phase 1: Core Schema Fixes (for cohort generation)</span>
+<span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="k">temp</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="k">SCHEMA</span> <span class="k">temp</span> <span class="k">TO</span> <span class="k">PUBLIC</span><span class="p">;</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_inclusion</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">design_hash</span> <span class="nb">INT</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_inclusion_result</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">mode_id</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_inclusion_stats</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">mode_id</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_summary_stats</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">mode_id</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_censor_stats</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">mode_id</span> <span class="nb">INT</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">-- Create cache tables for performance</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">results</span><span class="p">.</span><span class="n">cohort_cache</span> <span class="p">(</span>
+    <span class="n">design_hash</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">subject_id</span> <span class="nb">BIGINT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">cohort_start_date</span> <span class="nb">DATE</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">cohort_end_date</span> <span class="nb">DATE</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="c1">-- Phase 2: Characterization Fixes</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cc_results</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="k">type</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cc_results</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">concept_id</span> <span class="nb">INTEGER</span> <span class="k">DEFAULT</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cc_results</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">aggregate_id</span> <span class="nb">INTEGER</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cc_results</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">aggregate_name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">.</span><span class="n">cc_results</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">missing_means_zero</span> <span class="nb">INTEGER</span><span class="p">;</span>
+
+<span class="c1">-- Grant permissions</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="n">TABLES</span> <span class="k">IN</span> <span class="k">SCHEMA</span> <span class="n">results</span> <span class="k">TO</span> <span class="k">PUBLIC</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="n">TABLES</span> <span class="k">IN</span> <span class="k">SCHEMA</span> <span class="k">temp</span> <span class="k">TO</span> <span class="k">PUBLIC</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>After applying these patches and restarting WebAPI, Dr. Chen regenerated her cohorts.</p>
+
+<h3 id="cohort-generation-success">Cohort Generation: Success!</h3>
+
+<p>This time, the results displayed correctly in ATLAS:</p>
+
+<p><img src="/assets/images/posts/blog-cohort-generation-success.png" alt="Cohort Generation Success" />
+<em>The Type 2 Diabetes cohort now shows 219 patients with generation status COMPLETE</em></p>
+
+<p>The cohort generation completed in just 1 second, returning <strong>219 patients</strong> who met all inclusion criteria:</p>
+<ul>
+  <li>First diagnosis of Type 2 Diabetes Mellitus</li>
+  <li>At least 365 days of prior observation</li>
+  <li>Age 18 or older at index date</li>
+  <li>No prior Type 1 or gestational diabetes diagnosis</li>
+</ul>
+
+<h3 id="inclusion-reports-understanding-population-attrition">Inclusion Reports: Understanding Population Attrition</h3>
+
+<p>Clicking <strong>“View Reports”</strong> revealed the inclusion report—a powerful visualization showing how patients flow through each inclusion criterion:</p>
+
+<p><img src="/assets/images/posts/blog-inclusion-report-success.png" alt="Inclusion Report Success" />
+<em>The inclusion report shows 99.55% match rate with detailed population visualization</em></p>
+
+<p>The report shows:</p>
+<ul>
+  <li><strong>220 initial qualifying events</strong> from patients with T2DM diagnosis</li>
+  <li><strong>99.55% match rate</strong> (219 of 220 passed all inclusion criteria)</li>
+  <li><strong>1 patient excluded</strong> by the age requirement or prior diabetes exclusions</li>
+</ul>
+
+<p>The green population visualization (sometimes called an “attrition diagram”) helps researchers understand exactly where patients are filtered out. This is crucial for validating that inclusion criteria aren’t overly restrictive.</p>
+
+<h3 id="running-characterization-the-complete-picture">Running Characterization: The Complete Picture</h3>
+
+<p>With cohorts generating correctly, Dr. Chen moved to <strong>Characterization</strong>—the feature that compares baseline demographics, conditions, and medications across cohorts.</p>
+
+<p>She configured a characterization analysis with:</p>
+<ul>
+  <li><strong>Target Cohort</strong>: Type 2 Diabetes Mellitus (219 patients)</li>
+  <li><strong>Feature Analyses</strong>: Demographics, conditions, drug exposures, procedures</li>
+  <li><strong>Stratification</strong>: None (baseline analysis)</li>
+</ul>
+
+<p>After clicking “Generate,” she monitored the <strong>Jobs</strong> page:</p>
+
+<p><img src="/assets/images/posts/blog-jobs-completed.png" alt="Jobs Completed" />
+<em>The Jobs page showing successful completion of cohort generation and characterization</em></p>
+
+<p>All jobs completed successfully:</p>
+<ul>
+  <li>Jobs 7-11: Cohort generation for all 5 cohorts ✅</li>
+  <li>Job 14: Characterization generation ✅</li>
+</ul>
+
+<h3 id="characterization-results-demographics-analysis">Characterization Results: Demographics Analysis</h3>
+
+<p>The characterization results revealed the clinical profile of her T2DM cohort:</p>
+
+<p><img src="/assets/images/posts/blog-characterization-results.png" alt="Characterization Results" />
+<em>Characterization results showing 866 records across 10 reports with demographics breakdown</em></p>
+
+<p>Key findings from the demographics analysis:</p>
+<ul>
+  <li><strong>10 reports generated</strong> covering different clinical domains</li>
+  <li><strong>866 total records</strong> of baseline characteristics</li>
+  <li><strong>Age distribution</strong> showing patients primarily in 40-70 age range</li>
+  <li><strong>Condition prevalence</strong> showing common comorbidities</li>
+  <li><strong>Drug exposure patterns</strong> at baseline</li>
+</ul>
+
+<p>The demographic breakdown matched clinical expectations for a Type 2 Diabetes population:</p>
+<ul>
+  <li>Higher prevalence in middle-aged and older adults</li>
+  <li>Common comorbidities including hypertension, hyperlipidemia</li>
+  <li>Baseline medication patterns consistent with diabetes management</li>
+</ul>
+
+<h3 id="the-complete-end-to-end-workflow">The Complete End-to-End Workflow</h3>
+
+<p>Dr. Chen’s journey from clinical question to characterized cohort demonstrates the complete ATLAS workflow:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌──────────────────────────────────────────────────────────────────────────┐
+│                Dr. Sarah Chen's Research Workflow                         │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌───────────┐ │
+│  │ 1. Clinical │───▶│ 2. Concept  │───▶│ 3. Build    │───▶│ 4. Add    │ │
+│  │    Question │    │    Mapping  │    │    Entry    │    │  Inclusion│ │
+│  │ "T2DM pts"  │    │  SNOMED     │    │    Events   │    │   Rules   │ │
+│  └─────────────┘    │  201826     │    │             │    │           │ │
+│                     └─────────────┘    └─────────────┘    └───────────┘ │
+│                                                                   │      │
+│                                                                   ▼      │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌───────────┐ │
+│  │ 8. Clinical │◀───│ 7. Analyze  │◀───│ 6. View     │◀───│ 5. Generate│ │
+│  │    Insights │    │  Character- │    │  Inclusion  │    │   Cohort  │ │
+│  │ "Ready for  │    │    ization  │    │   Reports   │    │  219 pts  │ │
+│  │  estimation"│    │ 866 records │    │  99.55%     │    │           │ │
+│  └─────────────┘    └─────────────┘    └─────────────┘    └───────────┘ │
+│                                                                           │
+│  ✅ Result: Validated T2DM cohort ready for population-level estimation  │
+└──────────────────────────────────────────────────────────────────────────┘
+</code></pre></div></div>
+
+<h3 id="what-dr-chen-verified">What Dr. Chen Verified</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Feature</th>
+      <th>Result</th>
+      <th>Validated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Vocabulary Search</td>
+      <td>Found SNOMED 201826</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Cohort Definition</td>
+      <td>Created with 3 inclusion rules</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Cohort Generation</td>
+      <td>219 patients in &lt; 1 second</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Inclusion Reports</td>
+      <td>99.55% match rate displayed</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Population Visualization</td>
+      <td>Attrition diagram renders</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Characterization</td>
+      <td>866 records across 10 reports</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Demographics Analysis</td>
+      <td>Age groups with counts</td>
+      <td>✅</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Job Tracking</td>
+      <td>All 14 jobs COMPLETED</td>
+      <td>✅</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+
+<p>Here’s what we learned from building cohorts in ATLAS:</p>
+
+<p>✅ <strong>Cohorts are algorithms, not just patient lists</strong> — They’re reproducible across any OMOP CDM database worldwide</p>
+
+<p>✅ <strong>Three components define every cohort</strong> — Entry event, inclusion criteria, exit criteria</p>
+
+<p>✅ <strong>ATLAS generates SQL</strong> — Understanding backend tables helps debugging when the UI shows unexpected results</p>
+
+<p>✅ <strong>Concept sets are building blocks</strong> — Invest time in creating comprehensive, validated concept sets with descendants</p>
+
+<p>✅ <strong>Always validate with characterization</strong> — Never trust cohort counts alone; inspect demographics and clinical features</p>
+
+<p>✅ <strong>WebAPI ≠ OMOP CDM</strong> — The application has evolved beyond the base data model specification</p>
+
+<p>✅ <strong>Check the database directly</strong> — When UI shows “…”, the data may be correct in <code class="language-plaintext highlighter-rouge">results.cohort</code></p>
+
+<hr />
+
+<h2 id="whats-next-from-cohorts-to-evidence">What’s Next: From Cohorts to Evidence</h2>
+
+<p>With the ability to precisely define patient populations, we’re ready to explore what comes next: <strong>using these cohorts to generate real-world evidence</strong>.</p>
+
+<p>We’ll take our T2DM cohort and ask a comparative effectiveness question:</p>
+
+<blockquote>
+  <p><em>“Among patients who initiate metformin for Type 2 Diabetes, does adding an SGLT2 inhibitor reduce cardiovascular events compared to adding a sulfonylurea?”</em></p>
+</blockquote>
+
+<p>This is the domain of <strong>population-level estimation</strong>—causal inference studies that use propensity score matching, stratification, and outcome modeling to estimate treatment effects from observational data.</p>
+
+<p>Stay tuned as we move from defining <em>who</em> to asking <em>what if</em>.</p>
+
+<hr />
+
+<h2 id="resources">Resources</h2>
+
+<h3 id="ohdsi-community">OHDSI Community</h3>
+<ul>
+  <li><a href="https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html">The Book of OHDSI - Chapter 10: Cohorts</a> - Definitive cohort design guide</li>
+  <li><a href="https://ohdsi.github.io/Atlas/">ATLAS User Guide</a> - Official documentation</li>
+  <li><a href="https://forums.ohdsi.org/">OHDSI Forums</a> - Community Q&amp;A and phenotype discussions</li>
+  <li><a href="https://academy.ehden.eu/">EHDEN Academy</a> - Free online OHDSI courses</li>
+  <li><a href="https://forums.ohdsi.org/t/phenotype-phebruary-day-1-type-2-diabetes-mellitus/15764">Phenotype Phebruary T2DM Thread</a> - Community T2DM phenotype</li>
+</ul>
+
+<h3 id="technical-resources">Technical Resources</h3>
+<ul>
+  <li><a href="https://github.com/OHDSI/WebAPI">WebAPI GitHub</a> - Source code and migrations</li>
+  <li><a href="https://github.com/OHDSI/Broadsea">Broadsea GitHub</a> - Docker deployment</li>
+  <li><a href="https://github.com/OHDSI/CommonDataModel">CommonDataModel</a> - OMOP CDM DDL</li>
+  <li><a href="https://www.ohdsi.org/wp-content/uploads/2022/10/Creating-Cohorts-Tutorial-2022.pdf">OHDSI Cohort Tutorial 2022</a> - Step-by-step PDF guide</li>
+</ul>
+
+<hr />
+
+<p><em>Have you encountered similar challenges building cohorts in ATLAS? What phenotypes are you working on? Join the discussion on the <a href="https://forums.ohdsi.org/">OHDSI Forums</a> or share your experience in the comments below.</em></p>
+
+<hr />
+
+<p><strong>Tags</strong>: OHDSI, ATLAS, Cohort Definitions, OMOP CDM, Type 2 Diabetes, Clinical Research, Real World Evidence, WebAPI, PostgreSQL, Phenotyping</p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#ohdsi" class="tag tag-ohdsi">ohdsi</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#atlas" class="tag tag-ohdsi">atlas</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#webapi" class="tag tag-ohdsi">webapi</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#postgresql" class="tag">postgresql</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#omop-cdm" class="tag tag-data">omop-cdm</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#broadsea" class="tag">broadsea</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#cohort-definitions" class="tag">cohort-definitions</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#type-2-diabetes" class="tag">type-2-diabetes</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-research" class="tag">clinical-research</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#real-world-evidence" class="tag">real-world-evidence</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/ohdsi-learning-journey/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">From EHR Chaos to Research-Ready Data: A Comple...</span>
+        </a>
+        
+        
+        <a href="/blog/predicting-gi-hemorrhage-ohdsi-plp/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Predicting GI Hemorrhage with OHDSI: A Clinical...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

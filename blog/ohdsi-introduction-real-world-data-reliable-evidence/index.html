@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>OHDSI Introduction: From Real-World Data to Reliable Evidence | Clinical AI Insider</title>
+    <meta name="description" content="Learn how OHDSI transforms messy healthcare data into reliable clinical evidence. This guide explains the OMOP Common Data Model, standardized vocabularies, ...">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="OHDSI Introduction: From Real-World Data to Reliable Evidence">
+    <meta property="og:description" content="Learn how OHDSI transforms messy healthcare data into reliable clinical evidence. This guide explains the OMOP Common Data Model, standardized vocabularies, ...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/ohdsi-introduction-real-world-data-reliable-evidence/">
+    
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OHDSI Introduction: From Real-World Data to Reliable Evidence">
+    <meta name="twitter:description" content="Learn how OHDSI transforms messy healthcare data into reliable clinical evidence. This guide explains the OMOP Common Data Model, standardized vocabularies, ...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize Mermaid with colorful theme
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors - Blue/Purple gradient feel
+                primaryColor: '#6366F1',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#4F46E5',
+
+                // Secondary colors - Teal/Green
+                secondaryColor: '#10B981',
+                secondaryTextColor: '#1f2937',
+                secondaryBorderColor: '#059669',
+
+                // Tertiary colors - Orange/Amber
+                tertiaryColor: '#F59E0B',
+                tertiaryTextColor: '#1f2937',
+                tertiaryBorderColor: '#D97706',
+
+                // Background and lines
+                background: '#ffffff',
+                mainBkg: '#EEF2FF',
+                lineColor: '#6366F1',
+
+                // Node colors for different types
+                nodeBorder: '#4F46E5',
+                clusterBkg: '#F5F3FF',
+                clusterBorder: '#C7D2FE',
+
+                // Flowchart specific
+                edgeLabelBackground: '#ffffff',
+
+                // Pie chart colors
+                pie1: '#6366F1',
+                pie2: '#10B981',
+                pie3: '#F59E0B',
+                pie4: '#EC4899',
+                pie5: '#8B5CF6',
+                pie6: '#14B8A6',
+                pie7: '#F97316',
+                pie8: '#06B6D4',
+
+                // Font
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+
+        // Convert markdown code blocks to mermaid divs and render
+        document.addEventListener('DOMContentLoaded', async () => {
+            const codeBlocks = document.querySelectorAll('code.language-mermaid');
+
+            codeBlocks.forEach((code, index) => {
+                const pre = code.parentElement;
+                const mermaidDiv = document.createElement('div');
+                mermaidDiv.className = 'mermaid';
+                mermaidDiv.textContent = code.textContent;
+                pre.parentNode.replaceChild(mermaidDiv, pre);
+            });
+
+            // Run Mermaid on all .mermaid divs
+            await mermaid.run();
+        });
+    </script>
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/ohdsi-introduction-real-world-data-reliable-evidence/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">OHDSI Introduction: From Real-World Data to Reliable Evidence</h1>
+    <div class="post-meta">
+        <time datetime="2025-12-12T00:00:00-05:00">December 12, 2025</time>
+        <span class="meta-separator">·</span>
+        <span>25 min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#ohdsi" class="tag tag-ohdsi">ohdsi</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#omop" class="tag tag-data">omop</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#cdm" class="tag">cdm</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <blockquote>
+  <p><strong>Listen to the Podcast</strong></p>
+
+  <p>Prefer audio? Listen to this article as a conversational podcast (~18 min):</p>
+
+  <audio controls="" style="width: 100%; max-width: 500px;">
+  <source src="/assets/audio/ohdsi_podcast.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+
+  <table>
+    <tbody>
+      <tr>
+        <td><a href="/assets/audio/ohdsi_podcast.mp3">Download MP3</a></td>
+        <td><a href="/podcasts/ohdsi_podcast_script/">View Transcript</a></td>
+      </tr>
+    </tbody>
+  </table>
+</blockquote>
+
+<hr />
+
+<p>Picture this: You’re a hospital administrator who just received a troubling report. Three patients developed aortic aneurysms after taking a common antibiotic. Is this a coincidence, or have you stumbled onto a serious safety signal?</p>
+
+<p>To answer this question, you’d need to compare your data with hundreds of other hospitals. But here’s the problem—every hospital stores data differently. One uses ICD-10 codes, another SNOMED-CT. One stores medications by brand name, another by generic. It’s like trying to compare apples and oranges, except the apples are labeled in French and the oranges in Mandarin.</p>
+
+<p>This is where OHDSI changes everything.</p>
+
+<p>In this post, we’ll explore how a global community of 4,751+ collaborators across 88 countries built a “universal translator” for healthcare data, enabling researchers to answer questions that would be impossible to tackle alone.</p>
+
+<hr />
+
+<h2 id="what-is-ohdsi">What is OHDSI?</h2>
+
+<p><strong>Think of OHDSI like the United Nations of healthcare data.</strong> Just as the UN brings countries together with a common framework for diplomacy, OHDSI brings healthcare organizations together with a common framework for data analysis.</p>
+
+<div class="mermaid">
+mindmap
+  root((OHDSI<br />Ecosystem))
+    Data Standards
+      OMOP CDM
+        Person Table
+        Visit Table
+        Condition Table
+        Drug Table
+        Procedure Table
+        Measurement Table
+      Vocabularies
+        SNOMED-CT
+        RxNorm
+        LOINC
+        ICD-10
+        CPT
+    Methods
+      Characterization
+        Patient Profiles
+        Disease Natural History
+      Estimation
+        Comparative Effectiveness
+        Safety Studies
+      Prediction
+        Risk Models
+        ML/AI
+    Tools
+      Athena
+        Browse Concepts
+        Download Vocabularies
+      Atlas
+        Cohort Builder
+        Study Design
+      HADES
+        R Packages
+        Analysis Pipeline
+      Strategus
+        Orchestration
+        Reproducibility
+    Community
+      Working Groups
+        CDM
+        Vocabularies
+        HADES
+        Phenotypes
+      Events
+        Symposium
+        Tutorials
+        Chapters
+</div>
+
+<h3 id="key-facts">Key Facts</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Founded</td>
+      <td>2014</td>
+    </tr>
+    <tr>
+      <td>Collaborators</td>
+      <td>4,751+</td>
+    </tr>
+    <tr>
+      <td>Countries</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <td>Time Zones</td>
+      <td>21</td>
+    </tr>
+    <tr>
+      <td>Continents</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Central Hub</td>
+      <td>Columbia University</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="the-mission">The Mission</h3>
+
+<blockquote>
+  <p><strong>Mission</strong>: Improve health by empowering a community to collaboratively generate the evidence that promotes better health decisions and better care.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="the-data-standardization-problem">The Data Standardization Problem</h2>
+
+<p>Here’s the thing that confused me for weeks when I first started learning about healthcare interoperability: <strong>why can’t hospitals just share data?</strong></p>
+
+<p>The answer is painfully simple once you understand it.</p>
+
+<h3 id="the-electrical-outlet-analogy">The Electrical Outlet Analogy</h3>
+
+<p>Imagine traveling internationally with your laptop. Your laptop (the analytical method) works the same everywhere—it’s designed to run identically regardless of location. But every country has different electrical outlets (the data).</p>
+
+<p>Without OMOP, you need a different adapter for every outlet. With OMOP, you have a universal adapter that works everywhere.</p>
+
+<div class="mermaid">
+flowchart TB
+    subgraph Sources["Source Data (Different Formats)"]
+        EHR["EHR Systems<br />(Epic, Cerner)"]
+        Claims["Claims Data"]
+        Registry["Registries"]
+    end
+
+    subgraph ETL["ETL Process"]
+        Extract["Extract"]
+        Transform["Transform"]
+        Load["Load"]
+    end
+
+    subgraph Vocab["Standardized Vocabularies"]
+        Athena["Athena<br />12M+ Concepts"]
+        Mapping["Source → Standard<br />Concept Mapping"]
+    end
+
+    subgraph CDM["OMOP CDM (Common Format)"]
+        Person["Person"]
+        Visit["Visit"]
+        Condition["Condition"]
+        Drug["Drug"]
+        Procedure["Procedure"]
+        Measurement["Measurement"]
+    end
+
+    subgraph Analysis["Analysis Tools"]
+        Atlas["Atlas<br />(Web UI)"]
+        HADES["HADES<br />(R Packages)"]
+    end
+
+    subgraph Output["Evidence"]
+        Characterization["Characterization"]
+        Estimation["Estimation"]
+        Prediction["Prediction"]
+    end
+
+    EHR --&gt; Extract
+    Claims --&gt; Extract
+    Registry --&gt; Extract
+    Extract --&gt; Transform
+    Transform --&gt; Load
+
+    Athena --&gt; Mapping
+    Mapping --&gt; Load
+
+    Load --&gt; Person
+    Load --&gt; Visit
+    Load --&gt; Condition
+    Load --&gt; Drug
+    Load --&gt; Procedure
+    Load --&gt; Measurement
+
+    Person --&gt; Atlas
+    Visit --&gt; Atlas
+    Condition --&gt; Atlas
+    Drug --&gt; Atlas
+
+    Atlas --&gt; HADES
+    HADES --&gt; Characterization
+    HADES --&gt; Estimation
+    HADES --&gt; Prediction
+</div>
+
+<h3 id="real-world-mapping-example">Real-World Mapping Example</h3>
+
+<p>Let me show you what this actually looks like. Say Hospital A and Hospital B both want to analyze their use of Ciprofloxacin (a common antibiotic).</p>
+
+<div class="mermaid">
+flowchart TB
+    subgraph HospA["Hospital A (Uses RxNorm)"]
+        CodeA["Ciprofloxacin<br />Code: 2551"]
+    end
+
+    subgraph HospB["Hospital B (Uses HMOG)"]
+        CodeB["Ciprofloxacin<br />Code: 104"]
+    end
+
+    subgraph OMOP["OMOP Standard"]
+        Standard["Standard Concept ID<br />1797513<br />(Ciprofloxacin)"]
+    end
+
+    subgraph Shared["Shared Analysis"]
+        Compare["✓ Can Compare<br />✓ Can Share<br />✓ Can Analyze"]
+    end
+
+    CodeA --&gt;|"Map"| Standard
+    CodeB --&gt;|"Map"| Standard
+    Standard --&gt; Compare
+</div>
+
+<p>The same drug has code “2551” in Hospital A and code “104” in Hospital B. But after mapping to OMOP, both become <strong>Concept ID 1797513</strong>. Now they can be analyzed together.</p>
+
+<hr />
+
+<h2 id="the-omop-common-data-model">The OMOP Common Data Model</h2>
+
+<p>Okay, now things get interesting. Let’s look at how the OMOP CDM actually works.</p>
+
+<h3 id="core-principles">Core Principles</h3>
+
+<p>The CDM was built around these foundational ideas:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Principle</th>
+      <th>What It Means</th>
+      <th>Why It Matters</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Patient-Centric</strong></td>
+      <td>Everything revolves around the patient</td>
+      <td>Not for billing—purely for research</td>
+    </tr>
+    <tr>
+      <td><strong>Standard Vocabulary</strong></td>
+      <td>Common terminology for all data</td>
+      <td>Enables cross-institutional comparison</td>
+    </tr>
+    <tr>
+      <td><strong>Domain-Oriented</strong></td>
+      <td>Concepts organized by clinical domain</td>
+      <td>Intuitive navigation</td>
+    </tr>
+    <tr>
+      <td><strong>Source Preservation</strong></td>
+      <td>Original codes are kept</td>
+      <td>Can trace back if needed</td>
+    </tr>
+    <tr>
+      <td><strong>Extensible</strong></td>
+      <td>Can evolve and add features</td>
+      <td>Future-proof design</td>
+    </tr>
+    <tr>
+      <td><strong>Database Independent</strong></td>
+      <td>Works with any database</td>
+      <td>PostgreSQL, SQL Server, Oracle, etc.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="the-table-structure">The Table Structure</h3>
+
+<div class="mermaid">
+erDiagram
+    PERSON ||--o{ VISIT_OCCURRENCE : has
+    PERSON ||--o{ CONDITION_OCCURRENCE : has
+    PERSON ||--o{ DRUG_EXPOSURE : has
+    PERSON ||--o{ PROCEDURE_OCCURRENCE : has
+    PERSON ||--o{ MEASUREMENT : has
+    PERSON ||--o{ OBSERVATION : has
+
+    VISIT_OCCURRENCE ||--o{ CONDITION_OCCURRENCE : contains
+    VISIT_OCCURRENCE ||--o{ DRUG_EXPOSURE : contains
+    VISIT_OCCURRENCE ||--o{ PROCEDURE_OCCURRENCE : contains
+
+    CONCEPT ||--|| CONDITION_OCCURRENCE : defines
+    CONCEPT ||--|| DRUG_EXPOSURE : defines
+    CONCEPT ||--|| PROCEDURE_OCCURRENCE : defines
+    CONCEPT ||--|| MEASUREMENT : defines
+
+    PERSON {
+        int person_id PK
+        int gender_concept_id
+        int year_of_birth
+        int race_concept_id
+    }
+
+    VISIT_OCCURRENCE {
+        int visit_occurrence_id PK
+        int person_id FK
+        int visit_concept_id
+        date visit_start_date
+    }
+
+    CONDITION_OCCURRENCE {
+        int condition_occurrence_id PK
+        int person_id FK
+        int condition_concept_id
+        date condition_start_date
+    }
+
+    DRUG_EXPOSURE {
+        int drug_exposure_id PK
+        int person_id FK
+        int drug_concept_id
+        date drug_exposure_start_date
+    }
+</div>
+
+<p>The PERSON table is central—everything connects back to it. This patient-centric design is what makes OMOP different from billing-focused data models.</p>
+
+<hr />
+
+<h2 id="standardized-vocabularies">Standardized Vocabularies</h2>
+
+<p>This is where OHDSI gets really powerful. The vocabularies are a massive “Rosetta Stone” for healthcare data.</p>
+
+<h3 id="by-the-numbers">By the Numbers</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Total Concepts</td>
+      <td>12+ million</td>
+    </tr>
+    <tr>
+      <td>Vocabularies</td>
+      <td>142</td>
+    </tr>
+    <tr>
+      <td>Domains</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <td>Concept Relationships</td>
+      <td>80+ million</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="key-vocabulary-sources">Key Vocabulary Sources</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Vocabulary</th>
+      <th>Domain</th>
+      <th>Examples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.snomed.org/">SNOMED-CT</a></td>
+      <td>Conditions</td>
+      <td>Diseases, findings</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.nlm.nih.gov/research/umls/rxnorm/">RxNorm</a></td>
+      <td>Drugs</td>
+      <td>Medications</td>
+    </tr>
+    <tr>
+      <td><a href="https://loinc.org/">LOINC</a></td>
+      <td>Measurements</td>
+      <td>Lab tests</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.who.int/standards/classifications/classification-of-diseases">ICD-10</a></td>
+      <td>Conditions</td>
+      <td>Diagnosis codes</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.ama-assn.org/practice-management/cpt">CPT</a></td>
+      <td>Procedures</td>
+      <td>Procedure codes</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="concept-id-vs-concept-code">Concept ID vs Concept Code</h3>
+
+<p>This distinction tripped me up at first. Let me explain:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Concept ID</th>
+      <th>Concept Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Source</td>
+      <td>OHDSI-assigned</td>
+      <td>External (SNOMED, RxNorm, etc.)</td>
+    </tr>
+    <tr>
+      <td>Uniqueness</td>
+      <td>Globally unique</td>
+      <td>Unique within vocabulary only</td>
+    </tr>
+    <tr>
+      <td>Format</td>
+      <td>Integer</td>
+      <td>String</td>
+    </tr>
+    <tr>
+      <td>Example</td>
+      <td>1797513</td>
+      <td>“2551”</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Why this matters</strong>: The same concept code “2551” might mean different things in different vocabularies. The Concept ID ensures uniqueness across the entire OMOP ecosystem.</p>
+
+<hr />
+
+<h2 id="study-types">Study Types</h2>
+
+<p>OHDSI supports three main types of studies, each answering a different kind of question:</p>
+
+<div class="mermaid">
+flowchart LR
+    subgraph Building["Study Building Blocks"]
+        direction TB
+        DB["📊 Databases<br />14 OMOP Sites"]
+        Phenotype["🎯 Phenotypes<br />Cohort Definitions"]
+        Design["📐 Study Design<br />Estimation"]
+        Methods["📈 Methods<br />Propensity Scores"]
+        Tools["🔧 Tools<br />Atlas, HADES"]
+    end
+
+    subgraph Study["Fluoroquinolone Study"]
+        Question["Does fluoroquinolone<br />increase aortic<br />aneurysm risk?"]
+        Results["📋 Results"]
+    end
+
+    DB --&gt; Question
+    Phenotype --&gt; Question
+    Design --&gt; Question
+    Methods --&gt; Question
+    Tools --&gt; Question
+    Question --&gt; Results
+</div>
+
+<h3 id="1-characterization">1. Characterization</h3>
+<p><strong>Question</strong>: “Who are these patients?”</p>
+
+<p>Examples:</p>
+<ul>
+  <li>What are the demographics of diabetic patients?</li>
+  <li>What medications do heart failure patients take?</li>
+  <li>What’s the natural history of Parkinson’s disease?</li>
+</ul>
+
+<h3 id="2-estimation-population-level-effect">2. Estimation (Population-Level Effect)</h3>
+<p><strong>Question</strong>: “Does treatment A cause outcome B?”</p>
+
+<p>Template: “Does exposure to [TREATMENT] have different risk of [OUTCOME] within [TIME] vs [COMPARATOR]?”</p>
+
+<p>Examples:</p>
+<ul>
+  <li>Do ACE inhibitors reduce stroke risk vs ARBs?</li>
+  <li>Does metformin cause lactic acidosis?</li>
+  <li>Do fluoroquinolones increase aortic aneurysm risk?</li>
+</ul>
+
+<h3 id="3-prediction-patient-level">3. Prediction (Patient-Level)</h3>
+<p><strong>Question</strong>: “What will happen to this specific patient?”</p>
+
+<p>Examples:</p>
+<ul>
+  <li>What’s this patient’s 5-year heart attack risk?</li>
+  <li>Will this patient be readmitted within 30 days?</li>
+  <li>What’s the probability of treatment response?</li>
+</ul>
+
+<hr />
+
+<h2 id="the-ohdsi-tool-ecosystem">The OHDSI Tool Ecosystem</h2>
+
+<p>Here’s where it gets fun—the tools that make all of this possible.</p>
+
+<div class="mermaid">
+graph TB
+    subgraph Community["OHDSI Community"]
+        direction TB
+
+        subgraph Vocab["Vocabulary Layer"]
+            Athena["🔍 Athena<br />athena.ohdsi.org<br />───────────<br />• Browse Concepts<br />• Download Vocabs<br />• 12M+ Concepts"]
+        end
+
+        subgraph Design["Design Layer"]
+            Atlas["🎨 Atlas<br />atlas.ohdsi.org<br />───────────<br />• Cohort Builder<br />• Study Design<br />• Concept Sets"]
+        end
+
+        subgraph Analysis["Analysis Layer"]
+            HADES["📦 HADES<br />R Packages<br />───────────<br />• CohortGenerator<br />• CohortMethod<br />• PatientLevelPred"]
+
+            Strategus["⚙️ Strategus<br />Pipeline<br />───────────<br />• Orchestration<br />• Reproducibility<br />• Automation"]
+        end
+
+        subgraph QA["Quality Layer"]
+            DQD["📊 Data Quality<br />Dashboard<br />───────────<br />• ETL Validation<br />• Issue Detection<br />• Quality Metrics"]
+        end
+    end
+
+    Athena --&gt; Atlas
+    Atlas --&gt; HADES
+    HADES --&gt; Strategus
+    DQD --&gt; Atlas
+</div>
+
+<h3 id="tool-summary">Tool Summary</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Purpose</th>
+      <th>URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Athena</strong></td>
+      <td>Vocabulary browser and download</td>
+      <td><a href="https://athena.ohdsi.org">athena.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>Atlas</strong></td>
+      <td>Web-based study design and cohort building</td>
+      <td><a href="https://atlas.ohdsi.org">atlas.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>HADES</strong></td>
+      <td>R packages for analysis</td>
+      <td><a href="https://ohdsi.github.io/Hades/">ohdsi.github.io/Hades</a></td>
+    </tr>
+    <tr>
+      <td><strong>Strategus</strong></td>
+      <td>Study execution pipeline</td>
+      <td>Part of HADES</td>
+    </tr>
+    <tr>
+      <td><strong>Data Quality Dashboard</strong></td>
+      <td>ETL validation</td>
+      <td><a href="https://ohdsi.github.io/DataQualityDashboard/">ohdsi.github.io/DataQualityDashboard</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="real-world-example-the-fluoroquinolones-study">Real-World Example: The Fluoroquinolones Study</h2>
+
+<p>Let me bring this all together with a real example.</p>
+
+<p><strong>The Question</strong>: Do fluoroquinolones (common antibiotics like Ciprofloxacin) increase the risk of aortic aneurysm or dissection?</p>
+
+<p><strong>The Approach</strong>:</p>
+<ol>
+  <li><strong>14 databases</strong> converted to OMOP CDM participated</li>
+  <li><strong>Phenotypes</strong> defined patients exposed to fluoroquinolones and patients with UTIs</li>
+  <li><strong>Study design</strong> compared fluoroquinolone users to other UTI treatments</li>
+  <li><strong>Methods</strong> used propensity score matching to control for confounding</li>
+  <li><strong>Tools</strong>: Atlas for cohort definition, HADES for analysis</li>
+</ol>
+
+<p>This kind of study would be nearly impossible without OHDSI. Each hospital would need its own study team, and results couldn’t be directly compared.</p>
+
+<hr />
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Ready to join the community? Here’s how:</p>
+
+<h3 id="ways-to-participate">Ways to Participate</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Level</th>
+      <th>Description</th>
+      <th>Time Commitment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Observer</strong></td>
+      <td>Join working groups, listen, learn</td>
+      <td>1-2 hours/month</td>
+    </tr>
+    <tr>
+      <td><strong>Consumer</strong></td>
+      <td>Use OHDSI tools and data</td>
+      <td>As needed</td>
+    </tr>
+    <tr>
+      <td><strong>Contributor</strong></td>
+      <td>Convert data, run studies</td>
+      <td>10+ hours/month</td>
+    </tr>
+    <tr>
+      <td><strong>Developer</strong></td>
+      <td>Build tools, improve packages</td>
+      <td>Ongoing</td>
+    </tr>
+    <tr>
+      <td><strong>Leader</strong></td>
+      <td>Lead working groups, mentor others</td>
+      <td>Significant</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="essential-resources">Essential Resources</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Main Website</td>
+      <td><a href="https://www.ohdsi.org">ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td>Vocabularies</td>
+      <td><a href="https://athena.ohdsi.org">athena.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td>Web Tools</td>
+      <td><a href="https://atlas.ohdsi.org">atlas.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td>R Packages</td>
+      <td><a href="https://ohdsi.github.io/Hades">ohdsi.github.io/Hades</a></td>
+    </tr>
+    <tr>
+      <td>Documentation</td>
+      <td><a href="https://ohdsi.github.io/CommonDataModel">ohdsi.github.io/CommonDataModel</a></td>
+    </tr>
+    <tr>
+      <td>Community</td>
+      <td><a href="https://forums.ohdsi.org">forums.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td>Book of OHDSI</td>
+      <td><a href="https://ohdsi.github.io/TheBookOfOhdsi">ohdsi.github.io/TheBookOfOhdsi</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+
+<ol>
+  <li><strong>OHDSI is a global community</strong> of 4,751+ collaborators working to standardize healthcare data analysis</li>
+  <li><strong>The OMOP CDM</strong> is the universal “adapter” that allows different healthcare systems to share and compare data</li>
+  <li><strong>Standardized vocabularies</strong> (12M+ concepts) provide a common language for clinical concepts</li>
+  <li><strong>Three study types</strong> (Characterization, Estimation, Prediction) cover the major research questions</li>
+  <li><strong>Open-source tools</strong> (Athena, Atlas, HADES) make analysis accessible to everyone</li>
+</ol>
+
+<hr />
+
+<h2 id="learning-resources">Learning Resources</h2>
+
+<h3 id="study-materials">Study Materials</h3>
+
+<p>Test your understanding and reinforce key concepts:</p>
+
+<ul>
+  <li><a href="/flashcards/ohdsi_flashcards.md"><strong>Flashcard Deck</strong></a> - 30 cards for spaced repetition learning</li>
+  <li><a href="/quizzes/ohdsi_quiz.md"><strong>Self-Assessment Quiz</strong></a> - 30 questions (multiple choice, true/false, short answer)</li>
+  <li><a href="/slides/ohdsi_slides.md"><strong>Presentation Slides</strong></a> - 27 slides for teaching or review</li>
+</ul>
+
+<hr />
+
+<h2 id="references--resources">References &amp; Resources</h2>
+
+<h3 id="official-ohdsi-resources">Official OHDSI Resources</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>Description</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>OHDSI Website</strong></td>
+      <td>Main community hub</td>
+      <td><a href="https://www.ohdsi.org">ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>OHDSI 2025 Symposium</strong></td>
+      <td>Annual global conference</td>
+      <td><a href="https://www.ohdsi.org/ohdsi2025/">ohdsi.org/ohdsi2025</a></td>
+    </tr>
+    <tr>
+      <td><strong>OHDSI GitHub</strong></td>
+      <td>Open-source code repositories</td>
+      <td><a href="https://github.com/OHDSI">github.com/OHDSI</a></td>
+    </tr>
+    <tr>
+      <td><strong>The Book of OHDSI</strong></td>
+      <td>Comprehensive guide (free online)</td>
+      <td><a href="https://ohdsi.github.io/TheBookOfOhdsi/">ohdsi.github.io/TheBookOfOhdsi</a></td>
+    </tr>
+    <tr>
+      <td><strong>OHDSI Forums</strong></td>
+      <td>Community Q&amp;A and discussions</td>
+      <td><a href="https://forums.ohdsi.org">forums.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>OHDSI YouTube</strong></td>
+      <td>Tutorials and presentations</td>
+      <td><a href="https://www.youtube.com/@OHDSI">youtube.com/@OHDSI</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tools--documentation">Tools &amp; Documentation</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Purpose</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Athena</strong></td>
+      <td>Browse and download vocabularies</td>
+      <td><a href="https://athena.ohdsi.org">athena.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>Atlas</strong></td>
+      <td>Web-based cohort building and study design</td>
+      <td><a href="https://atlas-demo.ohdsi.org">atlas-demo.ohdsi.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>HADES</strong></td>
+      <td>Health Analytics Data-to-Evidence Suite (R packages)</td>
+      <td><a href="https://ohdsi.github.io/Hades/">ohdsi.github.io/Hades</a></td>
+    </tr>
+    <tr>
+      <td><strong>OMOP CDM</strong></td>
+      <td>Common Data Model documentation</td>
+      <td><a href="https://ohdsi.github.io/CommonDataModel/">ohdsi.github.io/CommonDataModel</a></td>
+    </tr>
+    <tr>
+      <td><strong>Data Quality Dashboard</strong></td>
+      <td>Validate your OMOP CDM conversion</td>
+      <td><a href="https://ohdsi.github.io/DataQualityDashboard/">ohdsi.github.io/DataQualityDashboard</a></td>
+    </tr>
+    <tr>
+      <td><strong>ACHILLES</strong></td>
+      <td>Database characterization and visualization</td>
+      <td><a href="https://ohdsi.github.io/Achilles/">ohdsi.github.io/Achilles</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="standardized-vocabularies-1">Standardized Vocabularies</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Vocabulary</th>
+      <th>Domain</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>SNOMED-CT</strong></td>
+      <td>Clinical findings, diseases, procedures</td>
+      <td><a href="https://www.snomed.org/">snomed.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>RxNorm</strong></td>
+      <td>Medications and drug products</td>
+      <td><a href="https://www.nlm.nih.gov/research/umls/rxnorm/">nlm.nih.gov/rxnorm</a></td>
+    </tr>
+    <tr>
+      <td><strong>LOINC</strong></td>
+      <td>Laboratory tests and measurements</td>
+      <td><a href="https://loinc.org/">loinc.org</a></td>
+    </tr>
+    <tr>
+      <td><strong>ICD-10</strong></td>
+      <td>Diagnosis classification</td>
+      <td><a href="https://www.who.int/standards/classifications/classification-of-diseases">who.int/icd</a></td>
+    </tr>
+    <tr>
+      <td><strong>CPT</strong></td>
+      <td>Procedure codes</td>
+      <td><a href="https://www.ama-assn.org/practice-management/cpt">ama-assn.org/cpt</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="getting-involved">Getting Involved</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Activity</th>
+      <th>Description</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Working Groups</strong></td>
+      <td>Join specialized community groups</td>
+      <td><a href="https://www.ohdsi.org/working-groups/">ohdsi.org/working-groups</a></td>
+    </tr>
+    <tr>
+      <td><strong>Regional Chapters</strong></td>
+      <td>Connect with local OHDSI communities</td>
+      <td><a href="https://www.ohdsi.org/who-we-are/regional-chapters/">ohdsi.org/regional-chapters</a></td>
+    </tr>
+    <tr>
+      <td><strong>Study-a-thons</strong></td>
+      <td>Collaborative research events</td>
+      <td><a href="https://www.ohdsi.org/studyathon/">ohdsi.org/studyathon</a></td>
+    </tr>
+    <tr>
+      <td><strong>OHDSI Network Studies</strong></td>
+      <td>Participate in global research</td>
+      <td><a href="https://www.ohdsi.org/network-research-studies/">ohdsi.org/network-studies</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="key-github-repositories">Key GitHub Repositories</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Repository</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/OHDSI/CommonDataModel">OHDSI/CommonDataModel</a></td>
+      <td>OMOP CDM specifications and DDL scripts</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/Athena">OHDSI/Athena</a></td>
+      <td>Vocabulary download and management</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/Atlas">OHDSI/Atlas</a></td>
+      <td>Web application for cohort building</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/WebAPI">OHDSI/WebAPI</a></td>
+      <td>Backend services for Atlas</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/Hades">OHDSI/Hades</a></td>
+      <td>R package ecosystem for analysis</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/CohortMethod">OHDSI/CohortMethod</a></td>
+      <td>Comparative effectiveness studies</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/PatientLevelPrediction">OHDSI/PatientLevelPrediction</a></td>
+      <td>Machine learning for patient outcomes</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/OHDSI/ETL-Synthea">OHDSI/ETL-Synthea</a></td>
+      <td>Convert Synthea data to OMOP CDM</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><em>The next time you see a medication order or lab result in a patient chart, you’ll know there’s an entire global infrastructure working behind the scenes to make that data meaningful—not just for one patient, but for millions of patients around the world.</em></p>
+
+<hr />
+
+<p><strong>Source</strong>: <a href="https://www.youtube.com/watch?v=lELiY5B27ps">OHDSI Introduction Tutorial (YouTube)</a></p>
+
+<p><em>Generated using the Feynman Technique: Complex concepts explained simply, with analogies and practical examples.</em></p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#ohdsi" class="tag tag-ohdsi">ohdsi</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#omop" class="tag tag-data">omop</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#cdm" class="tag">cdm</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#real-world-data" class="tag">real-world-data</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#observational-research" class="tag">observational-research</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare-analytics" class="tag">healthcare-analytics</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        <a href="/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/" class="nav-prev">
+            <span class="nav-label">← Previous</span>
+            <span class="nav-title">Healthcare Interoperability: FHIR, HL7, LOINC &...</span>
+        </a>
+        
+        
+        <a href="/blog/ohdsi-learning-journey/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">From EHR Chaos to Research-Ready Data: A Comple...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

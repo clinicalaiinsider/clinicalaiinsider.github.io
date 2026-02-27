@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability | Clinical AI Insider</title>
+    <meta name="description" content="A comprehensive guide to understanding how HL7 v2.x message segments (PID, ORC, OBR, OBX) transform into modern FHIR resources, enabling semantic interoperab...">
+    
+    <meta name="author" content="DataGodzilla">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability">
+    <meta property="og:description" content="A comprehensive guide to understanding how HL7 v2.x message segments (PID, ORC, OBR, OBX) transform into modern FHIR resources, enabling semantic interoperab...">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://clinicalaiinsider.github.io/blog/HL7-FHIR-Clinical-Lab-Interoperability/">
+    <meta property="og:image" content="https://clinicalaiinsider.github.io/assets/images/fhir-hl7-interoperability.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability">
+    <meta name="twitter:description" content="A comprehensive guide to understanding how HL7 v2.x message segments (PID, ORC, OBR, OBX) transform into modern FHIR resources, enabling semantic interoperab...">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/main.css?v=1772169774">
+
+    <!-- Visual Storytelling Components -->
+    <link rel="stylesheet" href="/assets/css/visual-storytelling.css">
+    <link rel="stylesheet" href="/assets/css/visual-storytelling-expanded.css">
+
+    <!-- Mermaid (conditional) -->
+    
+    
+    <!-- MathJax (conditional) -->
+    
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Clinical AI Insider" href="/feed.xml">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://clinicalaiinsider.github.io/blog/HL7-FHIR-Clinical-Lab-Interoperability/">
+</head>
+<body>
+    
+    <header class="site-header">
+    <div class="header-container">
+        <a href="/" class="site-title">Clinical AI Insider</a>
+        <nav class="site-nav">
+            
+            <a href="/blog/">Blog</a>
+            
+            <a href="/projects/">Projects</a>
+            
+            <a href="/about/">About</a>
+            
+        </nav>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+    
+    <main class="container">
+        <header class="post-header">
+    <h1 class="post-title">From HL7 Pipes to FHIR APIs: A Deep Dive into Clinical Laboratory Interoperability</h1>
+    <div class="post-meta">
+        <time datetime="2025-11-30T00:00:00-05:00">November 30, 2025</time>
+        <span class="meta-separator">·</span>
+        <span>14 min read</span>
+        
+        <span class="meta-separator">·</span>
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">fhir</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#hl7" class="tag tag-fhir">hl7</a>
+        
+        
+        
+        
+        
+        <a href="/tags/#loinc" class="tag tag-fhir">loinc</a>
+        
+        
+        
+    </div>
+</header>
+
+<article class="post-content">
+    <blockquote>
+  <p><strong>For clinical informaticists and data scientists:</strong> Understanding the translation layer between legacy HL7 v2.x messages and modern FHIR resources is essential for building interoperable healthcare systems. This guide walks through the complete lab workflow—from physician order to clinical decision support—showing exactly how data transforms at each step.</p>
+</blockquote>
+
+<hr />
+
+<h2 id="the-interoperability-challenge">The Interoperability Challenge</h2>
+
+<p>Picture this scenario: A physician orders a fasting glucose test at 9:30 AM. By noon, the results are in the patient’s chart, flagged as abnormal, with a clinical decision support alert suggesting follow-up. Behind this seemingly simple workflow lies a complex dance of systems, standards, and semantics.</p>
+
+<p>The challenge isn’t just moving data—it’s preserving <strong>meaning</strong>.</p>
+
+<p><img src="/assets/images/hl7-fhir/interoperability_evolution.svg" alt="Interoperability Evolution" /></p>
+
+<p>This is where the healthcare interoperability stack comes into play:</p>
+
+<p><img src="/assets/images/hl7-fhir/standards_stack.svg" alt="Healthcare Standards Stack" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Standard</th>
+      <th>Layer</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>HL7 v2.x</strong></td>
+      <td>Messaging</td>
+      <td>Pipe-delimited transactional backbone</td>
+    </tr>
+    <tr>
+      <td><strong>FHIR</strong></td>
+      <td>Structure</td>
+      <td>RESTful JSON resources for modern APIs</td>
+    </tr>
+    <tr>
+      <td><strong>LOINC</strong></td>
+      <td>Identification</td>
+      <td>Universal codes for <em>what</em> was measured</td>
+    </tr>
+    <tr>
+      <td><strong>SNOMED CT</strong></td>
+      <td>Semantics</td>
+      <td>Clinical meaning for <em>why</em> and interpretation</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="a-real-world-scenario-mr-smiths-diabetes-diagnosis">A Real-World Scenario: Mr. Smith’s Diabetes Diagnosis</h2>
+
+<p>Let’s follow a complete clinical workflow to understand how these standards work together.</p>
+
+<h3 id="the-patient">The Patient</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Name</strong></td>
+      <td>John Q. Smith</td>
+    </tr>
+    <tr>
+      <td><strong>Age</strong></td>
+      <td>55, Male</td>
+    </tr>
+    <tr>
+      <td><strong>Chief Complaint</strong></td>
+      <td>Fatigue and increased thirst for 2 weeks</td>
+    </tr>
+    <tr>
+      <td><strong>Clinical Suspicion</strong></td>
+      <td>Type 2 Diabetes Mellitus</td>
+    </tr>
+    <tr>
+      <td><strong>MRN</strong></td>
+      <td>MRN123456</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="the-timeline">The Timeline</h3>
+
+<p><img src="/assets/images/hl7-fhir/lab_workflow_timeline.svg" alt="Lab Workflow Timeline" /></p>
+
+<p>Now let’s examine the data structures that make this workflow possible.</p>
+
+<hr />
+
+<h2 id="part-1-hl7-v2x-message-anatomy">Part 1: HL7 v2.x Message Anatomy</h2>
+
+<p>HL7 v2.x messages are the <strong>transactional backbone</strong> of healthcare. They use a pipe-delimited format that, while dated, remains ubiquitous in production systems worldwide.</p>
+
+<h3 id="message-delimiters">Message Delimiters</h3>
+
+<p>Understanding the delimiter hierarchy is essential for parsing HL7:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Character</th>
+      <th>Symbol</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&lt;CR&gt;</code></td>
+      <td>Carriage Return</td>
+      <td>Segment terminator</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\|</code></td>
+      <td>Pipe</td>
+      <td>Field separator</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">^</code></td>
+      <td>Caret</td>
+      <td>Component separator</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">&amp;</code></td>
+      <td>Ampersand</td>
+      <td>Subcomponent separator</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">~</code></td>
+      <td>Tilde</td>
+      <td>Repetition separator</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">\</code></td>
+      <td>Backslash</td>
+      <td>Escape character</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="core-segments-for-laboratory-messaging">Core Segments for Laboratory Messaging</h3>
+
+<p><img src="/assets/images/hl7-fhir/hl7_segments.svg" alt="HL7 Core Segments" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Segment</th>
+      <th>Name</th>
+      <th>Clinical Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>MSH</strong></td>
+      <td>Message Header</td>
+      <td>Routing metadata, message type, version</td>
+    </tr>
+    <tr>
+      <td><strong>PID</strong></td>
+      <td>Patient Identification</td>
+      <td>Demographics, MRN, name, DOB</td>
+    </tr>
+    <tr>
+      <td><strong>PV1</strong></td>
+      <td>Patient Visit</td>
+      <td>Encounter context, attending physician</td>
+    </tr>
+    <tr>
+      <td><strong>ORC</strong></td>
+      <td>Common Order</td>
+      <td>Order control, placer/filler numbers</td>
+    </tr>
+    <tr>
+      <td><strong>OBR</strong></td>
+      <td>Observation Request</td>
+      <td>Test ordered, LOINC code, specimen info</td>
+    </tr>
+    <tr>
+      <td><strong>OBX</strong></td>
+      <td>Observation/Result</td>
+      <td>Actual test values and interpretations</td>
+    </tr>
+    <tr>
+      <td><strong>NTE</strong></td>
+      <td>Notes</td>
+      <td>Free-text clinical comments</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="part-2-the-order-flow-ormo01">Part 2: The Order Flow (ORM^O01)</h2>
+
+<p>When Dr. Williams clicks “Sign Order” in the EHR, an <strong>ORM^O01</strong> message is generated:</p>
+
+<h3 id="complete-orm-example">Complete ORM Example</h3>
+
+<pre><code class="language-hl7">MSH|^~\&amp;|EPIC|CITYCLINIC|LABSYS|CITYLAB|20251130093500||ORM^O01|MSG00001|P|2.5.1|||AL|NE
+PID|1||MRN123456^^^CITYCLINIC^MR||Smith^John^Q||19700215|M|||123 Main St^^Chicago^IL^60601||312-555-1234
+PV1|1|O|CLINIC^^^CITYCLINIC||||1234567^Williams^Robert^J^MD
+ORC|NW|ORD123456^EPIC||||||^^^^^R||20251130093000|||1234567^Williams^Robert^J^MD
+OBR|1|ORD123456^EPIC||2345-7^Glucose [Mass/volume] in Serum or Plasma^LN|||20251130093500||||||||1234567^Williams^Robert^J^MD
+NTE|1||R/O Diabetes Mellitus - Patient reports fatigue and polyuria x 2 weeks
+ORC|NW|ORD123457^EPIC||||||^^^^^R||20251130093000|||1234567^Williams^Robert^J^MD
+OBR|2|ORD123457^EPIC||4548-4^Hemoglobin A1c/Hemoglobin.total in Blood^LN|||20251130093500
+ORC|NW|ORD123458^EPIC||||||^^^^^R||20251130093000|||1234567^Williams^Robert^J^MD
+OBR|3|ORD123458^EPIC||24323-8^Comprehensive metabolic panel^LN|||20251130093500
+</code></pre>
+
+<h3 id="segment-by-segment-breakdown">Segment-by-Segment Breakdown</h3>
+
+<h4 id="msh-message-header">MSH (Message Header)</h4>
+
+<p>The MSH segment is <strong>always first</strong> and defines the message envelope:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MSH|^~\&amp;|EPIC|CITYCLINIC|LABSYS|CITYLAB|20251130093500||ORM^O01|MSG00001|P|2.5.1
+    │    │    │          │      │       │               │       │        │ │
+    │    │    │          │      │       │               │       │        │ └─ HL7 Version
+    │    │    │          │      │       │               │       │        └─── Processing ID (P=Production)
+    │    │    │          │      │       │               │       └───────────── Message Control ID
+    │    │    │          │      │       │               └───────────────────── Message Type (Order)
+    │    │    │          │      │       └───────────────────────────────────── Timestamp
+    │    │    │          │      └───────────────────────────────────────────── Receiving Facility
+    │    │    │          └──────────────────────────────────────────────────── Receiving Application
+    │    │    └─────────────────────────────────────────────────────────────── Sending Facility
+    │    └──────────────────────────────────────────────────────────────────── Sending Application
+    └───────────────────────────────────────────────────────────────────────── Encoding Characters
+</code></pre></div></div>
+
+<h4 id="pid-patient-identification">PID (Patient Identification)</h4>
+
+<p>The PID segment carries all patient demographics:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PID|1||MRN123456^^^CITYCLINIC^MR||Smith^John^Q||19700215|M|||123 Main St^^Chicago^IL^60601
+    │  │                         │             │        │   │
+    │  │                         │             │        │   └─ Address (Street^^City^State^ZIP)
+    │  │                         │             │        └───── Sex (M/F)
+    │  │                         │             └────────────── DOB (YYYYMMDD)
+    │  │                         └──────────────────────────── Name (Last^First^Middle)
+    │  └────────────────────────────────────────────────────── MRN^^^Authority^Type
+    └───────────────────────────────────────────────────────── Set ID
+</code></pre></div></div>
+
+<p>The patient identifier includes the <strong>assigning authority</strong> (<code class="language-plaintext highlighter-rouge">CITYCLINIC</code>) and <strong>identifier type</strong> (<code class="language-plaintext highlighter-rouge">MR</code> = Medical Record Number).</p>
+
+<h4 id="orc-common-order">ORC (Common Order)</h4>
+
+<p>The ORC segment controls order management:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ORC|NW|ORD123456^EPIC||FIL789012^LABSYS|||||20251130093000|||1234567^Williams^Robert^J^MD
+    │  │               │                    │                 │
+    │  │               │                    │                 └─ Ordering Provider (XCN format)
+    │  │               │                    └───────────────────── Transaction Date/Time
+    │  │               └────────────────────────────────────────── Filler Order Number (LIS assigns)
+    │  └────────────────────────────────────────────────────────── Placer Order Number (EHR assigns)
+    └───────────────────────────────────────────────────────────── Order Control (NW = New Order)
+</code></pre></div></div>
+
+<p><strong>Order Control Codes:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Meaning</th>
+      <th>Use Case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NW</code></td>
+      <td>New Order</td>
+      <td>Initial order placement</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CA</code></td>
+      <td>Cancel</td>
+      <td>Cancel previously placed order</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">XO</code></td>
+      <td>Change</td>
+      <td>Modify existing order</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SC</code></td>
+      <td>Status Changed</td>
+      <td>Order status update</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">RE</code></td>
+      <td>Observations</td>
+      <td>Results accompanying order</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="obr-observation-request">OBR (Observation Request)</h4>
+
+<p>The OBR segment specifies <strong>what test</strong> to perform using <strong>LOINC codes</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OBR|1|ORD123456^EPIC|FIL789012^LABSYS|2345-7^Glucose [Mass/volume] in Serum or Plasma^LN
+    │ │               │               │
+    │ │               │               └─ Universal Service ID (LOINC Code^Display^System)
+    │ │               └───────────────── Filler Order Number
+    │ └───────────────────────────────── Placer Order Number
+    └─────────────────────────────────── Set ID
+</code></pre></div></div>
+
+<p>This is where <strong>LOINC integration</strong> begins—the code <code class="language-plaintext highlighter-rouge">2345-7</code> universally identifies “Glucose [Mass/volume] in Serum or Plasma.”</p>
+
+<hr />
+
+<h2 id="part-3-the-results-flow-orur01">Part 3: The Results Flow (ORU^R01)</h2>
+
+<p>When the lab completes analysis, an <strong>ORU^R01</strong> message carries the results back:</p>
+
+<h3 id="complete-oru-example">Complete ORU Example</h3>
+
+<pre><code class="language-hl7">MSH|^~\&amp;|LABSYS|CITYLAB|EPIC|CITYCLINIC|20251130120000||ORU^R01|MSG00002|P|2.5.1|||AL|NE
+PID|1||MRN123456^^^CITYCLINIC^MR||Smith^John^Q||19700215|M|||123 Main St^^Chicago^IL^60601
+PV1|1|O|CLINIC^^^CITYCLINIC||||1234567^Williams^Robert^J^MD
+ORC|RE|ORD123456^EPIC|FIL789012^LABSYS||||^^^^^R||20251130093000|||1234567^Williams^Robert^J^MD
+OBR|1|ORD123456^EPIC|FIL789012^LABSYS|2345-7^Glucose [Mass/volume] in Serum or Plasma^LN|||20251130094500|||||||||1234567^Williams^Robert^J^MD||||||20251130120000|||F
+OBX|1|NM|2345-7^Glucose^LN||186|mg/dL|70-100|H|||F|||20251130113000||9876543^Johnson^Mary^L^MT
+NTE|1||Fasting specimen confirmed
+ORC|RE|ORD123457^EPIC|FIL789013^LABSYS
+OBR|2|ORD123457^EPIC|FIL789013^LABSYS|4548-4^Hemoglobin A1c/Hemoglobin.total in Blood^LN|||20251130094500|||||||||1234567^Williams^Robert^J^MD||||||20251130120000|||F
+OBX|1|NM|4548-4^Hemoglobin A1c/Hemoglobin.total^LN||8.2|%|4.0-5.6|H|||F|||20251130114500
+NTE|1||Result indicates poor glycemic control over past 2-3 months
+</code></pre>
+
+<h3 id="the-obx-segment-heart-of-lab-results">The OBX Segment: Heart of Lab Results</h3>
+
+<p>The <strong>OBX segment</strong> carries individual test results:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OBX|1|NM|2345-7^Glucose^LN||186|mg/dL|70-100|H|||F|||20251130113000
+    │ │  │                   │   │      │       │   │   │
+    │ │  │                   │   │      │       │   │   └─ Observation Date/Time
+    │ │  │                   │   │      │       │   └───── Result Status (F=Final)
+    │ │  │                   │   │      │       └───────── Abnormal Flag (H=High)
+    │ │  │                   │   │      └───────────────── Reference Range
+    │ │  │                   │   └──────────────────────── Units
+    │ │  │                   └──────────────────────────── Result Value
+    │ │  └──────────────────────────────────────────────── Observation ID (LOINC)
+    │ └─────────────────────────────────────────────────── Value Type (NM=Numeric)
+    └───────────────────────────────────────────────────── Set ID
+</code></pre></div></div>
+
+<p><strong>Value Types in OBX:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Type</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NM</code></td>
+      <td>Numeric</td>
+      <td><code class="language-plaintext highlighter-rouge">186</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ST</code></td>
+      <td>String</td>
+      <td><code class="language-plaintext highlighter-rouge">"Yellow"</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">CE</code></td>
+      <td>Coded Entry</td>
+      <td><code class="language-plaintext highlighter-rouge">112144000^Blood group A^SCT</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SN</code></td>
+      <td>Structured Numeric</td>
+      <td><code class="language-plaintext highlighter-rouge">&lt;^5</code> or <code class="language-plaintext highlighter-rouge">&gt;^10000</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">TX</code></td>
+      <td>Text</td>
+      <td>Free-text narrative</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Abnormal Flags:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Flag</th>
+      <th>Meaning</th>
+      <th>Clinical Significance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">N</code></td>
+      <td>Normal</td>
+      <td>Within reference range</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">L</code></td>
+      <td>Low</td>
+      <td>Below normal</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">H</code></td>
+      <td>High</td>
+      <td>Above normal</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">LL</code></td>
+      <td>Critical Low</td>
+      <td>Panic value - immediate action needed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">HH</code></td>
+      <td>Critical High</td>
+      <td>Panic value - immediate action needed</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="part-4-mapping-hl7-to-fhir">Part 4: Mapping HL7 to FHIR</h2>
+
+<p>Here’s where <strong>modernization</strong> happens. Each HL7 segment maps to a FHIR resource:</p>
+
+<h3 id="hl7-to-fhir-mapping-architecture">HL7 to FHIR Mapping Architecture</h3>
+
+<p><img src="/assets/images/hl7-fhir/hl7_fhir_mapping.svg" alt="HL7 to FHIR Mapping" /></p>
+
+<h3 id="mapping-matrix">Mapping Matrix</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>HL7 Segment</th>
+      <th>FHIR Resource</th>
+      <th>Key Elements</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>PID</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">Patient</code></td>
+      <td>name, birthDate, gender, identifier, address</td>
+    </tr>
+    <tr>
+      <td><strong>ORC/OBR</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">ServiceRequest</code></td>
+      <td>code (LOINC), subject, requester, status</td>
+    </tr>
+    <tr>
+      <td><strong>OBX</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">Observation</code></td>
+      <td>code (LOINC), value, interpretation (SNOMED), referenceRange</td>
+    </tr>
+    <tr>
+      <td><strong>SPM</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">Specimen</code></td>
+      <td>type, collection, receivedTime</td>
+    </tr>
+    <tr>
+      <td><strong>ORU (full)</strong></td>
+      <td><code class="language-plaintext highlighter-rouge">DiagnosticReport</code></td>
+      <td>result references, conclusion, status</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="fhir-observation-example">FHIR Observation Example</h3>
+
+<p>Here’s how Mr. Smith’s glucose result transforms into FHIR:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"resourceType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Observation"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"glucose-result-mr-smith"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"final"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"category"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="nl">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/observation-category"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"laboratory"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Laboratory"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+  </span><span class="p">}],</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://loinc.org"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2345-7"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Glucose [Mass/volume] in Serum or Plasma"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"subject"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patient/mrn123456"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Q. Smith"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"effectiveDateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-11-30T11:30:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"valueQuantity"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">186</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg/dL"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://unitsofmeasure.org"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg/dL"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"interpretation"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="nl">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"H"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+  </span><span class="p">}],</span><span class="w">
+  </span><span class="nl">"referenceRange"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="nl">"low"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg/dL"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"high"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mg/dL"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70-100 mg/dL"</span><span class="w">
+  </span><span class="p">}],</span><span class="w">
+  </span><span class="nl">"performer"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Practitioner/tech-mary-johnson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mary L. Johnson, MT"</span><span class="w">
+  </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="the-power-of-coded-elements">The Power of Coded Elements</h3>
+
+<p>Notice how the FHIR resource embeds <strong>multiple coding systems</strong>:</p>
+
+<p><img src="/assets/images/hl7-fhir/coded_elements.svg" alt="Coded Elements in FHIR" /></p>
+
+<ul>
+  <li><strong>LOINC</strong> (<code class="language-plaintext highlighter-rouge">http://loinc.org</code>): Identifies <em>what</em> was tested</li>
+  <li><strong>UCUM</strong> (<code class="language-plaintext highlighter-rouge">http://unitsofmeasure.org</code>): Standardizes units</li>
+  <li><strong>HL7 Interpretation</strong> codes: Flags abnormal values</li>
+  <li><strong>SNOMED CT</strong> (when needed): Provides clinical semantics</li>
+</ul>
+
+<hr />
+
+<h2 id="part-5-loinc-deep-dive">Part 5: LOINC Deep Dive</h2>
+
+<p>LOINC (Logical Observation Identifiers Names and Codes) provides <strong>universal test identification</strong> through a 6-part model:</p>
+
+<h3 id="loinc-code-structure">LOINC Code Structure</h3>
+
+<p><img src="/assets/images/hl7-fhir/loinc_model.svg" alt="LOINC 6-Part Model" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Name</th>
+      <th>Example (2345-7)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>Component</strong></td>
+      <td>Glucose</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Property</strong></td>
+      <td>MCnc (Mass Concentration)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Time</strong></td>
+      <td>Pt (Point in time)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>System</strong></td>
+      <td>Ser/Plas (Serum or Plasma)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>Scale</strong></td>
+      <td>Qn (Quantitative)</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>Method</strong></td>
+      <td>(optional)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Combined:</strong> <code class="language-plaintext highlighter-rouge">Glucose.MCnc.Pt.Ser/Plas.Qn</code> = <strong>2345-7</strong></p>
+
+<h3 id="essential-laboratory-loinc-codes">Essential Laboratory LOINC Codes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>LOINC</th>
+      <th>Test</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>2345-7</strong></td>
+      <td>Glucose (Fasting)</td>
+      <td>Chemistry</td>
+    </tr>
+    <tr>
+      <td><strong>4548-4</strong></td>
+      <td>Hemoglobin A1c</td>
+      <td>Diabetes</td>
+    </tr>
+    <tr>
+      <td><strong>2951-2</strong></td>
+      <td>Sodium</td>
+      <td>Electrolytes</td>
+    </tr>
+    <tr>
+      <td><strong>2823-3</strong></td>
+      <td>Potassium</td>
+      <td>Electrolytes</td>
+    </tr>
+    <tr>
+      <td><strong>2160-0</strong></td>
+      <td>Creatinine</td>
+      <td>Renal</td>
+    </tr>
+    <tr>
+      <td><strong>718-7</strong></td>
+      <td>Hemoglobin</td>
+      <td>Hematology</td>
+    </tr>
+    <tr>
+      <td><strong>6690-2</strong></td>
+      <td>WBC Count</td>
+      <td>Hematology</td>
+    </tr>
+    <tr>
+      <td><strong>5902-2</strong></td>
+      <td>Prothrombin Time</td>
+      <td>Coagulation</td>
+    </tr>
+    <tr>
+      <td><strong>883-9</strong></td>
+      <td>ABO Group</td>
+      <td>Blood Bank</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="loinc-in-the-wild">LOINC in the Wild</h3>
+
+<p><strong>In HL7 OBR/OBX:</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OBR|1|...|2345-7^Glucose [Mass/volume] in Serum or Plasma^LN|...
+         └─────┘                                           └─┘
+         LOINC Code                                       LN = LOINC
+</code></pre></div></div>
+
+<p><strong>In FHIR:</strong></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://loinc.org"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2345-7"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Glucose [Mass/volume] in Serum or Plasma"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="part-6-snomed-ct-for-clinical-meaning">Part 6: SNOMED CT for Clinical Meaning</h2>
+
+<p>While LOINC tells you <em>what</em> was measured, <strong>SNOMED CT</strong> tells you <em>what it means</em>.</p>
+
+<h3 id="when-snomed-ct-applies">When SNOMED CT Applies</h3>
+
+<p><img src="/assets/images/hl7-fhir/snomed_use_cases.svg" alt="SNOMED CT Use Cases" /></p>
+
+<ul>
+  <li><strong>Qualitative results</strong>: Blood type (A, B, AB, O)</li>
+  <li><strong>Interpretations</strong>: Positive, Negative, Indeterminate</li>
+  <li><strong>Clinical findings</strong>: Associated conditions</li>
+  <li><strong>Diagnoses</strong>: Linked clinical diagnoses</li>
+</ul>
+
+<h3 id="example-blood-type-result">Example: Blood Type Result</h3>
+
+<p><strong>HL7 OBX (Coded Entry):</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>OBX|1|CE|882-1^ABO Group^LN||112144000^Blood group A^SCT||||N|||F
+                               └─────────────────────────────┘
+                               SNOMED CT code for "Blood group A"
+</code></pre></div></div>
+
+<p><strong>FHIR Observation:</strong></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"valueCodeableConcept"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"coding"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"system"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://snomed.info/sct"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"112144000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"display"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Blood group A (finding)"</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="common-snomed-ct-codes-for-lab">Common SNOMED CT Codes for Lab</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Display</th>
+      <th>Use Case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>260385009</strong></td>
+      <td>Negative</td>
+      <td>Qualitative negative result</td>
+    </tr>
+    <tr>
+      <td><strong>10828004</strong></td>
+      <td>Positive</td>
+      <td>Qualitative positive result</td>
+    </tr>
+    <tr>
+      <td><strong>112144000</strong></td>
+      <td>Blood group A</td>
+      <td>ABO typing</td>
+    </tr>
+    <tr>
+      <td><strong>278147001</strong></td>
+      <td>Blood group O</td>
+      <td>ABO typing</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="part-7-the-complete-integration-architecture">Part 7: The Complete Integration Architecture</h2>
+
+<p>Here’s how it all fits together in production:</p>
+
+<p><img src="/assets/images/hl7-fhir/integration_architecture.svg" alt="Integration Architecture" /></p>
+
+<h3 id="transformation-pipeline">Transformation Pipeline</h3>
+
+<p><img src="/assets/images/hl7-fhir/transformation_pipeline.svg" alt="Transformation Pipeline" /></p>
+
+<hr />
+
+<h2 id="part-8-clinical-results-for-mr-smith">Part 8: Clinical Results for Mr. Smith</h2>
+
+<p>Here’s the final results summary with clinical interpretation:</p>
+
+<h3 id="results-table">Results Table</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Test</th>
+      <th>LOINC</th>
+      <th>Result</th>
+      <th>Units</th>
+      <th>Range</th>
+      <th>Flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Glucose, Fasting</td>
+      <td>2345-7</td>
+      <td><strong>186</strong></td>
+      <td>mg/dL</td>
+      <td>70-100</td>
+      <td><strong>HIGH</strong></td>
+    </tr>
+    <tr>
+      <td>Hemoglobin A1c</td>
+      <td>4548-4</td>
+      <td><strong>8.2</strong></td>
+      <td>%</td>
+      <td>4.0-5.6</td>
+      <td><strong>HIGH</strong></td>
+    </tr>
+    <tr>
+      <td>Sodium</td>
+      <td>2951-2</td>
+      <td>140</td>
+      <td>mmol/L</td>
+      <td>136-145</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>Potassium</td>
+      <td>2823-3</td>
+      <td>4.2</td>
+      <td>mmol/L</td>
+      <td>3.5-5.0</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>Chloride</td>
+      <td>2075-0</td>
+      <td>102</td>
+      <td>mmol/L</td>
+      <td>98-106</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>CO2</td>
+      <td>2028-9</td>
+      <td>24</td>
+      <td>mmol/L</td>
+      <td>23-29</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>BUN</td>
+      <td>3094-0</td>
+      <td>18</td>
+      <td>mg/dL</td>
+      <td>7-20</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>Creatinine</td>
+      <td>2160-0</td>
+      <td>1.0</td>
+      <td>mg/dL</td>
+      <td>0.7-1.3</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <td>Calcium</td>
+      <td>17861-6</td>
+      <td>9.4</td>
+      <td>mg/dL</td>
+      <td>8.5-10.5</td>
+      <td>Normal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="clinical-interpretation">Clinical Interpretation</h3>
+
+<p>The elevated fasting glucose (186 mg/dL) and HbA1c (8.2%) are consistent with <strong>Type 2 Diabetes Mellitus</strong>. Normal renal function (BUN, Creatinine) indicates no diabetic nephropathy at this time. Electrolytes within normal limits.</p>
+
+<p><strong>Diagnosis:</strong> Type 2 Diabetes Mellitus (ICD-10: E11.9)</p>
+
+<h3 id="what-makes-this-data-interoperable">What Makes This Data Interoperable</h3>
+
+<p><img src="/assets/images/hl7-fhir/interoperability_success.svg" alt="Interoperability Success Factors" /></p>
+
+<ol>
+  <li><strong>LOINC codes</strong> ensure the glucose test from City Clinic is recognized identically at any other facility</li>
+  <li><strong>Reference ranges</strong> enable automatic flagging regardless of which EHR displays results</li>
+  <li><strong>Structured data</strong> allows CDS rules to fire: “If Glucose &gt; 126 AND HbA1c &gt; 6.5, suggest Diabetes workup”</li>
+  <li><strong>FHIR resources</strong> enable real-time API queries across systems</li>
+</ol>
+
+<hr />
+
+<h2 id="key-takeaways-for-implementers">Key Takeaways for Implementers</h2>
+
+<h3 id="for-data-engineers">For Data Engineers</h3>
+
+<ol>
+  <li><strong>Parse before transforming</strong>: Validate HL7 delimiter handling before FHIR mapping</li>
+  <li><strong>Preserve identifiers</strong>: Placer/filler order numbers link orders to results</li>
+  <li><strong>Handle repetitions</strong>: OBX segments repeat; create one Observation per OBX</li>
+  <li><strong>Validate terminology</strong>: LOINC codes must be valid; implement terminology server lookups</li>
+</ol>
+
+<h3 id="for-clinical-informaticists">For Clinical Informaticists</h3>
+
+<ol>
+  <li><strong>Map local codes</strong>: Many LIS systems use local codes—map them to LOINC</li>
+  <li><strong>Preserve clinical notes</strong>: NTE segments contain critical clinical context</li>
+  <li><strong>Abnormal flag consistency</strong>: Ensure HL7 flags map correctly to FHIR interpretations</li>
+  <li><strong>Reference range normalization</strong>: Different analyzers may have different ranges</li>
+</ol>
+
+<h3 id="for-data-scientists">For Data Scientists</h3>
+
+<ol>
+  <li><strong>Structured codes enable ML</strong>: LOINC/SNOMED coded data is ML-ready</li>
+  <li><strong>Temporal data matters</strong>: effectiveDateTime enables time-series analysis</li>
+  <li><strong>Reference ranges as features</strong>: Abnormal flags are pre-computed clinical features</li>
+  <li><strong>Linkage is key</strong>: Patient/Encounter references enable longitudinal analysis</li>
+</ol>
+
+<hr />
+
+<h2 id="resources-and-further-reading">Resources and Further Reading</h2>
+
+<h3 id="official-standards">Official Standards</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HL7 International</td>
+      <td><a href="https://www.hl7.org">https://www.hl7.org</a></td>
+    </tr>
+    <tr>
+      <td>FHIR R4 Specification</td>
+      <td><a href="https://www.hl7.org/fhir/">https://www.hl7.org/fhir/</a></td>
+    </tr>
+    <tr>
+      <td>LOINC</td>
+      <td><a href="https://loinc.org">https://loinc.org</a></td>
+    </tr>
+    <tr>
+      <td>SNOMED CT</td>
+      <td><a href="https://www.snomed.org">https://www.snomed.org</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="tools">Tools</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>RELMA</strong></td>
+      <td>LOINC mapping and search tool</td>
+    </tr>
+    <tr>
+      <td><strong>HAPI FHIR</strong></td>
+      <td>Open-source FHIR server (Java)</td>
+    </tr>
+    <tr>
+      <td><strong>Mirth Connect</strong></td>
+      <td>HL7 integration engine</td>
+    </tr>
+    <tr>
+      <td><strong>Synthea</strong></td>
+      <td>Synthetic patient data generator</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>The journey from HL7 pipes to FHIR APIs represents healthcare IT’s transition from <strong>systems that talk</strong> to <strong>systems that understand</strong>. By leveraging:</p>
+
+<ul>
+  <li><strong>HL7 v2.x</strong> for legacy transactional messaging</li>
+  <li><strong>FHIR</strong> for modern, API-driven architecture</li>
+  <li><strong>LOINC</strong> for universal test identification</li>
+  <li><strong>SNOMED CT</strong> for clinical semantic meaning</li>
+</ul>
+
+<p>We enable clinical systems to not just transfer data, but to <strong>reason</strong> about it—powering clinical decision support, AI/ML applications, and truly interoperable healthcare.</p>
+
+<p>The pipes are still there. But now they carry meaning.</p>
+
+<hr />
+
+<p><em>Have questions about implementing lab interoperability? Connect with me on <a href="https://github.com/datagodzilla">GitHub</a> or drop a comment below.</em></p>
+
+<hr />
+
+<p><strong>Tags:</strong> #FHIR #HL7 #LOINC #SNOMEDCT #Interoperability #ClinicalInformatics #HealthcareIT #LIS #EHR #DataStandards #HealthTech</p>
+
+</article>
+
+
+
+<footer class="post-footer">
+    
+    <p><em>Have thoughts on this post? Feel free to reach out or share your experience.</em></p>
+    
+    
+    
+    <div class="tags-list">
+        <strong>Tags:</strong>
+        
+        
+        
+        
+        <a href="/tags/#fhir" class="tag tag-fhir">fhir</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#hl7" class="tag tag-fhir">hl7</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#loinc" class="tag tag-fhir">loinc</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#snomed-ct" class="tag tag-fhir">snomed-ct</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#lis" class="tag">lis</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#ehr" class="tag">ehr</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#healthcare-data" class="tag">healthcare-data</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#clinical-workflow" class="tag">clinical-workflow</a> · 
+        
+        
+        
+        
+        
+        <a href="/tags/#data-standards" class="tag">data-standards</a>
+        
+        
+    </div>
+    
+    
+    <nav class="post-navigation">
+        
+        
+        <a href="/blog/Healthcare-Interoperability-FHIR-HL7-LOINC-SNOMED-CT/" class="nav-next">
+            <span class="nav-label">Next →</span>
+            <span class="nav-title">Healthcare Interoperability: FHIR, HL7, LOINC &...</span>
+        </a>
+        
+    </nav>
+</footer>
+
+    </main>
+    
+    <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Clinical AI Insider</div>
+                <p class="footer-tagline">Deep dives into healthcare interoperability, NLP pipelines, and real-world evidence generation. Building bridges between clinical data and actionable insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Content</h4>
+                <ul>
+                    <li><a href="/blog/">All Posts</a></li>
+                    <li><a href="/tags/">Tags</a></li>
+                    <li><a href="/projects/">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    
+                    <li><a href="https://ohdsi.org">OHDSI.org</a></li>
+                    
+                    <li><a href="https://forums.ohdsi.org">OHDSI Forums</a></li>
+                    
+                    <li><a href="https://github.com/OHDSI">OHDSI GitHub</a></li>
+                    
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://github.com/datagodzilla">GitHub</a></li>
+                    <li><a href="https://linkedin.com/in/lsurampudi">LinkedIn</a></li>
+                    <li><a href="/about/">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Clinical AI Insider</span>
+            <span>Built with Jekyll</span>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Floating Scroll Navigation -->
+<div class="scroll-nav" id="scrollNav">
+    <button class="scroll-nav-btn scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button class="scroll-nav-btn scroll-to-bottom" id="scrollToBottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </button>
+</div>
+
+<style>
+/* Floating Scroll Navigation */
+.scroll-nav {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.scroll-nav-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Anthropic salmon/terracotta */
+    background: rgba(217, 119, 87, 0.12);
+    color: #D97757;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+        0 4px 16px rgba(217, 119, 87, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.22);
+    transform: scale(1.08);
+    box-shadow:
+        0 6px 24px rgba(217, 119, 87, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.scroll-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.scroll-nav-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.scroll-nav-btn:hover svg {
+    transform: translateY(-2px);
+}
+
+.scroll-to-bottom:hover svg {
+    transform: translateY(2px);
+}
+
+/* Hide on small screens or when not needed */
+@media (max-width: 768px) {
+    .scroll-nav {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .scroll-nav-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scroll-nav-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Pill variant for combined button (alternative style) */
+.scroll-nav.pill-style {
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 5px;
+    gap: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.scroll-nav.pill-style .scroll-nav-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.scroll-nav.pill-style .scroll-nav-btn:hover {
+    background: rgba(217, 119, 87, 0.15);
+}
+</style>
+
+<script>
+(function() {
+    const scrollNav = document.getElementById('scrollNav');
+    const scrollToTop = document.getElementById('scrollToTop');
+    const scrollToBottom = document.getElementById('scrollToBottom');
+
+    // Show/hide based on scroll position
+    function toggleScrollNav() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        // Show when scrolled more than 300px
+        if (scrollY > 300) {
+            scrollNav.classList.add('visible');
+        } else {
+            scrollNav.classList.remove('visible');
+        }
+
+        // Hide bottom button when near bottom
+        if (scrollY + windowHeight >= docHeight - 100) {
+            scrollToBottom.style.opacity = '0.3';
+            scrollToBottom.style.pointerEvents = 'none';
+        } else {
+            scrollToBottom.style.opacity = '1';
+            scrollToBottom.style.pointerEvents = 'auto';
+        }
+
+        // Hide top button when at top
+        if (scrollY < 100) {
+            scrollToTop.style.opacity = '0.3';
+            scrollToTop.style.pointerEvents = 'none';
+        } else {
+            scrollToTop.style.opacity = '1';
+            scrollToTop.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Smooth scroll to top
+    scrollToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smooth scroll to bottom
+    scrollToBottom.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Listen for scroll events (throttled)
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                toggleScrollNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    // Initial check
+    toggleScrollNav();
+})();
+</script>
+
+
+</body>
+</html>

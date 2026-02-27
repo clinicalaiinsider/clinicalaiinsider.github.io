@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering ATLAS Cohort Definitions | DataGodzilla</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Mermaid for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'neutral',
+            themeVariables: {
+                primaryColor: '#f3f4f6',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#e5e7eb',
+                lineColor: '#9ca3af',
+                secondaryColor: '#f9fafb',
+                fontFamily: 'Inter, sans-serif'
+            }
+        });
+    </script>
+    
+    <style>
+        :root {
+            --color-text: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-text-muted: #9ca3af;
+            --color-bg: #ffffff;
+            --color-bg-secondary: #f9fafb;
+            --color-border: #e5e7eb;
+            --color-accent: #2563eb;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --max-width: 720px;
+            --radius: 8px;
+        }
+        
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--color-text);
+            background: var(--color-bg);
+        }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Header */
+        .site-header {
+            border-bottom: 1px solid var(--color-border);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            background: var(--color-bg);
+            z-index: 100;
+        }
+        
+        .site-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-text);
+            text-decoration: none;
+        }
+        
+        .site-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .site-nav a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .site-nav a:hover {
+            color: var(--color-text);
+        }
+        
+        /* Post Header */
+        .post-header {
+            padding: 48px 0 32px;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 32px;
+        }
+        
+        .post-title {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        
+        .post-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .post-meta time {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+        
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+        
+        /* Typography */
+        article h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 48px 0 16px;
+            letter-spacing: -0.01em;
+        }
+        
+        article h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 32px 0 12px;
+        }
+        
+        article p {
+            margin-bottom: 1.25rem;
+        }
+        
+        article a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+        
+        article a:hover {
+            text-decoration: underline;
+        }
+        
+        article ul, article ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        article li {
+            margin-bottom: 0.5rem;
+        }
+        
+        article hr {
+            border: none;
+            border-top: 1px solid var(--color-border);
+            margin: 48px 0;
+        }
+        
+        /* Code */
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background: var(--color-bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+        }
+        
+        pre {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            overflow-x: auto;
+            margin: 24px 0;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            border: none;
+        }
+        
+        /* ========== IMAGES - KEY STYLING ========== */
+        .image-container {
+            margin: 32px 0;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--color-bg-secondary);
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .image-caption {
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            border-top: 1px solid var(--color-border);
+            font-style: italic;
+        }
+        
+        /* For images that need to extend beyond content width */
+        .image-wide {
+            margin-left: -60px;
+            margin-right: -60px;
+            max-width: calc(100% + 120px);
+        }
+        
+        @media (max-width: 840px) {
+            .image-wide {
+                margin-left: 0;
+                margin-right: 0;
+                max-width: 100%;
+            }
+        }
+        
+        /* Inline images without border */
+        article img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius);
+        }
+        
+        /* Callouts */
+        .callout {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        
+        .callout-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .callout-info {
+            border-left: 3px solid var(--color-accent);
+        }
+        
+        .callout-warning {
+            border-left: 3px solid #f59e0b;
+            background: #fffbeb;
+        }
+        
+        .callout-error {
+            border-left: 3px solid #ef4444;
+            background: #fef2f2;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .stat-card {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 8px;
+        }
+        
+        /* Diagram Container */
+        .diagram-container {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        th {
+            font-weight: 600;
+            background: var(--color-bg-secondary);
+        }
+        
+        /* Key Points */
+        .key-points {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .key-points h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+        
+        .key-points ol {
+            margin-bottom: 0;
+        }
+        
+        /* Resources */
+        .resources {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin: 32px 0;
+        }
+        
+        .resources h3 {
+            margin-top: 0;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .resources h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0 0 12px;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .resources ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .resources li {
+            margin-bottom: 8px;
+        }
+        
+        /* Footer */
+        .post-footer {
+            border-top: 1px solid var(--color-border);
+            margin-top: 48px;
+            padding: 32px 0;
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .tags-list {
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+        
+        /* Responsive */
+        @media (max-width: 640px) {
+            .post-title {
+                font-size: 1.5rem;
+            }
+            
+            article h2 {
+                font-size: 1.25rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-title">DataGodzilla</a>
+            <nav class="site-nav">
+                <a href="/blog">Blog</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Post Header -->
+        <header class="post-header">
+            <h1 class="post-title">Mastering ATLAS Cohort Definitions: A Clinical Researcher's Complete Guide</h1>
+            <div class="post-meta">
+                <time>December 28, 2025</time>
+                <span>·</span>
+                <span>18 min read</span>
+                <span>·</span>
+                <span class="tag">OHDSI</span>
+                <span class="tag">ATLAS</span>
+                <span class="tag">OMOP CDM</span>
+            </div>
+        </header>
+        
+        <!-- Article -->
+        <article>
+            
+            <h2>The Journey So Far</h2>
+            
+            <p>Building on our exploration of the OMOP Common Data Model, standardized vocabularies like SNOMED CT, RxNorm, and LOINC, ETL fundamentals, and data quality assessment with Achilles, we've reached a pivotal milestone: <strong>defining patient cohorts in OHDSI ATLAS</strong>.</p>
+            
+            <div class="callout callout-info">
+                <div class="callout-title">📚 The Book of OHDSI</div>
+                <p>"A cohort is not just a list of patients—it's the operationalization of a clinical question."</p>
+            </div>
+            
+            <hr>
+            
+            <h2>Why ATLAS and OHDSI Matter</h2>
+            
+            <p>OHDSI has grown into one of the largest international collaboratives in healthcare data science:</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">810M</div>
+                    <div class="stat-label">Patient Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">453+</div>
+                    <div class="stat-label">Data Partners</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">83</div>
+                    <div class="stat-label">Countries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4,200+</div>
+                    <div class="stat-label">Collaborators</div>
+                </div>
+            </div>
+            
+            <h3>What is ATLAS?</h3>
+            
+            <p>ATLAS is the flagship web application of the OHDSI ecosystem. It provides a graphical interface for vocabulary exploration, cohort definition, characterization, estimation, prediction, and pathway analysis.</p>
+            
+            <!-- EXAMPLE: Your existing blog image with proper styling -->
+            <div class="image-container">
+                <img src="https://placehold.co/800x450/f9fafb/6b7280?text=ATLAS+Home+Screen+Screenshot%0A(Your+existing+image+here)" alt="ATLAS Home Screen">
+                <div class="image-caption">The ATLAS home screen provides navigation to all OHDSI analytical tools</div>
+            </div>
+            
+            <hr>
+            
+            <h2>Why Cohorts Are the Foundation</h2>
+            
+            <p>In clinical research, a <strong>cohort</strong> is a defined group of patients who share specific characteristics. Unlike ad-hoc database queries, cohorts are reproducible, shareable, standardized, versioned, and portable across 450+ OMOP databases.</p>
+            
+            <div class="callout callout-info">
+                <div class="callout-title">🏥 Clinical Scenario</div>
+                <p><strong>Dr. Sarah Chen</strong>, an endocrinologist at a large academic medical center, wants to study cardiovascular outcomes in Type 2 Diabetes patients initiating metformin therapy.</p>
+            </div>
+            
+            <h3>Mapping Clinical Criteria to OMOP Concepts</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Clinical Criterion</th>
+                        <th>Domain</th>
+                        <th>Vocabulary</th>
+                        <th>Concept ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>T2DM Diagnosis</td>
+                        <td>Condition</td>
+                        <td>SNOMED CT</td>
+                        <td>201826</td>
+                    </tr>
+                    <tr>
+                        <td>Metformin</td>
+                        <td>Drug</td>
+                        <td>RxNorm</td>
+                        <td>6809</td>
+                    </tr>
+                    <tr>
+                        <td>T1DM (exclude)</td>
+                        <td>Condition</td>
+                        <td>SNOMED CT</td>
+                        <td>201254</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <hr>
+            
+            <h2>Our Database Setup</h2>
+            
+            <p>After extensive preparation, our PostgreSQL database contained 2,411 synthetic patients with complete OMOP CDM 5.4 structure.</p>
+            
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart TB
+    subgraph DB["Database: ohdsi_learning"]
+        subgraph CDM["cdm (OMOP CDM 5.4)"]
+            P["person (2,411 patients)"]
+            CO[condition_occurrence]
+            DE[drug_exposure]
+        end
+        
+        subgraph VOC["vocabulary"]
+            C["concept (~6M)"]
+        end
+        
+        subgraph RES["results"]
+            CH[cohort]
+        end
+    end
+    
+    P --> CO
+    P --> DE
+    C --> CO
+                </pre>
+            </div>
+            
+            <h3>First Success: Data Sources Dashboard</h3>
+            
+            <p>The Data Sources dashboard confirmed our setup was working. ATLAS correctly displayed our 2,411 synthetic patients with demographic breakdowns:</p>
+            
+            <!-- EXAMPLE: Another blog image -->
+            <div class="image-container image-wide">
+                <img src="https://placehold.co/900x500/f9fafb/6b7280?text=Data+Sources+Dashboard%0ACDM+Summary+with+2,411+patients%0A(Your+existing+screenshot+here)" alt="Data Sources Dashboard">
+                <div class="image-caption">The CDM Summary shows 2,411 patients with gender distribution from our Synthea data</div>
+            </div>
+            
+            <hr>
+            
+            <h2>Building the Type 2 Diabetes Cohort</h2>
+            
+            <h3>Step 1: Vocabulary Search</h3>
+            
+            <p>Every cohort starts with finding the right clinical concepts. In ATLAS, navigate to <strong>Search</strong> and enter "type 2 diabetes":</p>
+            
+            <!-- EXAMPLE: Vocabulary search screenshot -->
+            <div class="image-container">
+                <img src="https://placehold.co/800x400/f9fafb/6b7280?text=Vocabulary+Search+Results%0A299+concepts+for+%22type+2+diabetes%22%0A(Your+existing+screenshot+here)" alt="Vocabulary Search">
+                <div class="image-caption">Searching for "type 2 diabetes" returns 299 concepts across multiple vocabularies</div>
+            </div>
+            
+            <h3>Step 2: Building the Cohort Definition</h3>
+            
+            <p>The definition has four key sections:</p>
+            
+            <div class="diagram-container">
+                <pre class="mermaid">
+flowchart LR
+    subgraph Entry["1. Entry Events"]
+        E1["Condition: T2DM"]
+        E2["First occurrence"]
+    end
+    
+    subgraph Include["2. Inclusion"]
+        I1["Age ≥ 18"]
+        I2["No prior T1DM"]
+    end
+    
+    subgraph Exit["3. Exit"]
+        X1["End of obs"]
+    end
+    
+    subgraph Out["4. Output"]
+        O1["220 patients"]
+    end
+    
+    Entry --> Include --> Exit --> Out
+                </pre>
+            </div>
+            
+            <!-- EXAMPLE: Cohort builder screenshot -->
+            <div class="image-container image-wide">
+                <img src="https://placehold.co/900x550/f9fafb/6b7280?text=Cohort+Builder+Interface%0AEntry+events,+inclusion+criteria,+exit+settings%0A(Your+existing+screenshot+here)" alt="Cohort Builder">
+                <div class="image-caption">The cohort builder showing entry events, inclusion criteria, and exit settings</div>
+            </div>
+            
+            <h3>Step 3: Generating the Cohort</h3>
+            
+            <p>After saving the definition, navigate to the <strong>Generation</strong> tab and click "Generate":</p>
+            
+            <div class="image-container">
+                <img src="https://placehold.co/800x300/f9fafb/6b7280?text=Cohort+Generation+Status%0ACOMPLETE+-+220+patients+generated%0A(Your+existing+screenshot+here)" alt="Cohort Generation Status">
+                <div class="image-caption">Generation completed successfully—220 patients in the final cohort</div>
+            </div>
+            
+            <hr>
+            
+            <h2>The Schema Compatibility Problem</h2>
+            
+            <p>After successfully generating cohorts, we attempted to run <strong>Cohort Characterization</strong>. That's when the errors started:</p>
+            
+            <div class="callout callout-error">
+                <div class="callout-title">⚠️ Schema Errors</div>
+                <pre style="background: transparent; border: none; padding: 0; margin: 0;"><code>ERROR: schema "temp" does not exist
+ERROR: column "design_hash" does not exist
+ERROR: relation "results.cohort_cache" does not exist</code></pre>
+            </div>
+            
+            <p><strong>WebAPI 2.x has evolved significantly beyond the base OMOP CDM specification.</strong> When you connect an external database, Flyway migrations don't run automatically.</p>
+            
+            <hr>
+            
+            <h2>Key Takeaways</h2>
+            
+            <div class="key-points">
+                <h3>Summary</h3>
+                <ol>
+                    <li><strong>Cohorts are algorithms, not just patient lists</strong> — They're reproducible across any OMOP database</li>
+                    <li><strong>Three components define every cohort</strong> — Entry event, inclusion criteria, exit criteria</li>
+                    <li><strong>ATLAS generates SQL</strong> — Understanding backend tables helps debugging</li>
+                    <li><strong>WebAPI ≠ OMOP CDM</strong> — The application has evolved beyond the base spec</li>
+                    <li><strong>Check the database directly</strong> — When UI shows "...", data may be correct</li>
+                </ol>
+            </div>
+            
+            <hr>
+            
+            <div class="resources">
+                <h3>Resources</h3>
+                <div class="resources-grid">
+                    <div>
+                        <h4>OHDSI Community</h4>
+                        <ul>
+                            <li><a href="https://ohdsi.github.io/TheBookOfOhdsi/Cohorts.html">The Book of OHDSI - Cohorts</a></li>
+                            <li><a href="https://ohdsi.github.io/Atlas/">ATLAS User Guide</a></li>
+                            <li><a href="https://forums.ohdsi.org/">OHDSI Forums</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Technical Resources</h4>
+                        <ul>
+                            <li><a href="https://github.com/OHDSI/WebAPI">WebAPI GitHub</a></li>
+                            <li><a href="https://github.com/OHDSI/Broadsea">Broadsea GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+        </article>
+        
+        <footer class="post-footer">
+            <p><em>Have you encountered similar challenges building cohorts in ATLAS? Share your experience in the comments below.</em></p>
+            <div class="tags-list">
+                <strong>Tags:</strong> OHDSI · ATLAS · Cohort Definitions · OMOP CDM · Type 2 Diabetes
+            </div>
+        </footer>
+        
+    </main>
+
+</body>
+</html>

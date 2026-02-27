@@ -1,0 +1,410 @@
+/**
+ * Clinical/Healthcare Visual Storytelling Theme
+ *
+ * Professional medical aesthetic with OHDSI brand integration.
+ * Best for: OHDSI content, clinical workflows, healthcare IT
+ *
+ * Version: 1.0.0
+ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+
+:root {
+  /* Background */
+  --clinical-bg: #f8fafc;
+  --clinical-bg-card: #ffffff;
+  --clinical-bg-secondary: #e2e8f0;
+
+  /* Primary OHDSI Colors */
+  --clinical-blue: #0077b6;
+  --clinical-teal: #00b4d8;
+  --clinical-light: #90e0ef;
+
+  /* Text */
+  --clinical-text: #1a365d;
+  --clinical-text-secondary: #4a5568;
+  --clinical-text-muted: #718096;
+  --clinical-text-inverse: #ffffff;
+
+  /* Semantic Colors */
+  --clinical-success: #38a169;
+  --clinical-warning: #d69e2e;
+  --clinical-danger: #e53e3e;
+  --clinical-info: #3182ce;
+
+  /* Evidence Levels */
+  --clinical-evidence-high: #38a169;
+  --clinical-evidence-moderate: #d69e2e;
+  --clinical-evidence-low: #e53e3e;
+
+  /* Borders & Shadows */
+  --clinical-border: #e2e8f0;
+  --clinical-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --clinical-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --clinical-font: "Roboto", -apple-system, BlinkMacSystemFont, sans-serif;
+  --clinical-font-mono: "Roboto Mono", monospace;
+
+  /* Spacing */
+  --clinical-spacing-xs: 0.25rem;
+  --clinical-spacing-sm: 0.5rem;
+  --clinical-spacing-md: 1rem;
+  --clinical-spacing-lg: 1.5rem;
+  --clinical-spacing-xl: 2rem;
+
+  /* Radius */
+  --clinical-radius-sm: 4px;
+  --clinical-radius-md: 8px;
+  --clinical-radius-lg: 12px;
+}
+
+/* ============================================
+   BASE CONTAINER
+   ============================================ */
+
+.clinical-section {
+  background: var(--clinical-bg);
+  padding: var(--clinical-spacing-xl) var(--clinical-spacing-lg);
+  font-family: var(--clinical-font);
+  color: var(--clinical-text);
+}
+
+.clinical-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   STAT CARDS
+   ============================================ */
+
+.clinical-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--clinical-spacing-lg);
+  margin: var(--clinical-spacing-xl) 0;
+}
+
+.clinical-stat-card {
+  background: var(--clinical-bg-card);
+  border-radius: var(--clinical-radius-md);
+  padding: var(--clinical-spacing-lg);
+  border: 1px solid var(--clinical-border);
+  border-top: 4px solid var(--clinical-blue);
+  box-shadow: var(--clinical-shadow);
+  text-align: center;
+}
+
+.clinical-stat-card.accent-teal {
+  border-top-color: var(--clinical-teal);
+}
+
+.clinical-stat-card.accent-success {
+  border-top-color: var(--clinical-success);
+}
+
+.clinical-stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--clinical-blue);
+  line-height: 1.2;
+}
+
+.clinical-stat-label {
+  font-size: 0.875rem;
+  color: var(--clinical-text-secondary);
+  margin-top: var(--clinical-spacing-sm);
+  font-weight: 500;
+}
+
+.clinical-stat-ci {
+  font-size: 0.75rem;
+  color: var(--clinical-text-muted);
+  margin-top: var(--clinical-spacing-xs);
+}
+
+/* ============================================
+   EVIDENCE CARDS
+   ============================================ */
+
+.clinical-evidence-card {
+  background: var(--clinical-bg-card);
+  border-radius: var(--clinical-radius-md);
+  padding: var(--clinical-spacing-lg);
+  border: 1px solid var(--clinical-border);
+  border-left: 4px solid var(--clinical-evidence-moderate);
+  margin: var(--clinical-spacing-lg) 0;
+}
+
+.clinical-evidence-card[data-evidence="high"] {
+  border-left-color: var(--clinical-evidence-high);
+}
+
+.clinical-evidence-card[data-evidence="moderate"] {
+  border-left-color: var(--clinical-evidence-moderate);
+}
+
+.clinical-evidence-card[data-evidence="low"] {
+  border-left-color: var(--clinical-evidence-low);
+}
+
+.clinical-evidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--clinical-spacing-xs);
+  padding: var(--clinical-spacing-xs) var(--clinical-spacing-sm);
+  border-radius: var(--clinical-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--clinical-spacing-md);
+}
+
+[data-evidence="high"] .clinical-evidence-badge {
+  background: rgba(56, 161, 105, 0.1);
+  color: var(--clinical-evidence-high);
+}
+
+[data-evidence="moderate"] .clinical-evidence-badge {
+  background: rgba(214, 158, 46, 0.1);
+  color: var(--clinical-evidence-moderate);
+}
+
+[data-evidence="low"] .clinical-evidence-badge {
+  background: rgba(229, 62, 62, 0.1);
+  color: var(--clinical-evidence-low);
+}
+
+.clinical-evidence-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--clinical-text);
+  margin-bottom: var(--clinical-spacing-sm);
+}
+
+.clinical-evidence-source {
+  font-size: 0.75rem;
+  color: var(--clinical-text-muted);
+  margin-top: var(--clinical-spacing-md);
+}
+
+/* ============================================
+   WORKFLOW STEPS
+   ============================================ */
+
+.clinical-workflow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--clinical-spacing-md);
+  margin: var(--clinical-spacing-xl) 0;
+}
+
+.clinical-workflow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--clinical-spacing-md);
+  background: var(--clinical-bg-card);
+  padding: var(--clinical-spacing-lg);
+  border-radius: var(--clinical-radius-md);
+  border: 1px solid var(--clinical-border);
+}
+
+.clinical-step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--clinical-blue);
+  color: var(--clinical-text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.clinical-step-content {
+  flex: 1;
+}
+
+.clinical-step-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--clinical-text);
+  margin-bottom: var(--clinical-spacing-xs);
+}
+
+.clinical-step-desc {
+  font-size: 0.875rem;
+  color: var(--clinical-text-secondary);
+  line-height: 1.5;
+}
+
+/* Horizontal workflow for wider screens */
+@media (min-width: 768px) {
+  .clinical-workflow.horizontal {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .clinical-workflow.horizontal .clinical-workflow-step {
+    flex: 1;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+  }
+
+  .clinical-workflow.horizontal .clinical-step-number {
+    margin: 0 auto var(--clinical-spacing-md);
+  }
+
+  .clinical-workflow.horizontal .clinical-workflow-step:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--clinical-text-muted);
+    font-size: 1.5rem;
+  }
+}
+
+/* ============================================
+   PATIENT JOURNEY
+   ============================================ */
+
+.clinical-journey {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: var(--clinical-spacing-xl) 0;
+  overflow-x: auto;
+  padding: var(--clinical-spacing-md) 0;
+}
+
+.clinical-journey-stage {
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  padding: var(--clinical-spacing-lg);
+  background: var(--clinical-bg-card);
+  border-radius: var(--clinical-radius-md);
+  border: 1px solid var(--clinical-border);
+}
+
+.clinical-journey-icon {
+  font-size: 2rem;
+  margin-bottom: var(--clinical-spacing-sm);
+}
+
+.clinical-journey-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--clinical-text);
+  margin-bottom: var(--clinical-spacing-xs);
+}
+
+.clinical-journey-desc {
+  font-size: 0.75rem;
+  color: var(--clinical-text-muted);
+}
+
+.clinical-journey-connector {
+  width: 40px;
+  height: 2px;
+  background: var(--clinical-teal);
+  position: relative;
+}
+
+.clinical-journey-connector::after {
+  content: "▶";
+  position: absolute;
+  right: -8px;
+  top: -7px;
+  color: var(--clinical-teal);
+  font-size: 0.75rem;
+}
+
+/* ============================================
+   OHDSI BRANDING
+   ============================================ */
+
+.ohdsi-branded {
+  background: linear-gradient(135deg, var(--clinical-blue) 0%, var(--clinical-teal) 100%);
+  color: var(--clinical-text-inverse);
+  padding: var(--clinical-spacing-xl);
+  border-radius: var(--clinical-radius-lg);
+}
+
+.ohdsi-branded .clinical-stat-value {
+  color: var(--clinical-text-inverse);
+}
+
+.ohdsi-branded .clinical-stat-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ============================================
+   DISCLAIMER
+   ============================================ */
+
+.clinical-disclaimer {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: var(--clinical-radius-md);
+  padding: var(--clinical-spacing-md);
+  font-size: 0.875rem;
+  color: #92400e;
+  margin: var(--clinical-spacing-xl) 0;
+}
+
+.clinical-disclaimer strong {
+  color: #78350f;
+}
+
+/* ============================================
+   CODE BLOCKS
+   ============================================ */
+
+.clinical-code {
+  font-family: var(--clinical-font-mono);
+  background: var(--clinical-bg-secondary);
+  padding: var(--clinical-spacing-xs) var(--clinical-spacing-sm);
+  border-radius: var(--clinical-radius-sm);
+  font-size: 0.875rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 640px) {
+  .clinical-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clinical-stat-value {
+    font-size: 2rem;
+  }
+
+  .clinical-journey {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .clinical-journey-connector {
+    width: 2px;
+    height: 30px;
+    margin: 0 auto;
+  }
+
+  .clinical-journey-connector::after {
+    content: "▼";
+    right: -5px;
+    top: auto;
+    bottom: -10px;
+  }
+}
